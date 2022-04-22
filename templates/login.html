@@ -1,0 +1,29 @@
+<html>
+<head>
+<title>Login</title>
+</head>
+
+<body bgcolor="#F0E68C">
+<br>
+<p align="center">
+	<font color="#000000" face="arial black" size="45">
+	<img src="{{url_for('static', filename='logo.ico')}}" height="40">
+	Echos
+	</font></p>
+<br><br>
+
+<fieldset>
+<legend> Autenticazione </legend>
+<form action="/login" method="POST">
+<p align="center">
+  <label for="fname">Email:</label><br>
+  <input name="user" type="text"><br><br>
+  <label for="lname">Password:</label><br>
+  </font> <input name="pass" type="password"><br><br>
+  <input type="submit" value="Accedi">
+</p>
+</form>
+</fieldset>
+
+</body>
+</html>
