@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500&display=swap');
+</style>
+
+<div style="margin-left: 30px; text-align:left; font-size: 20px; font-family: 'Red Hat Display', sans-serif; color: white;">
+    <br>
+    <a href=/><p><img src="{{ url_for('static', filename='images/soundwave.png')}}" height="30" width="30"></a> ECHOS</p>
+</div>
+{% endblock %}
+
+{% block body %}
+<div style="text-align:center; font-size: 50px; font-family: 'Red Hat Display', sans-serif; color: white;">
+    <p>Login</p>
+</div>
+{% endblock %}

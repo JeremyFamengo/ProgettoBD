@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500&display=swap');
+</style>
+{% endblock %}
+
+{% block body %}
+<div style="text-align:center; font-size: 80px; font-family: 'Red Hat Display', sans-serif; color: white;">
+    <br>
+    <p><img src="{{ url_for('static', filename='images/soundwave.png')}}" height="100" width="100"> ECHOS</p>
+</div>
+<div style="text-align:center; font-family: 'Red Hat Display', sans-serif; color: white;">
+    <br><br>
+    <a href=login><button type="button" style="border: none; background-color: #8e4dff; text-align: center; padding: 10px 80px; font-size: 30px; border-radius: 25px;">Login</button></a>
+    <br><br>
+    <a href=info><button type="button" style="border: none; background-color: #8e4dff; text-align: center; padding: 10px 80px; font-size: 30px; border-radius: 25px;">Info</button></a>
+    <br><br>
+    <a href=profile><button type="button" style="border: none; background-color: #8e4dff; text-align: center; padding: 10px 80px; font-size: 30px; border-radius: 25px;">Profile</button></a>
+
+</div>
+{% endblock %}
