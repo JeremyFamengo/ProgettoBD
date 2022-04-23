@@ -15,4 +15,16 @@
 <div style="text-align:center; font-size: 50px; font-family: 'Red Hat Display', sans-serif; color: white;">
     <p>Login</p>
 </div>
+
+<fieldset>
+    <form action="/login" method="POST">
+    <p style="text-align:center; font-family: 'Red Hat Display', sans-serif; color: white;">
+      <label for="fname">Email:</label><br>
+      <input name="user" type="text"><br><br>
+      <label for="lname">Password:</label><br>
+      <input name="pass" type="password"><br><br><br>
+      <input type="submit" value="Accedi" style="border: none; background-color: #8e4dff; text-align: center; padding: 10px 30px; font-size: 15px; border-radius: 25px;">
+    </p>
+    </form>
+    </fieldset>
 {% endblock %}
