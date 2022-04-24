@@ -1,10 +1,16 @@
 from crypt import methods
+from enum import unique
 import mailbox
 from tty import CFLAG
 from flask import *
 import os
 from datetime import timedelta
 from flask_sqlalchemy import *
+from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
+
+#######################################################
+# CONFIGS
+#######################################################
 
 app = Flask(__name__)
 db = SQLAlchemy(app)
@@ -13,15 +19,16 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://echos:EchosApp@139.162.163
 app.config['SECRET_KEY']="AS7wvAhaKu4yFyVuPaTasCUDY6mg8c3RmjMFAAtQCfAxrUZxt5xZbTbVy8rHYagkAYG52jrVSz6aMBDPQt6bVLnPzd7ZBbCwAZnazwKkuYNvnKMVSqppmnvSV8xrwJZMXhPdQY6bhgHUjxx3cwHZkB66v4uYZWmdBNaLuDrnFZFgJS58KnSnPuQa2zQYjzqCZEZzz3gscmZvNCfhaRSFaM4AKu2UaHcW9K9Cqnf5pFLvBPTFmbAJCsuVEHPvKNSL"
 app.permanent_session_lifetime = timedelta(minutes=10)
 
-# SQLite supporta database transienti in RAM (echo attiva il logging)
 
-#engine = create_engine('postgresql://postgres:trolese@localhost:5432/progetto', echo = True)
+#######################################################
+# CLASSES
+#######################################################
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = "utenti"
     nome  = db.Column(db.String(20))
     cognome = db.Column(db.String(20))
-    mail = db.Column(db.String(40))
+    mail = db.Column(db.String(40), unique=True)
     cf = db.Column(db.String, primary_key=True)
     psw = db.Column(db.String(50))
     data_di_nascita = db.Column(db.Date)
@@ -36,10 +43,17 @@ class User(db.Model):
         self.data_di_nascita = data_di_nascita
         self.id_artista = id_artista
 
+
+#######################################################
+# ROUTES
+#######################################################
+
+#home
 @app.route('/')
 def home():
     return render_template("index.html")
 
+#profile page
 @app.route('/profile')
 def profile():
     if 'user' in session:
@@ -49,6 +63,7 @@ def profile():
     else:
         return redirect(url_for('login'))
 
+#login page
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -63,16 +78,19 @@ def login():
     else:
         return render_template("login.html")
 
+#info page
 @app.route('/info')
 def info():
     return render_template("info.html")
 
+#logout function as route
 @app.route('/logout')
 def logout():
     session.pop('user', None)
     session.pop('password', None)
     return redirect(url_for('login'))
 
+#register page and function
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -89,6 +107,11 @@ def register():
         db.session.commit()
 
     return render_template("register.html")
+
+
+#######################################################
+# FUNCTIONS
+#######################################################
 
 if __name__ == "__main__":
     app.run(debug=True)
