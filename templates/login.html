@@ -18,13 +18,15 @@
 
 <fieldset>
     <form action="/login" method="POST">
-    <p style="text-align:center; font-family: 'Red Hat Display', sans-serif; color: white;">
-      <label for="fname">Email:</label><br>
-      <input name="user" type="text"><br><br>
-      <label for="lname">Password:</label><br>
-      <input name="pass" type="password"><br><br><br>
-      <input type="submit" value="Accedi" style="border: none; background-color: #8e4dff; text-align: center; padding: 10px 30px; font-size: 15px; border-radius: 25px;">
-    </p>
+        <p style="text-align:center; font-family: 'Red Hat Display', sans-serif; color: white;">
+        <label for="fname">Email:</label><br>
+        <input name="user" type="text" placeholder="Insert Name"><br><br>
+        <label for="lname">Password:</label><br>
+        <input name="pass" type="password" placeholder="Insert Password"><br><br><br>
+        <input type="submit" value="Accedi" style="border: none; background-color: #8e4dff; text-align: center; padding: 10px 30px; font-size: 15px; border-radius: 25px;">
+        </p>
     </form>
-    </fieldset>
+</fieldset>
+<br><br>
+<p style="text-align:center; font-family: 'Red Hat Display', sans-serif; color: white;">New to ECHOS?<br><a href="/register" style="text-decoration: underline; color: white;"> Sign in</a></p>
 {% endblock %}
