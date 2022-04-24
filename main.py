@@ -8,7 +8,6 @@ app.secret_key="AS7wvAhaKu4yFyVuPaTasCUDY6mg8c3RmjMFAAtQCfAxrUZxt5xZbTbVy8rHYagk
 
 # SQLite supporta database transienti in RAM (echo attiva il logging)
 
-#TODO: oscuare credenziali portandole duore dalla cartella pubblica
 #engine = create_engine('postgresql://postgres:trolese@localhost:5432/progetto', echo = True)
 
 @app.route('/')
@@ -45,6 +44,11 @@ def info():
 def logout():
     session.pop('user')
     session.pop('password')
+    return redirect(url_for('login'))
+
+@app.route("/register")
+def register():
+    return render_template("register.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
