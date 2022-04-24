@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500&display=swap');
+</style>
+
+<div style="margin-left: 30px; text-align:left; font-size: 20px; font-family: 'Red Hat Display', sans-serif; color: white;">
+    <br>
+    <a href="/" style="text-decoration: none; color: white;"><p><img src="{{ url_for('static', filename='images/soundwave.png')}}" height="30" width="30"> ECHOS</p></a>
+</div>
+{% endblock %}
+
+{% block body %}
+<div style="text-align:center; font-size: 50px; font-family: 'Red Hat Display', sans-serif; color: white;">
+    <p>Register</p>
+</div>
+
+<fieldset>
+    <form action="/register" method="POST">
+        <p style="text-align:center; font-family: 'Red Hat Display', sans-serif; color: white;">
+        <label for="nome">Nome:</label><br>
+        <input name="nome" type="text" placeholder="Insert Name"><br><br>
+
+        <label for="cognome">Cognome:</label><br>
+        <input name="cognome" type="text" placeholder="Insert Surname"><br><br>
+
+        <label for="mail">Email:</label><br>
+        <input name="mail" type="text" placeholder="Insert Email"><br><br>
+
+        <label for="cf">CF:</label><br>
+        <input name="cf" type="text" placeholder="Insert CF"><br><br>
+
+        <label for="psw">Password:</label><br>
+        <input name="psw" type="password" placeholder="Insert Password"><br><br>
+
+        <label for="data_di_nascita">Birth Date:</label><br>
+        <input name="data_di_nascita" type="text" placeholder="Insert Birth Date"><br><br>
+
+        <input type="submit" value="Sign Up" style="border: none; background-color: #8e4dff; text-align: center; padding: 10px 30px; font-size: 15px; border-radius: 25px;">
+        </p>
+    </form>
+</fieldset>
+{% endblock %}
