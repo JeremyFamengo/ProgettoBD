@@ -53,7 +53,7 @@ def profile():
 def login():
     if request.method == 'POST':
         user = request.form['user']
-        password = request.form['pass']
+        password = request.form['psw']
         if user != '' and password != '':
             session['user'] = user
             session['password'] = password

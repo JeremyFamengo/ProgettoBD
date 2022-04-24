@@ -7,17 +7,17 @@
 {% endblock %}
 
 {% block body %}
-<div style="text-align:center; font-size: 80px; font-family: 'Red Hat Display', sans-serif; color: white;">
+<div>
     <br>
-    <p><img src="{{ url_for('static', filename='images/soundwave.png')}}" height="100" width="100"> ECHOS</p>
+    <h1><img src="{{ url_for('static', filename='images/soundwave.png')}}" width="120px"> ECHOS</h1>
 </div>
-<div style="text-align:center; font-family: 'Red Hat Display', sans-serif; color: white;">
+<div style="text-align:center;">
     <br><br>
-    <a href=login><button type="button" style="border: none; background-color: #8e4dff; text-align: center; padding: 10px 80px; font-size: 30px; border-radius: 25px;">Login</button></a>
+    <a href=login><button type="button" class="button">Login</button></a>
     <br><br>
-    <a href=info><button type="button" style="border: none; background-color: #8e4dff; text-align: center; padding: 10px 80px; font-size: 30px; border-radius: 25px;">Info</button></a>
+    <a href=info><button type="button" class="button">Info</button></a>
     <br><br>
-    <a href=profile><button type="button" style="border: none; background-color: #8e4dff; text-align: center; padding: 10px 80px; font-size: 30px; border-radius: 25px;">Profile</button></a>
+    <a href=profile><button type="button" class="button">Profile</button></a>
     
 </div>
 {% endblock %}
