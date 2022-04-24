@@ -1,32 +1,32 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500&display=swap');
-</style>
 
-<div style="margin-left: 30px; text-align:left; font-size: 20px; font-family: 'Red Hat Display', sans-serif; color: white;">
+<div class="top-left-icon">
     <br>
-    <a href="/" style="text-decoration: none; color: white;"><p><img src="{{ url_for('static', filename='images/soundwave.png')}}" height="30" width="30"> ECHOS</p></a>
+    <a href="/" class="hidden-link"><p><img src="{{ url_for('static', filename='images/soundwave.png')}}" height="30" width="30"> ECHOS</p></a>
 </div>
+
 {% endblock %}
 
 {% block body %}
-<div style="text-align:center; font-size: 50px; font-family: 'Red Hat Display', sans-serif; color: white;">
-    <p>Login</p>
-</div>
+
+<h2>Login</h2>
 
 <fieldset>
     <form action="/login" method="POST">
-        <p style="text-align:center; font-family: 'Red Hat Display', sans-serif; color: white;">
+        <p>
         <label for="fname">Email:</label><br>
         <input name="user" type="text" placeholder="Insert Name"><br><br>
-        <label for="lname">Password:</label><br>
-        <input name="pass" type="password" placeholder="Insert Password"><br><br><br>
-        <input type="submit" value="Accedi" style="border: none; background-color: #8e4dff; text-align: center; padding: 10px 30px; font-size: 15px; border-radius: 25px;">
+        <label for="psw">Password:</label><br>
+        <input name="psw" type="password" placeholder="Insert Password"><br><br><br>
+        <input type="submit" value="Accedi" class="button-2">
         </p>
     </form>
 </fieldset>
 <br><br>
-<p style="text-align:center; font-family: 'Red Hat Display', sans-serif; color: white;">New to ECHOS?<br><a href="/register" style="text-decoration: underline; color: white;"> Sign in</a></p>
+<div style="text-align: center">
+    <p>New to ECHOS?<br><a href="/register"> Sign in</a></p>
+</div>
+
 {% endblock %}

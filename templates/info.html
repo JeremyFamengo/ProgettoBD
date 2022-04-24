@@ -1,22 +1,20 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500&display=swap');
-</style>
 
-<div style="margin-left: 30px; text-align:left; font-size: 20px; font-family: 'Red Hat Display', sans-serif; color: white;">
+<div class="top-left-icon">
     <br>
-    <a href="/" style="text-decoration: none; color: white;"><p><img src="{{ url_for('static', filename='images/soundwave.png')}}" height="30" width="30"> ECHOS</p></a>
+    <a href="/" class="hidden-link"><p><img src="{{ url_for('static', filename='images/soundwave.png')}}" height="30" width="30"> ECHOS</p></a>
 </div>
+
 {% endblock %}
 
 {% block body %}
-<div style="text-align:center; font-size: 50px; font-family: 'Red Hat Display', sans-serif; color: white;">
-    <br>
-    <p>Proudly developed by:</p>
-</div>
-<div style="text-align:center; font-size: 30px; font-family: 'Red Hat Display', sans-serif; color: white;">
+
+
+<h2>Proudly developed by:</h2>
+
+<div style="text-align: center">
     <br>
     <p>JeremyFamengo<br>NumenMirus<br>Michele</p>
 </div>
