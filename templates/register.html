@@ -12,6 +12,15 @@
 {% endblock %}
 
 {% block body %}
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for msg in messages %}
+            <p class="flashed-message-error">{{ msg }}</p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
 <div>
     <h2>Register</h2>
 </div>
@@ -19,25 +28,30 @@
 <fieldset>
     <form action="/register" method="POST">
         <p>
-        <label for="nome">Nome:</label><br>
-        <input name="nome" type="text" placeholder="Insert Name"><br><br>
+            {{ form.hidden_tag() }}
 
-        <label for="cognome">Cognome:</label><br>
-        <input name="cognome" type="text" placeholder="Insert Surname"><br><br>
+            {{ form.nome.label }} <br>
+            {{ form.nome(size=30, class="form") }} <br><br>
 
-        <label for="mail">Email:</label><br>
-        <input name="mail" type="text" placeholder="Insert Email"><br><br>
+            {{ form.cognome.label }} <br>
+            {{ form.cognome(size=30, class="form") }} <br><br>
 
-        <label for="cf">CF:</label><br>
-        <input name="cf" type="text" placeholder="Insert CF"><br><br>
+            {{ form.email.label }} <br>
+            {{ form.email(size=30, class="form") }} <br><br>
 
-        <label for="psw">Password:</label><br>
-        <input name="psw" type="password" placeholder="Insert Password"><br><br>
+            {{ form.cf.label }} <br>
+            {{ form.cf(size=30, class="form") }} <br><br>
 
-        <label for="data_di_nascita">Birth Date:</label><br>
-        <input name="data_di_nascita" type="text" placeholder="Insert Birth Date"><br><br>
+            {{ form.psw.label }} <br>
+            {{ form.psw(size=30, class="form") }} <br><br>
 
-        <input type="submit" value="Sign Up" class="button-2">
+            {{ form.psw2.label }} <br>
+            {{ form.psw2(size=30, class="form") }} <br><br>
+
+            {{ form.data_di_nascita.label }} <br>
+            {{ form.data_di_nascita(size=30, class="form") }} <br><br>
+
+            {{ form.submit(size=30, class="button-2") }} <br><br>
         </p>
     </form>
 </fieldset>
