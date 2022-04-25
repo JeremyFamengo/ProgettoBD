@@ -1,3 +1,4 @@
-Fare login tramite Flask nativo
-Oscuare credenziali portandole duore dalla cartella pubblica
+Cambiare tipo della data di nascita da String a Date
+Mettere username o email come primary key invece che il codice fiscale
+Oscuare credenziali portandole fuori dalla cartella pubblica
 Collegare database
