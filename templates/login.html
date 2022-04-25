@@ -13,17 +13,20 @@
 
 <h2>Login</h2>
 
-<fieldset>
     <form action="/login" method="POST">
         <p>
-        <label for="fname">Email:</label><br>
-        <input name="user" type="text" placeholder="Insert Name"><br><br>
-        <label for="psw">Password:</label><br>
-        <input name="psw" type="password" placeholder="Insert Password"><br><br><br>
-        <input type="submit" value="Accedi" class="button-2">
+            {{ form.hidden_tag() }}
+
+            {{ form.email.label }} <br>
+            {{ form.email(size=30, class="form") }} <br><br>
+            
+            {{ form.psw.label }} <br>
+            {{ form.psw(size=30, class="form") }} <br><br>
+        
+            {{ form.submit(size=30, class="button-2") }}
         </p>
     </form>
-</fieldset>
+
 <br><br>
 <div style="text-align: center">
     <p>New to ECHOS?<br><a href="/register"> Sign in</a></p>
