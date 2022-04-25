@@ -74,3 +74,31 @@ form {
     text-decoration: none;
     color: white;
 }
+
+.flashed-message-error {
+    font-size: 15px;
+    color: white;
+    background: rgba(150, 0, 0, 0.5);
+    text-align: left;
+    margin-left: 25%;
+    margin-right: 25%;
+    border: rgb(100, 0, 0);
+    border: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    
+}
+
+.flashed-message-ok {
+    font-size: 15px;
+    color: white;
+    background: rgba(0, 150, 0, 0.5);
+    text-align: left;
+    margin-left: 25%;
+    margin-right: 25%;
+    border: rgb(0, 100, 0);
+    border: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    
+}
