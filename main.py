@@ -1,16 +1,9 @@
-from crypt import methods
-from enum import unique
-import mailbox
-from random import lognormvariate
-from tty import CFLAG
 from flask import *
-import os
-from datetime import timedelta
 from flask_sqlalchemy import *
-from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
+from flask_login import UserMixin, current_user, login_user, LoginManager, login_required, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, DateField, Form
+from wtforms import StringField, PasswordField, SubmitField, DateField
 from wtforms.validators import DataRequired, EqualTo
 
 
@@ -18,14 +11,20 @@ from wtforms.validators import DataRequired, EqualTo
 # CONFIGS
 #######################################################
 
+#initializing the webapp
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://echos:EchosApp@139.162.163.103/echos"
+#setting secret key
 app.config['SECRET_KEY']="AS7wvAhaKu4yFyVuPaTasCUDY6mg8c3RmjMFAAtQCfAxrUZxt5xZbTbVy8rHYagkAYG52jrVSz6aMBDPQt6bVLnPzd7ZBbCwAZnazwKkuYNvnKMVSqppmnvSV8xrwJZMXhPdQY6bhgHUjxx3cwHZkB66v4uYZWmdBNaLuDrnFZFgJS58KnSnPuQa2zQYjzqCZEZzz3gscmZvNCfhaRSFaM4AKu2UaHcW9K9Cqnf5pFLvBPTFmbAJCsuVEHPvKNSL"
+
+#settig flask-sqalchemy database connection
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://echos:EchosApp@139.162.163.103/echos"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+#initializing database with flask-sqalchemy
 db = SQLAlchemy(app)
 
+#setting up native flask-login manager
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
@@ -35,6 +34,7 @@ login_manager.login_view = 'login'
 # CLASSES
 #######################################################
 
+#class that defines a user in the table of Utenti in the database
 class User(db.Model, UserMixin):
     __tablename__ = "utenti"
     nome  = db.Column(db.String(20))
@@ -72,11 +72,13 @@ class User(db.Model, UserMixin):
     def get_id(self):
         return self.cf
 
+#class that defines the login form
 class LoginForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired()])
     psw = PasswordField("Password", validators=[DataRequired()])
     submit = SubmitField("Log In")
 
+#class that defines the register form
 class RegisterForm(FlaskForm):
     nome = StringField("Nome*", validators=[DataRequired()])
     cognome = StringField("Cognome*", validators=[DataRequired()])
@@ -121,11 +123,12 @@ def login():
 @app.route('/profile')
 @login_required
 def profile():
-    return render_template("profile.html")
+    return render_template("profile.html", user=current_user.nome)
 
 #info page
 @app.route('/info')
 def info():
+    
     return render_template("info.html")
 
 #logout function as route
@@ -154,6 +157,9 @@ def register():
             form.cf.data = ''
             form.psw.data = ''
             form.data_di_nascita.data = ''
+            
+            return redirect(url_for('login'))
+
         else:
             print("User already registered!")
             flash("User already registered!")
@@ -162,6 +168,9 @@ def register():
 
     return render_template("register.html", form = form)
 
+@app.route('/test')
+def test():
+    return render_template('test.html')
 
 #######################################################
 # FUNCTIONS

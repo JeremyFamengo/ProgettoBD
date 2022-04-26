@@ -4,24 +4,85 @@
     font-family: 'Red Hat Display';
 }
 
+body {
+    margin: 0;
+    background-color:#2B0078;
+}
+
+.container {
+    width: 100vw;
+    height: 100vh;
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 100px 1fr 1fr 75px;
+
+    gap: 10px;
+
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.container div {
+    padding: 10px;
+}
+
+.logo {
+    grid-column-start: 1;
+    grid-column-end: span 1;
+    text-align: left;
+    vertical-align: bottom;
+}
+
+.header {
+    grid-column-start: 2;
+    grid-column-end: 5;
+    grid-row-start: 1;
+    text-align: left;
+    margin-left: 30px;
+    border-bottom: 1px solid white;
+
+}
+
+.footer {
+    grid-column-start: 1;
+    grid-column-end: 5;
+    grid-row-start: 4;
+
+}
+
+.left-content {
+    grid-column-start: 1;
+    grid-row-start: 2;
+    grid-row-end: 4;
+
+}
+
+.right-content {
+    grid-column-start: 2;
+    grid-column-end: 5;
+    grid-row-start: 2;
+    grid-row-end: 4;
+    margin-left: 30px;
+
+}
+
 img {
     vertical-align: middle;
 }
 
 h1 {
-    text-align:center;
     font-size: 80px;
     color: white;
 }
 
 h2 {
-    text-align:center;
-    font-size: 50px;
+    font-size: 40px;
     color: white;
 }
 
 h3 {
-    text-align:center;
     font-size: 15px;
     color: white;
 }
@@ -63,13 +124,6 @@ form {
     color: white;
 }
 
-.top-left-icon {
-    margin-left: 30px;
-    text-align:left;
-    font-size: 20px;
-    color: white;
-}
-
 .hidden-link {
     text-decoration: none;
     color: white;
@@ -101,4 +155,11 @@ form {
     padding: 5px;
     border-radius: 5px;
     
+}
+
+.left-content-entry {
+    padding: 10px;
+    border: 1px solid #8e4dff;
+    border-radius: 15px;
+    margin: 0px;
 }

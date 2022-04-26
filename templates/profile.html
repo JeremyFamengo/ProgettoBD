@@ -1,32 +1,25 @@
-{% extends 'base.html' %}
+{% extends 'base-2.html' %}
 
-{% block head %}
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500&display=swap');
-</style>
+{% block head %}{% endblock %}
 
-<div class="top-left-icon">
-    <br>
-    <a href="/" class="hidden-link"><p><img src="{{ url_for('static', filename='images/soundwave.png')}}" height="30" width="30"> ECHOS</p></a>
-    <a href="/logout" class="hidden-link"><p style="text-align: right; margin-right: 40px; ">Logout</p></a>
-</div>
+
+{% block header %}
+    <h2>Profile</h2>
 {% endblock %}
 
-{% block body %}
+{% block footer %}
+    
+{% endblock %}
 
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-        {% for msg in messages %}
-            <p class="flashed-message-error">{{ msg }}</p>
-        {% endfor %}
-    {% endif %}
-{% endwith %}
+{% block right_content %}
+        <p>Welcome back, {{ user }}</p>
+{% endblock %}
 
-<div>
-    <h2>Profile</h2>
+{% block left_content %}
+    <p class="left-content-entry">Profile info</p>
     <br>
-</div>
-<div style="text-align: center">
-    <p>Welcome back, {{ user }}</p>
-</div>
+    <p class="left-content-entry">Change Password</p>
+    <br>
+    <p class="left-content-entry">Become an Artist</p>
+    <br>
 {% endblock %}
