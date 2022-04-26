@@ -1,17 +1,9 @@
-from crypt import methods
-from enum import unique
-import mailbox
-from random import lognormvariate
-from tty import CFLAG
 from flask import *
-import os
-from datetime import timedelta
 from flask_sqlalchemy import *
-from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
-from psycopg2 import OperationalError
+from flask_login import UserMixin, current_user, login_user, LoginManager, login_required, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, DateField, Form
+from wtforms import StringField, PasswordField, SubmitField, DateField
 from wtforms.validators import DataRequired, EqualTo
 
 
@@ -131,11 +123,12 @@ def login():
 @app.route('/profile')
 @login_required
 def profile():
-    return render_template("profile.html")
+    return render_template("profile.html", user=current_user.nome)
 
 #info page
 @app.route('/info')
 def info():
+    
     return render_template("info.html")
 
 #logout function as route
@@ -164,6 +157,9 @@ def register():
             form.cf.data = ''
             form.psw.data = ''
             form.data_di_nascita.data = ''
+            
+            return redirect(url_for('login'))
+
         else:
             print("User already registered!")
             flash("User already registered!")
@@ -172,6 +168,9 @@ def register():
 
     return render_template("register.html", form = form)
 
+@app.route('/test')
+def test():
+    return render_template('test.html')
 
 #######################################################
 # FUNCTIONS
