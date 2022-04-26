@@ -3,4 +3,5 @@ Mettere username o email come primary key invece che il codice fiscale
 Oscuare credenziali portandole fuori dalla cartella pubblica
 Dividere le classi in file diversi se possibile
 Collegare database
+Commentare il codice esaustivamente
 Fare README.md carino
