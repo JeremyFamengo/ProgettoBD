@@ -1,8 +1,8 @@
-{% extends 'base-1.html' %}
+{% extends 'base-2.html' %}
 
 {% block head %}{% endblock %}
 
-{% block body %}
+{% block header %}
 
 {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -12,7 +12,11 @@
     {% endif %}
 {% endwith %}
 
-<h2>Login</h2>
+{% endblock %}
+
+
+{% block content %}
+<h2 style="text-align: center;">Login</h2>
 
     <form action="/login" method="POST">
         <p>
@@ -32,5 +36,7 @@
 <div style="text-align: center">
     <p>New to ECHOS?<br><a href="/register"> Sign in</a></p>
 </div>
-
 {% endblock %}
+
+
+{% block footer %}{% endblock %}

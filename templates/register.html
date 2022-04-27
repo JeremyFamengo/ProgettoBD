@@ -1,8 +1,8 @@
-{% extends 'base-1.html' %}
+{% extends 'base-2.html' %}
 
 {% block head %}{% endblock %}
 
-{% block body %}
+{% block header %}
 
 {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -12,9 +12,11 @@
     {% endif %}
 {% endwith %}
 
-<div>
-    <h2>Register</h2>
-</div>
+{% endblock %}
+
+{% block content %}
+
+<h2 style="text-align: center;">Register</h2>
 
 <fieldset>
     <form action="/register" method="POST">
@@ -46,4 +48,7 @@
         </p>
     </form>
 </fieldset>
+
 {% endblock %}
+
+{% block footer %}{% endblock %}
