@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500&display=swap');
+
+* {
+    font-family: 'Red Hat Display';
+}
+
+body {
+    margin: 0;
+    background-color:#2B0078;
+}
+
+.container {
+    width: 100vw;
+    height: 100vh;
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 100px 1fr 1fr 75px;
+
+    gap: 10px;
+
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.container div {
+    /* border: 1px solid white; */
+    padding: 10px;
+}
+
+.logo {
+    grid-column-start: 1;
+    grid-column-end: span 1;
+    text-align: left;
+    vertical-align: bottom;
+}
+
+.header {
+    grid-column-start: 2;
+    grid-column-end: 5;
+    grid-row-start: 1;
+    text-align: left;
+    margin-left: 30px;
+    border-bottom: 1px solid white;
+
+}
+
+.footer {
+    grid-column-start: 1;
+    grid-column-end: 5;
+    grid-row-start: 4;
+
+}
+
+.left-content {
+    grid-column-start: 1;
+    grid-row-start: 2;
+    grid-row-end: 4;
+
+}
+
+.right-content {
+    grid-column-start: 2;
+    grid-column-end: 5;
+    grid-row-start: 2;
+    grid-row-end: 4;
+    margin-left: 30px;
+
+}
+
+img {
+    vertical-align: middle;
+}
+
+h1 {
+    font-size: 80px;
+    color: white;
+}
+
+h2 {
+    font-size: 40px;
+    color: white;
+}
+
+h3 {
+    font-size: 15px;
+    color: white;
+}
+
+p {
+    font-size: 20px;
+    color: white;
+}
+
+a {
+    text-decoration: underline;
+    color: white;
+}
+
+fieldset {
+    border: none;
+}
+
+.button {
+    border: none;
+    background-color: #8e4dff;
+    text-align: center;
+    padding: 10px 80px;
+    font-size: 30px;
+    border-radius: 25px;
+}
+
+.button-2 {
+    border: none;
+    background-color: #8e4dff;
+    text-align: center;
+    padding: 10px 30px;
+    font-size: 15px;
+    border-radius: 25px;
+}
+
+form {
+    text-align:center;
+    color: white;
+}
+
+.hidden-link {
+    text-decoration: none;
+    color: white;
+}
+
+.flashed-message-error {
+    font-size: 15px;
+    color: white;
+    background: rgba(150, 0, 0, 0.5);
+    text-align: left;
+    margin-right: 25%;
+    border: rgb(100, 0, 0);
+    border: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    
+}
+
+.flashed-message-ok {
+    font-size: 15px;
+    color: white;
+    background: rgba(0, 150, 0, 0.5);
+    text-align: left;
+    margin-right: 25%;
+    border: rgb(0, 100, 0);
+    border: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    
+}
+
+.left-content-entry {
+    padding: 10px;
+    border: 1px solid #8e4dff;
+    border-radius: 15px;
+    margin: 0px;
+}
