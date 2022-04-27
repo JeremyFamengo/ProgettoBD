@@ -2,24 +2,19 @@
 
 {% block head %}{% endblock %}
 
-
 {% block header %}
-    <h2>Profile</h2>
-{% endblock %}
 
-{% block footer %}
-    
-{% endblock %}
+<h2>Artist Dashboard</h2>
 
-{% block right_content %}
-        <p>Welcome back, {{ user }}</p>
 {% endblock %}
 
 {% block left_content %}
+
     <a href="/profileinfo" class="hidden-link"><p class="left-content-entry">Profile info</p></a>
     <br>
-    <a href="/artist" class="hidden-link"><p class="left-content-entry">Artist Dashboard</p></a>
+    <p class="left-content-entry" style="color: blueviolet;">Artist Dashboard</p>
     <br>
     <a href="/logout" class="hidden-link"><p class="left-content-entry">Logout</p></a>
     <br>
+
 {% endblock %}
