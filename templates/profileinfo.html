@@ -12,9 +12,7 @@
 
     <p class="left-content-entry" style="color: blueviolet;">Profile info</p>
     <br>
-    <p class="left-content-entry">Change Password</p>
-    <br>
-    <p class="left-content-entry">Become an Artist</p>
+    <p class="left-content-entry">Artist Dashboard</p>
     <br>
     <a href="/logout" class="hidden-link"><p class="left-content-entry">Logout</p></a>
     <br>
@@ -29,34 +27,39 @@
             {{ form.hidden_tag() }}
 
             {{ form.nome.label }}
-            {{ form.nome(size=80, class="form-field") }} <br><br>
+            {{ form.nome(class="form-field") }} <br><br>
 
             {{ form.cognome.label }}
-            {{ form.cognome(size=80, class="form-field") }} <br><br>
+            {{ form.cognome(class="form-field") }} <br><br>
 
             {{ form.email.label }}
-            {{ form.email(size=80, class="form-field") }} <br><br>
+            {{ form.email(class="form-field") }} <br><br>
 
             {{ form.cf.label }}
-            {{ form.cf(size=80, class="form-field") }} <br><br>
+            {{ form.cf(class="form-field") }} <br><br>
 
             {{ form.data_di_nascita.label }}
-            {{ form.data_di_nascita(size=80, class="form-field") }} <br><br>            
+            {{ form.data_di_nascita(class="form-field") }} <br><br>  
+
+            {{ form.submit(size=30, class="button-2") }} <br><br>
         </p>
     </form>
 </fieldset>
 
 <fieldset>
     <form>
-        <h2 style="text-align: center;">Change Password</h2>
+        <h2>Change Password</h2>
         <p>
-            {{ form.psw.label }} <br>
-            {{ form.psw(size=30, class="form") }} <br><br>
+            {{ form2.old_psw.label }} <br>
+            {{ form2.old_psw(size=30, class="form") }} <br><br>
 
-            {{ form.psw2.label }} <br>
-            {{ form.psw2(size=30, class="form") }} <br><br>
+            {{ form2.psw.label }} <br>
+            {{ form2.psw(size=30, class="form") }} <br><br>
+
+            {{ form2.psw2.label }} <br>
+            {{ form2.psw2(size=30, class="form") }} <br><br>
             
-            {{ form.submit(size=30, class="button-2") }} <br><br>
+            {{ form2.submit(size=30, class="button-2") }} <br><br>
         </p>
     </form>
 </fieldset>
