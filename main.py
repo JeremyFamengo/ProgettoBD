@@ -90,15 +90,17 @@ class RegisterForm(FlaskForm):
     submit = SubmitField("Register")
 
 
-class ModifyForm(FlaskForm):
+class ModifyInfo(FlaskForm):
     nome = StringField("Nome")
     cognome = StringField("Cognome")
     cf = StringField("CF")
     email = StringField("Email")
-    psw = PasswordField("Password", validators=[DataRequired(), EqualTo('psw2', message='Passwords do not match')])
-    psw2 = PasswordField("Confirm Password", validators=[DataRequired()])
     data_di_nascita = StringField("Data di nascita")
     submit = SubmitField("Change")
+
+class ModifyPsw(FlaskForm):
+    psw = PasswordField("Password", validators=[DataRequired(), EqualTo('psw2', message='Passwords do not match')])
+    psw2 = PasswordField("Confirm Password", validators=[DataRequired()])
 
 #######################################################
 # ROUTES
@@ -185,8 +187,8 @@ def test():
 
 @app.route('/profileinfo')
 def profileinfo():
-    form = ModifyForm()
-    
+    form = ModifyInfo()
+
     form.nome.data = current_user.nome
     form.cognome.data = current_user.cognome
     form.email.data = current_user.mail
