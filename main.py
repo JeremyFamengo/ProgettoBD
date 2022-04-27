@@ -122,8 +122,6 @@ def login():
         if user:
             if user.verify_password(form.psw.data):
                 login_user(user)
-                print('Login succesful')
-                flash('Login succesful')
                 return redirect(url_for('profile'))
             else:
                 print('Wrong password')
