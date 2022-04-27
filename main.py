@@ -98,7 +98,7 @@ class ModifyForm(FlaskForm):
     psw = PasswordField("Password", validators=[DataRequired(), EqualTo('psw2', message='Passwords do not match')])
     psw2 = PasswordField("Confirm Password", validators=[DataRequired()])
     data_di_nascita = StringField("Data di nascita")
-    submit = SubmitField("Register")
+    submit = SubmitField("Change")
 
 #######################################################
 # ROUTES
@@ -186,6 +186,12 @@ def test():
 @app.route('/profileinfo')
 def profileinfo():
     form = ModifyForm()
+    
+    form.nome.data = current_user.nome
+    form.cognome.data = current_user.cognome
+    form.email.data = current_user.mail
+    form.cf.data = current_user.cf
+    form.data_di_nascita.data = current_user.data_di_nascita
 
     return render_template('profileinfo.html', form = form)
 
