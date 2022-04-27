@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>ECHOS</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='main.css')}}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='main-2.css')}}">
         <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.png') }}">
 
         {% block head %}{% endblock %}
@@ -14,11 +14,16 @@
     <body style="background-color:#2B0078;">
         <div class="container">
             <div class="logo">
-                    <a href="/" class="hidden-link"><p><img src="{{ url_for('static', filename='images/soundwave.png')}}" height="30" width="30"> ECHOS</p></a>
+                <a href="/" class="hidden-link"><p><img src="{{ url_for('static', filename='images/soundwave.png')}}" height="30" width="30"> ECHOS</p></a>
             </div>
             <div class="header">
 
                 {% block header %}{% endblock %}
+
+            </div>
+            <div class="content">
+
+                {% block content %}{% endblock %}
 
             </div>
             <div class="footer">
@@ -26,16 +31,7 @@
                 {% block footer %}{% endblock %}
 
             </div>
-            <div class="left-content">
-
-                {% block left_content %}{% endblock %}
-
-            </div>
-            <div class="right-content">
-
-                {% block right_content %}{% endblock %}
-
-            </div>
+            
         </div>
         </body>
 </html>

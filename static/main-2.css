@@ -25,6 +25,7 @@ body {
 }
 
 .container div {
+    /* border: 1px solid white; */
     padding: 10px;
 }
 
@@ -40,8 +41,6 @@ body {
     grid-column-end: 5;
     grid-row-start: 1;
     text-align: left;
-    margin-left: 30px;
-    border-bottom: 1px solid white;
 
 }
 
@@ -52,19 +51,11 @@ body {
 
 }
 
-.left-content {
+.content {
     grid-column-start: 1;
+    grid-column-end: span 4;
     grid-row-start: 2;
     grid-row-end: 4;
-
-}
-
-.right-content {
-    grid-column-start: 2;
-    grid-column-end: 5;
-    grid-row-start: 2;
-    grid-row-end: 4;
-    margin-left: 30px;
 
 }
 
@@ -134,7 +125,6 @@ form {
     color: white;
     background: rgba(150, 0, 0, 0.5);
     text-align: left;
-    margin-left: 25%;
     margin-right: 25%;
     border: rgb(100, 0, 0);
     border: 10px;
@@ -148,7 +138,6 @@ form {
     color: white;
     background: rgba(0, 150, 0, 0.5);
     text-align: left;
-    margin-left: 25%;
     margin-right: 25%;
     border: rgb(0, 100, 0);
     border: 10px;

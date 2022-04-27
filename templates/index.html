@@ -1,14 +1,15 @@
-{% extends 'base-1.html' %}
+{% extends 'base-2.html' %}
 
 {% block head %}{% endblock %}
 
-{% block body %}
+{% block header %}{% endblock %}
+
+{% block content %}
 <div>
-    <br>
-    <h1><img src="{{ url_for('static', filename='images/soundwave.png')}}" width="120px"> ECHOS</h1>
+    <h1 style="text-align: center;"><img src="{{ url_for('static', filename='images/soundwave.png')}}" width="120px"> ECHOS</h1>
 </div>
-<div style="text-align:center;">
-    <br><br>
+<div style="text-align: center;">
+
     <a href=login><button type="button" class="button">Login</button></a>
     <br><br>
     <a href=info><button type="button" class="button">Info</button></a>
@@ -17,3 +18,5 @@
     
 </div>
 {% endblock %}
+
+{% block footer %}{% endblock %}
