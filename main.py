@@ -99,8 +99,10 @@ class ModifyInfo(FlaskForm):
     submit = SubmitField("Change")
 
 class ModifyPsw(FlaskForm):
-    psw = PasswordField("Password", validators=[DataRequired(), EqualTo('psw2', message='Passwords do not match')])
-    psw2 = PasswordField("Confirm Password", validators=[DataRequired()])
+    old_psw = PasswordField("Old Password", validators=[DataRequired(), ])
+    psw = PasswordField("New password", validators=[DataRequired(), EqualTo('psw2', message='Passwords do not match')])
+    psw2 = PasswordField("Confirm new password", validators=[DataRequired()])
+    submit = SubmitField("Change")
 
 #######################################################
 # ROUTES
@@ -186,8 +188,10 @@ def test():
     return render_template('test.html')
 
 @app.route('/profileinfo')
+@login_required
 def profileinfo():
     form = ModifyInfo()
+    form2 = ModifyPsw()
 
     form.nome.data = current_user.nome
     form.cognome.data = current_user.cognome
@@ -195,9 +199,10 @@ def profileinfo():
     form.cf.data = current_user.cf
     form.data_di_nascita.data = current_user.data_di_nascita
 
-    return render_template('profileinfo.html', form = form)
+    return render_template('profileinfo.html', form = form, form2 = form2)
 
 @app.route('/artist')
+@login_required
 def artist():
     return render_template('artist.html')
 
