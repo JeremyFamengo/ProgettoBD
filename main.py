@@ -89,6 +89,17 @@ class RegisterForm(FlaskForm):
     data_di_nascita = StringField("Data di nascita*", validators=[DataRequired()])
     submit = SubmitField("Register")
 
+
+class ModifyForm(FlaskForm):
+    nome = StringField("Nome")
+    cognome = StringField("Cognome")
+    cf = StringField("CF")
+    email = StringField("Email")
+    psw = PasswordField("Password", validators=[DataRequired(), EqualTo('psw2', message='Passwords do not match')])
+    psw2 = PasswordField("Confirm Password", validators=[DataRequired()])
+    data_di_nascita = StringField("Data di nascita")
+    submit = SubmitField("Register")
+
 #######################################################
 # ROUTES
 #######################################################
@@ -171,6 +182,16 @@ def register():
 @app.route('/test')
 def test():
     return render_template('test.html')
+
+@app.route('/profileinfo')
+def profileinfo():
+    form = ModifyForm()
+
+    return render_template('profileinfo.html', form = form)
+
+@app.route('/artist')
+def artist():
+    return render_template('artist.html')
 
 #######################################################
 # FUNCTIONS

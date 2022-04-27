@@ -113,6 +113,7 @@ fieldset {
 form {
     text-align:center;
     color: white;
+    float: right;
 }
 
 .hidden-link {

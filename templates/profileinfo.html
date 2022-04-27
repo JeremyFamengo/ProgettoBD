@@ -1,0 +1,66 @@
+{% extends 'base-1.html' %}
+
+{% block head %}{% endblock %}
+
+{% block header %}
+
+<h2>Your info</h2>
+
+{% endblock %}
+
+{% block left_content %}
+
+    <p class="left-content-entry" style="color: blueviolet;">Profile info</p>
+    <br>
+    <p class="left-content-entry">Change Password</p>
+    <br>
+    <p class="left-content-entry">Become an Artist</p>
+    <br>
+    <a href="/logout" class="hidden-link"><p class="left-content-entry">Logout</p></a>
+    <br>
+
+{% endblock %}
+
+{% block right_content %}
+
+<fieldset>
+    <form action="/register" method="POST">
+        <p>
+            {{ form.hidden_tag() }}
+
+            {{ form.nome.label }}
+            {{ form.nome(size=30, class="form") }} <br><br>
+
+            {{ form.cognome.label }}
+            {{ form.cognome(size=30, class="form") }} <br><br>
+
+            {{ form.email.label }}
+            {{ form.email(size=30, class="form") }} <br><br>
+
+            {{ form.cf.label }}
+            {{ form.cf(size=30, class="form") }} <br><br>
+
+            {{ form.data_di_nascita.label }}
+            {{ form.data_di_nascita(size=30, class="form") }} <br><br>
+
+            {{ form.submit(size=30, class="button-2") }} <br><br>
+        </p>
+    </form>
+</fieldset>
+
+<fieldset>
+    <form>
+        <h2 style="text-align: center;">Change Password</h2>
+        <p>
+            {{ form.psw.label }} <br>
+            {{ form.psw(size=30, class="form") }} <br><br>
+
+            {{ form.psw2.label }} <br>
+            {{ form.psw2(size=30, class="form") }} <br><br>
+        </p>
+    </form>
+</fieldset>
+
+{% endblock %}
+
+{% block footer %}{% endblock %}
