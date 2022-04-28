@@ -2,7 +2,6 @@ Collegare become artist a database
 Reindirizzamento tipo php
 Sistemare gerarchia
 Cambiare tipo della data di nascita da String a Date
-Mettere username o email come primary key invece che il codice fiscale
 Oscuare credenziali portandole fuori dalla cartella pubblica
 Dividere le classi in file diversi se possibile
 Collegare database
