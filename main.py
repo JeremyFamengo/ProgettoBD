@@ -212,7 +212,8 @@ def artist():
 
     if current_user.id_artista != None:
         artist=True
-        return render_template('artist.html', artist = artist)
+        nome_arte = 'Singer2000' # recuperare da database il nome d'arte
+        return render_template('artist.html', artist = artist, nome_arte = nome_arte)
 
     form = ArtistForm()    
     return render_template('artist.html', artist = artist, form = form)
