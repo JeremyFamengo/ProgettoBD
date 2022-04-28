@@ -24,7 +24,7 @@
 
 {% if artist %}
     
-    <p> Welcome to your dashboard, {{ nome_arte }}</p>
+    <p> Welcome to your dashboard, {{ formArtista.nome_arte }}</p>
 
  {% elif not artist and  richiesta_effettuata%}
     <div style="text-align: center">
@@ -37,18 +37,18 @@
 
         <form>
             <p>
-            {{ form.hidden_tag() }}
-            {{ form.nome_arte.label }} <br><br>
-            {{ form.nome_arte(class="form") }} <br><br>
+            {{ formRichieste_diventa_artista.hidden_tag() }}
+            {{ formRichieste_diventa_artista.nome_arte.label }} <br><br>
+            {{ formRichieste_diventa_artista.nome_arte(class="form") }} <br><br>
 
 
-            {{ form.stato_richiesta.label }} <br><br>
-            {{ form.stato_richiesta(class="form") }} <br><br>
+            {{ formRichieste_diventa_artista.stato_richiesta.label }} <br><br>
+            {{ formRichieste_diventa_artista.stato_richiesta(class="form") }} <br><br>
             
-            {{ form.info.label }} <br><br>
-            {{ form.info(class="form-field", rows=10) }} <br><br><br><br><br><br><br><br>
+            {{ formRichieste_diventa_artista.info.label }} <br><br>
+            {{ formRichieste_diventa_artista.info(class="form-field", rows=10) }} <br><br><br><br><br><br><br><br>
             
-            {{ form.submit(class="button-2") }}
+            {{ formRichieste_diventa_artista.submit(class="button-2") }}
             </p>
         </form>
     </div>

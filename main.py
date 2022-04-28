@@ -111,6 +111,12 @@ class ArtistForm(FlaskForm):
     info = TextAreaField("Tell us what makes you special!", validators=(DataRequired(), Length(min=100)))
     submit = SubmitField("I'm ready!")
 
+class Richieste_diventa_artistaForm(FlaskForm):
+    nome_arte = StringField("nome_arte", validators=[DataRequired()])
+    motivazione = DateField("Motivazine")
+    stato_richiesta = DateField("stato_richiesta")
+    submit = SubmitField("I'm ready!")
+
 class Richieste_diventa_artista(db.Model):
     __tablename__ = "richieste_diventa_artista"
     nome_arte = db.Column(db.String(40))
@@ -119,7 +125,6 @@ class Richieste_diventa_artista(db.Model):
     stato_richiesta = db.Column(db.String(20))
     id_utente = db.Column(db.String(20))
     
-    psw = db.Column(db.String(128))
 
     def __init__(self, id, nome_arte, motivazione, stato_richiesta, id_utente):
         self.id = id
@@ -320,23 +325,26 @@ def artist():
     stato_richiesta = None
     richiesta_effettuata = False
     richieste_diventa_artista = Richieste_diventa_artista.query.filter_by(id_utente = current_user.cf).first()
+    
+    formArtista = ArtistForm()
+    formRichieste_diventa_artista=  Richieste_diventa_artistaForm()
 
     # #TODO: rimuovere e nel caso fosse già un arista restituire il nome, altrimenti il nome_arte sarà null (vuoto)
-    # if current_user.id_artista != None:  
-    #     # recuperare da database i dati dalla tabella richieste_diventa_artista
-    #     artista=Artista.query.get(current_user.id_artista).first()
-    #     artist=True
-    #     richiesta_effettuata=True
-    #     nome_arte=artista.nome_arte
-    # elif richieste_diventa_artista.id != None :
-    #     richiesta_effettuata = True
-    #     nome_arte = richieste_diventa_artista.nome_arte
-    #     motivazione = richieste_diventa_artista.motivazione
-    #     stato_richiesta = richieste_diventa_artista.stato_richiesta
+    if current_user.id_artista != None:  
+        # recuperare da database i dati dalla tabella richieste_diventa_artista
+        artista=Artista.query.get(current_user.id_artista).first()
+        artist=True
+        richiesta_effettuata=True
+        formArtista.nome_arte.data=artista.nome_arte
+    elif richieste_diventa_artista != None :
+        richiesta_effettuata = True
+        formRichieste_diventa_artista.nome_arte.data = richieste_diventa_artista.nome_arte
+        formRichieste_diventa_artista.motivazione.data  = richieste_diventa_artista.motivazione
+        formRichieste_diventa_artista.stato_richiesta.data  = richieste_diventa_artista.stato_richiesta
 
-    form = ArtistForm()
+    
         
-    return render_template('artist.html', artist = artist, richiesta_effettuata=richiesta_effettuata, form=form)
+    return render_template('artist.html', artist = artist, richiesta_effettuata=richiesta_effettuata, formArtista=formArtista)
 
 #######################################################
 # FUNCTIONS
