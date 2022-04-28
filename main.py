@@ -112,9 +112,9 @@ class ArtistForm(FlaskForm):
     submit = SubmitField("I'm ready!")
 
 class Richieste_diventa_artistaForm(FlaskForm):
-    nome_arte = StringField("nome_arte", validators=[DataRequired()])
-    motivazione = DateField("Motivazine")
-    stato_richiesta = DateField("stato_richiesta")
+    nome_arte = StringField("nome_arte")
+    motivazione = StringField("Motivazine")
+    stato_richiesta = StringField("stato_richiesta")
     submit = SubmitField("I'm ready!")
 
 class Richieste_diventa_artista(db.Model):
@@ -344,7 +344,7 @@ def artist():
 
     
         
-    return render_template('artist.html', artist = artist, richiesta_effettuata=richiesta_effettuata, formArtista=formArtista)
+    return render_template('artist.html', artist = artist, richiesta_effettuata=richiesta_effettuata, formArtista=formArtista,formRichieste_diventa_artista=formRichieste_diventa_artista)
 
 #######################################################
 # FUNCTIONS
