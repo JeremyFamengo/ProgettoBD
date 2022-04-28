@@ -86,7 +86,7 @@ class RegisterForm(FlaskForm):
     email = StringField("Email*", validators=[DataRequired()])
     psw = PasswordField("Password*", validators=[DataRequired(), EqualTo('psw2', message='Passwords do not match'), Length(min=8)])
     psw2 = PasswordField("Confirm Password*", validators=[DataRequired(), Length(min=8)])
-    data_di_nascita = DateField("Data di nascita*", validators=[DataRequired()])
+    data_di_nascita = DateField("Data di nascita")
     submit = SubmitField("Register")
 
 
