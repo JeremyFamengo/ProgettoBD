@@ -3,8 +3,8 @@ from flask_sqlalchemy import *
 from flask_login import UserMixin, current_user, login_user, LoginManager, login_required, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, DateField
-from wtforms.validators import DataRequired, EqualTo
+from wtforms import StringField, PasswordField, SubmitField, DateField, TextAreaField
+from wtforms.validators import DataRequired, EqualTo, Length
 
 
 #######################################################
@@ -84,9 +84,9 @@ class RegisterForm(FlaskForm):
     cognome = StringField("Cognome*", validators=[DataRequired()])
     cf = StringField("CF*", validators=[DataRequired()])
     email = StringField("Email*", validators=[DataRequired()])
-    psw = PasswordField("Password*", validators=[DataRequired(), EqualTo('psw2', message='Passwords do not match')])
-    psw2 = PasswordField("Confirm Password*", validators=[DataRequired()])
-    data_di_nascita = StringField("Data di nascita*", validators=[DataRequired()])
+    psw = PasswordField("Password*", validators=[DataRequired(), EqualTo('psw2', message='Passwords do not match'), Length(min=8)])
+    psw2 = PasswordField("Confirm Password*", validators=[DataRequired(), Length(min=8)])
+    data_di_nascita = DateField("Data di nascita*", validators=[DataRequired()])
     submit = SubmitField("Register")
 
 
@@ -95,14 +95,20 @@ class ModifyInfo(FlaskForm):
     cognome = StringField("Cognome")
     cf = StringField("CF")
     email = StringField("Email")
-    data_di_nascita = StringField("Data di nascita")
+    data_di_nascita = DateField("Data di nascita")
     submit = SubmitField("Change")
 
 class ModifyPsw(FlaskForm):
-    old_psw = PasswordField("Old Password", validators=[DataRequired(), ])
-    psw = PasswordField("New password", validators=[DataRequired(), EqualTo('psw2', message='Passwords do not match')])
-    psw2 = PasswordField("Confirm new password", validators=[DataRequired()])
+    old_psw = PasswordField("Old Password", validators=[DataRequired()])
+    psw = PasswordField("New password", validators=[DataRequired(), EqualTo('psw2', message='Passwords do not match'), Length(min=8)])
+    psw2 = PasswordField("Confirm new password", validators=[DataRequired(), Length(min=8)])
     submit = SubmitField("Change")
+
+class ArtistForm(FlaskForm):
+    nome_arte = StringField("Your stage name", validators=[DataRequired()])
+    info = TextAreaField("Tell us what makes you special!", validators=(DataRequired(), Length(min=100)))
+    submit = SubmitField("I'm ready!")
+
 
 #######################################################
 # ROUTES
@@ -202,7 +208,14 @@ def profileinfo():
 @app.route('/artist')
 @login_required
 def artist():
-    return render_template('artist.html')
+    artist = False
+
+    if current_user.id_artista != None:
+        artist=True
+        return render_template('artist.html', artist = artist)
+
+    form = ArtistForm()    
+    return render_template('artist.html', artist = artist, form = form)
 
 #######################################################
 # FUNCTIONS

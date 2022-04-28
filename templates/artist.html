@@ -18,3 +18,37 @@
     <br>
 
 {% endblock %}
+
+{% block right_content%}
+
+{% if artist %}
+    
+
+
+{% else %}
+    <div style="text-align: center">
+        <br><br>
+        <p>Got some good music to share with the world?</p>
+        <p>Become an artist!</p>
+        <br><br>
+
+        <hr style="width: 50vw; border-style: dotted; color: white;">
+
+        <form>
+            <p>
+            {{ form.hidden_tag() }}
+
+            {{ form.nome_arte.label }} <br><br>
+            {{ form.nome_arte(class="form") }} <br><br>
+            
+            {{ form.info.label }} <br><br>
+            {{ form.info(class="form-field", rows=10) }} <br><br> <br><br> <br><br> <br><br>
+            
+            {{ form.submit(class="button-2") }}
+            </p>
+        </form>
+    </div>
+
+{% endif %}
+
+{% endblock %}
