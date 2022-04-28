@@ -327,12 +327,12 @@ def artist():
     richieste_diventa_artista = Richieste_diventa_artista.query.filter_by(id_utente = current_user.cf).first()
     
     formArtista = ArtistForm()
-    formRichieste_diventa_artista=  Richieste_diventa_artistaForm()
+    formRichieste_diventa_artista =  Richieste_diventa_artistaForm()
 
     # #TODO: rimuovere e nel caso fosse già un arista restituire il nome, altrimenti il nome_arte sarà null (vuoto)
     if current_user.id_artista != None:  
         # recuperare da database i dati dalla tabella richieste_diventa_artista
-        artista=Artista.query.get(current_user.id_artista).first()
+        artista=Artista.query.get(current_user.id_artista)
         artist=True
         richiesta_effettuata=True
         formArtista.nome_arte.data=artista.nome_arte
@@ -341,6 +341,8 @@ def artist():
         formRichieste_diventa_artista.nome_arte.data = richieste_diventa_artista.nome_arte
         formRichieste_diventa_artista.motivazione.data  = richieste_diventa_artista.motivazione
         formRichieste_diventa_artista.stato_richiesta.data  = richieste_diventa_artista.stato_richiesta
+    
+
 
     
         
