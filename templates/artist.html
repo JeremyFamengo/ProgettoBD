@@ -19,13 +19,14 @@
 
 {% endblock %}
 
+
 {% block right_content%}
 
 {% if artist %}
     
-    <p> Welocme to your dashboard, {{ nome_arte }}</p>
+    <p> Welcome to your dashboard, {{ nome_arte }}</p>
 
-{% else %}
+ {% elif not artist and  richiesta_effettuata%}
     <div style="text-align: center">
         <br><br>
         <p>Got some good music to share with the world?</p>
@@ -37,12 +38,15 @@
         <form>
             <p>
             {{ form.hidden_tag() }}
-
             {{ form.nome_arte.label }} <br><br>
             {{ form.nome_arte(class="form") }} <br><br>
+
+
+            {{ form.stato_richiesta.label }} <br><br>
+            {{ form.stato_richiesta(class="form") }} <br><br>
             
             {{ form.info.label }} <br><br>
-            {{ form.info(class="form-field", rows=10) }} <br><br> <br><br> <br><br> <br><br>
+            {{ form.info(class="form-field", rows=10) }} <br><br><br><br><br><br><br><br>
             
             {{ form.submit(class="button-2") }}
             </p>
