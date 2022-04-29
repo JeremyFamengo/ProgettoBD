@@ -2,6 +2,7 @@ from faulthandler import dump_traceback_later
 from flask import *
 from flask_sqlalchemy import *
 from flask_login import UserMixin, current_user, login_user, LoginManager, login_required, logout_user
+from psycopg2 import IntegrityError
 from sqlalchemy import PrimaryKeyConstraint
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_wtf import FlaskForm
@@ -95,7 +96,6 @@ class RegisterForm(FlaskForm):
 class ModifyInfo(FlaskForm):
     nome = StringField("Nome")
     cognome = StringField("Cognome")
-    cf = StringField("CF")
     email = StringField("Email")
     data_di_nascita = DateField("Data di nascita")
     submit = SubmitField("Change")
@@ -108,26 +108,18 @@ class ModifyPsw(FlaskForm):
 
 class ArtistForm(FlaskForm):
     nome_arte = StringField("Your stage name", validators=[DataRequired()])
-    info = TextAreaField("Tell us what makes you special!", validators=(DataRequired(), Length(min=100)))
-    submit = SubmitField("I'm ready!")
-
-class Richieste_diventa_artistaForm(FlaskForm):
-    nome_arte = StringField("nome_arte")
-    motivazione = StringField("Motivazine")
-    stato_richiesta = StringField("stato_richiesta")
+    motivazione = TextAreaField("Tell us what makes you special!", validators=(DataRequired(), Length(max = 128)))
     submit = SubmitField("I'm ready!")
 
 class Richieste_diventa_artista(db.Model):
     __tablename__ = "richieste_diventa_artista"
     nome_arte = db.Column(db.String(40))
-    id  = db.Column(db.Integer, primary_key=True)
-    motivazione = db.Column(db.String(40))
-    stato_richiesta = db.Column(db.String(20))
-    id_utente = db.Column(db.String(20))
+    motivazione = db.Column(db.String(128))
+    stato_richiesta = db.Column(db.Integer)
+    id_utente = db.Column(db.String(20), primary_key=True)
     
 
-    def __init__(self, id, nome_arte, motivazione, stato_richiesta, id_utente):
-        self.id = id
+    def __init__(self, nome_arte, motivazione, stato_richiesta, id_utente):
         self.nome_arte = nome_arte
         self.motivazione = motivazione
         self.stato_richiesta = stato_richiesta
@@ -136,7 +128,6 @@ class Richieste_diventa_artista(db.Model):
 
     def debug(self):
         print("\n---------[DEBUG]---------\n")
-        print(self.id)
         print(self.nome_arte)
         print(self.motivazione)
         print(self.stato_richiesta)
@@ -308,47 +299,65 @@ def profileinfo():
     form = ModifyInfo()
     form2 = ModifyPsw()
 
+    # implementare logica di modifica
+
     form.nome.data = current_user.nome
     form.cognome.data = current_user.cognome
     form.email.data = current_user.mail
-    form.cf.data = current_user.cf
     form.data_di_nascita.data = current_user.data_di_nascita
 
     return render_template('profileinfo.html', form = form, form2 = form2)
 
-@app.route('/artist')
+@app.route('/artist', methods=['GET', 'POST'])
 @login_required
 def artist():
-    artist = False
-    nome_arte = None 
-    motivazione = None
-    stato_richiesta = None
-    richiesta_effettuata = False
-    richieste_diventa_artista = Richieste_diventa_artista.query.filter_by(id_utente = current_user.cf).first()
+    form = ArtistForm()
+    request_status = None
+    nome_arte = None
+
+    # controllo se esiste già una entry nella tabella artisti legata all'utente corrente e setto artist a True se vero, altrimenti a False
+    artist = Artista.query.filter_by(id_artista = current_user.id_artista).first()
+    if artist:
+        nome_arte = artist.nome_arte
+        artist = True
+    else:
+        artist = False
+
+
+    # controllo se esiste già una richiesta a nome dell'utente, se esiste prendo il codice si stato, altrimenti setto il codice di stato a 0
+    if not artist:
+        request = Richieste_diventa_artista.query.filter_by(id_utente = current_user.cf).first()
+        if request:
+            request_status = request.stato_richiesta
+        else:
+            request_status = 0
+
+        if form.validate_on_submit():
+            nome_arte = form.nome_arte.data
+            motivazione = form.motivazione.data
+            stato_richiesta = 1
+            id_utente = current_user.cf
+
+            richiesta = Richieste_diventa_artista(nome_arte, motivazione, stato_richiesta, id_utente)
+            richiesta.debug()
+            db.session.add(richiesta)
+            db.session.commit()
+
+            form.nome_arte.data = ''
+            form.motivazione.data = ''
+
+            return redirect('profile')
     
-    formArtista = ArtistForm()
-    formRichieste_diventa_artista =  Richieste_diventa_artistaForm()
+    return render_template('artist.html', form = form, artist = artist, nome_arte = nome_arte, request_status = request_status)
 
-    # #TODO: rimuovere e nel caso fosse già un arista restituire il nome, altrimenti il nome_arte sarà null (vuoto)
-    if current_user.id_artista != None:  
-        # recuperare da database i dati dalla tabella richieste_diventa_artista
-        artista=Artista.query.get(current_user.id_artista)
-        artist=True
-        richiesta_effettuata=True
-        formArtista.nome_arte.data=artista.nome_arte
-    elif richieste_diventa_artista != None :
-        richiesta_effettuata = True
-        formRichieste_diventa_artista.nome_arte.data = richieste_diventa_artista.nome_arte
-        formRichieste_diventa_artista.motivazione.data  = richieste_diventa_artista.motivazione
-        formRichieste_diventa_artista.stato_richiesta.data  = richieste_diventa_artista.stato_richiesta
-    
+@app.route('/admin')
+def admin():
+    requests = Richieste_diventa_artista.query.filter_by(stato_richiesta = 1)
+    return render_template("admin.html", requests = requests)
 
 
-    
-        
-    return render_template('artist.html', artist = artist, richiesta_effettuata=richiesta_effettuata, formArtista=formArtista,formRichieste_diventa_artista=formRichieste_diventa_artista)
 
-#######################################################
+#######################################################   
 # FUNCTIONS
 #######################################################
 

@@ -4,69 +4,70 @@
 
 {% block header %}
 
-<h2>Dashboard Artisti</h2>
+    <h2>Dashboard Artisti</h2>
 
 {% endblock %}
 
 {% block left_content %}
 
+    <a href="/" class="hidden-link"><p class="left-content-entry">Home</p></a>
+    <br>
     <a href="/profileinfo" class="hidden-link"><p class="left-content-entry">Profile info</p></a>
     <br>
     <p class="left-content-entry" style="color: blueviolet;">Artist Dashboard</p>
     <br>
     <a href="/logout" class="hidden-link"><p class="left-content-entry">Logout</p></a>
-    <br>
-    <br>
-    <br>
-    <form>
-        <INPUT TYPE="button" VALUE="Torna Indietro" 
-        onClick="history.go(-1);" 
-        style="background-color: #ce401c; 
-        width: 10em;
-        padding: .5em;
-        color: #ffffff;
-        text-shadow: 1px 1px 1px #000;
-        font: 16px Arial, Helvetica, sans-serif;
-        border: solid thin #882d13;
-        -webkit-border-radius: .7em;
-        -moz-border-radius: .7em;
-        border-radius: .7em;
-        background-image: -webkit-gradient(linear, left top, left bottom,
-        from(#e9ede8), to(#ce401c),color-stop(0.4, #8c1b0b));">
-        </form>
 
 {% endblock %}
 
 
 {% block right_content%}
 
-{% if artist %}
+    {% if artist %} <!-- se è già artista mostra la dashboard-->
+        
+        <p> Ecco la tua dashboard, {{ nome_arte }}</p>
+
+    {% endif %}
+
+    {% if artist == False and richiesta_effettuata != 0 %} <!-- se non è già artista e ha già inviato una richiesta (!= 0) mostra lo stato della richiesta -->
+
+        {% if request_status == 1 %} <!-- in attesa di approvazione -->
+            
+            <p> Stato della richiesta: PENDING</p>
+
+        {% elif  request_status == -1 %} <!-- rifiutata -->
+
+            <p> Stato della richiesta: REFUSED</p>
+
+        {% endif %}
+        
+    {% endif %}
     
-    <p> Ecco la tua dashboard {{ formArtista.nome_arte }}</p>
+    {% if artist == False and request_status == 0 %} <!-- altrimenti mostra il form di richiesta -->
 
-{% elif not artist and  richiesta_effettuata%}
-    <p> Stato della richiesta: {{ formRichieste_diventa_artista.stato_richiesta }}</p>
-{% else %}
-    <div style="text-align: center">
-        <br><br>
-        <p>Invia la richiesta per diventare un'artista</p>
-        <br><br>
+        <div style="text-align: center">
+            <br><br>
+            <p>Feel artistic inside? Become an artist now!</p>
+            <br>
 
-        <hr style="width: 50vw; border-style: dotted; color: white;">
+            <hr style="width: 50vw; border-style: dotted; color: white;">
 
-        <form>
-            <p>
-           
-            Nome d'arte <br><br>
-            {{ formRichieste_diventa_artista.nome_arte(class="form") }} <br><br>
-            
-            Motivazione della richiesta <br><br>
-            {{ formRichieste_diventa_artista.motivazione(class="form-field", rows=10) }} <br><br><br><br><br><br><br><br>
-            
-            {{ formRichieste_diventa_artista.submit(class="button-2") }}
-            </p>
-        </form>
-    </div>
-{% endif %}
+            <br>
+            <form action="/artist" method="POST">
+                <p>
+                    {{ form.hidden_tag() }}
+
+                    {{ form.nome_arte.label }} <br><br>
+                    {{ form.nome_arte(size=30, class="form") }} <br><br>
+                    
+                    {{ form.motivazione.label }} <br><br>
+                    {{ form.motivazione(rows = 5, class="form-field") }} <br><br><br><br><br>
+                
+                    {{ form.submit(size=30, class="button-2") }}
+                </p>
+            </form>
+        </div>
+
+    {% endif %}
 
 {% endblock %}
