@@ -1,5 +1,6 @@
 Gestire salvataggio richieste per diventare artista
 Correggere errori
+Valutare se tenere il pulsante "profilo" nella home
 Collegare become artist a database
 Implementare cambio info collegato con database
 Reindirizzamento tipo php
