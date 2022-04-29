@@ -1,0 +1,32 @@
+{% extends 'base-2.html' %}
+
+{% block head %}{% endblock %}
+
+{% block header %}
+
+<h2 style="border-bottom: 1px solid white; padding-bottom: 20px;">Pending requests</h2>
+
+{% endblock %}
+
+{% block content %}
+
+
+    {% if request %}
+        
+        {% for request in requests %}
+
+        <div style="text-align: center;">
+            <p class="request">{{ request }}</p>
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+         <p>No requests pending</p>
+
+    {% endif %}
+
+{% endblock %}
+
+{% block footer %}{% endblock %}
