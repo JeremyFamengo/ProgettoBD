@@ -172,3 +172,13 @@ form {
     border-radius: 15px;
     margin: 0px;
 }
+
+.request {
+    font-size: 20px;
+    color: white;
+    background: rgba(193, 1, 211, 0.5);
+    text-align: left;
+    margin-left: 25%;
+    padding: 5px;
+    border-radius: 5px;
+}

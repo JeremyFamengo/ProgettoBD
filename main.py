@@ -352,7 +352,7 @@ def artist():
 
 @app.route('/admin')
 def admin():
-    requests = Richieste_diventa_artista.query.filter_by(stato_richiesta = 1)
+    requests = Richieste_diventa_artista.query.filter_by(stato_richiesta = '1').all()
     return render_template("admin.html", requests = requests)
 
 

@@ -4,7 +4,7 @@
 
 {% block header %}
 
-<h2 style="border-bottom: 1px solid white; padding-bottom: 20px;">Pending requests</h2>
+    <h2 style="border-bottom: 1px solid white; padding-bottom: 20px;">Pending requests</h2>
 
 {% endblock %}
 
@@ -15,9 +15,14 @@
         
         {% for request in requests %}
 
-        <div style="text-align: center;">
-            <p class="request">{{ request }}</p>
-        </div>
+            <p class="request">
+                
+                {{ request.id_utente }} - {{ request.nome_arte }} - {{ request.motivazione }}
+                
+                <button style="float: right">Accept</button>
+                <button style="float: right">Reject</button>
+            
+            </p>
 
         {% endfor %}
 
