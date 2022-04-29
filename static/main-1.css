@@ -178,7 +178,8 @@ form {
     color: white;
     background: rgba(193, 1, 211, 0.5);
     text-align: left;
-    margin-left: 25%;
+    margin-left: 5%;
+    margin-right: 5%;
     padding: 5px;
     border-radius: 5px;
 }
