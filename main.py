@@ -313,6 +313,7 @@ def profileinfo():
 def artist():
     form = ArtistForm()
     request_status = None
+    nome_arte = None
 
     # controllo se esiste già una entry nella tabella artisti legata all'utente corrente e setto artist a True se vero, altrimenti a False
     artist = Artista.query.filter_by(id_artista = current_user.id_artista).first()
@@ -334,7 +335,7 @@ def artist():
         if form.validate_on_submit():
             nome_arte = form.nome_arte.data
             motivazione = form.motivazione.data
-            stato_richiesta = -1
+            stato_richiesta = 1
             id_utente = current_user.cf
 
             richiesta = Richieste_diventa_artista(nome_arte, motivazione, stato_richiesta, id_utente)
