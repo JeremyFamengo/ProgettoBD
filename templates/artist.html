@@ -4,7 +4,7 @@
 
 {% block header %}
 
-<h2>Dashboard Artisti</h2>
+    <h2>Dashboard Artisti</h2>
 
 {% endblock %}
 
@@ -22,33 +22,51 @@
 
 {% block right_content%}
 
-{% if artist %}
+    {% if artist %} <!-- se è già artista mostra la dashboard-->
+        
+        <p> Ecco la tua dashboard, {{ nome_arte }}</p>
+
+    {% endif %}
+
+    {% if artist == False and richiesta_effettuata != 0 %} <!-- se non è già artista e ha già inviato una richiesta (!= 0) mostra lo stato della richiesta -->
+
+        {% if request_status == 1 %} <!-- in attesa di approvazione -->
+            
+            <p> Stato della richiesta: PENDING</p>
+
+        {% elif  request_status == -1 %} <!-- rifiutata -->
+
+            <p> Stato della richiesta: REFUSED</p>
+
+        {% endif %}
+        
+    {% endif %}
     
-    <p> Ecco la tua dashboard {{ formArtista.nome_arte }}</p>
+    {% if artist == False and request_status == 0 %} <!-- altrimenti mostra il form di richiesta -->
 
-{% elif not artist and  richiesta_effettuata%}
-    <p> Stato della richiesta: {{ formRichieste_diventa_artista.stato_richiesta }}</p>
-{% else %}
-    <div style="text-align: center">
-        <br><br>
-        <p>Invia la richiesta per diventare un'artista</p>
-        <br><br>
+        <div style="text-align: center">
+            <br><br>
+            <p>Feel artistic inside? Become an artist now!</p>
+            <br>
 
-        <hr style="width: 50vw; border-style: dotted; color: white;">
+            <hr style="width: 50vw; border-style: dotted; color: white;">
 
-        <form>
-            <p>
-           
-            Nome d'arte <br><br>
-            {{ formRichieste_diventa_artista.nome_arte(class="form") }} <br><br>
-            
-            Motivazione della richiesta <br><br>
-            {{ formRichieste_diventa_artista.motivazione(class="form-field", rows=10) }} <br><br><br><br><br><br><br><br>
-            
-            {{ formRichieste_diventa_artista.submit(class="button-2") }}
-            </p>
-        </form>
-    </div>
-{% endif %}
+            <br>
+            <form action="/artist" method="POST">
+                <p>
+                    {{ form.hidden_tag() }}
+
+                    {{ form.nome_arte.label }} <br><br>
+                    {{ form.nome_arte(size=30, class="form") }} <br><br>
+                    
+                    {{ form.motivazione.label }} <br><br>
+                    {{ form.motivazione(rows = 5, class="form-field") }} <br><br><br><br><br>
+                
+                    {{ form.submit(size=30, class="button-2") }}
+                </p>
+            </form>
+        </div>
+
+    {% endif %}
 
 {% endblock %}
