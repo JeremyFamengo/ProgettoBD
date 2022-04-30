@@ -1,4 +1,5 @@
 Gestire salvataggio richieste per diventare artista
+Creare un menu a sinistra che racchiuda le principali funzioni (Home, profile info, dashboard artisti, logout)
 Correggere errori
 Valutare se tenere il pulsante "profilo" nella home
 Collegare become artist a database

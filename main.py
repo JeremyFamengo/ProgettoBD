@@ -88,9 +88,9 @@ class RegisterForm(FlaskForm):
     cf = StringField("CF*", validators=[DataRequired()])
     email = StringField("Email*", validators=[DataRequired()])
     psw = PasswordField("Password*", validators=[DataRequired(), EqualTo('psw2', message='Passwords do not match'), Length(min=8)])
-    psw2 = PasswordField("Confirm Password*", validators=[DataRequired(), Length(min=8)])
+    psw2 = PasswordField("Conferma Password*", validators=[DataRequired(), Length(min=8)])
     data_di_nascita = DateField("Data di nascita")
-    submit = SubmitField("Register")
+    submit = SubmitField("Registrati")
 
 
 class ModifyInfo(FlaskForm):
@@ -98,13 +98,13 @@ class ModifyInfo(FlaskForm):
     cognome = StringField("Cognome")
     email = StringField("Email")
     data_di_nascita = DateField("Data di nascita")
-    submit = SubmitField("Change")
+    submit = SubmitField("Applica modifiche")
 
 class ModifyPsw(FlaskForm):
-    old_psw = PasswordField("Old Password", validators=[DataRequired()])
-    psw = PasswordField("New password", validators=[DataRequired(), EqualTo('psw2', message='Passwords do not match'), Length(min=8)])
-    psw2 = PasswordField("Confirm new password", validators=[DataRequired(), Length(min=8)])
-    submit = SubmitField("Change")
+    old_psw = PasswordField("Vecchia Password", validators=[DataRequired()])
+    psw = PasswordField("Nuova password", validators=[DataRequired(), EqualTo('psw2', message='Passwords do not match'), Length(min=8)])
+    psw2 = PasswordField("Conferma nuova password", validators=[DataRequired(), Length(min=8)])
+    submit = SubmitField("Cambia password")
 
 class ArtistForm(FlaskForm):
     nome_arte = StringField("Your stage name", validators=[DataRequired()])

@@ -4,7 +4,7 @@
 
 {% block header %}
 
-<h2>Your info</h2>
+<h2>Le tue informazioni</h2>
 
 {% endblock %}
 
@@ -12,9 +12,9 @@
 
     <a href="/" class="hidden-link"><p class="left-content-entry">Home</p></a>
     <br>
-    <p class="left-content-entry" style="color: blueviolet;">Profile info</p>
+    <p class="left-content-entry" style="color: blueviolet;">Informazioni personali</p>
     <br>
-    <a href="/artist" class="hidden-link"><p class="left-content-entry">Artist Dashboard</p></a>
+    <a href="/artist" class="hidden-link"><p class="left-content-entry">Dashboard Artisti</p></a>
     <br>
     <a href="/logout" class="hidden-link"><p class="left-content-entry">Logout</p></a>
     
@@ -46,7 +46,7 @@
 
 <fieldset>
     <form>
-        <h2>Change Password</h2>
+        <h2>Cambia Password</h2>
         <p>
             {{ form2.old_psw.label }} <br>
             {{ form2.old_psw(size=30, class="form") }} <br><br>
