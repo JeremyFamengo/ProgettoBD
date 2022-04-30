@@ -1,12 +1,8 @@
 Gestire salvataggio richieste per diventare artista
-Creare un menu a sinistra che racchiuda le principali funzioni (Home, profile info, dashboard artisti, logout)
 Correggere errori
 Valutare se tenere il pulsante "profilo" nella home
-Collegare become artist a database
 Implementare cambio info collegato con database
-Reindirizzamento tipo php
 Sistemare gerarchia
-Cambiare tipo della data di nascita da String a Date
 Oscuare credenziali portandole fuori dalla cartella pubblica
 Dividere le classi in file diversi se possibile
 Collegare database
