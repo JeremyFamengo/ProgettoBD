@@ -1,6 +1,5 @@
 Gestire salvataggio richieste per diventare artista
 Correggere errori
-Implementare cambio info collegato con database
 Sistemare gerarchia
 Oscuare credenziali portandole fuori dalla cartella pubblica
 Dividere le classi in file diversi se possibile
