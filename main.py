@@ -98,13 +98,13 @@ class ModifyInfo(FlaskForm):
     cognome = StringField("Cognome")
     email = StringField("Email")
     data_di_nascita = DateField("Data di nascita")
-    submit = SubmitField("Applica modifiche")
+    submit1 = SubmitField("Applica modifiche")
 
 class ModifyPsw(FlaskForm):
     old_psw = PasswordField("Vecchia Password", validators=[DataRequired()])
     psw = PasswordField("Nuova password", validators=[DataRequired(), EqualTo('psw2', message='Passwords do not match'), Length(min=8)])
     psw2 = PasswordField("Conferma nuova password", validators=[DataRequired(), Length(min=8)])
-    submit = SubmitField("Cambia password")
+    submit2 = SubmitField("Cambia password")
 
 class ArtistForm(FlaskForm):
     nome_arte = StringField("Your stage name", validators=[DataRequired()])
@@ -293,13 +293,37 @@ def register():
 def test():
     return render_template('test.html')
 
-@app.route('/profileinfo')
+@app.route('/profileinfo', methods=['GET', 'POST'])
 @login_required
 def profileinfo():
     form = ModifyInfo()
     form2 = ModifyPsw()
 
-    # implementare logica di modifica
+    if form.submit1.data and form.validate():
+        print("Modified info")
+        user = User.query.filter_by(cf = current_user.cf).first()
+
+        user.nome = form.nome.data
+        user.cognome = form.cognome.data
+        user.mail = form.email.data
+        user.data_di_nascita = form.data_di_nascita.data
+
+        db.session.commit()
+
+        flash("Info updated correctly")
+
+    
+    if form2.submit2.data and form2.validate():    
+        user = User.query.filter_by(cf = current_user.cf).first()
+
+        if user.verify_password(form2.old_psw.data):
+            user.psw = generate_password_hash(form2.psw.data)
+            print("Modified password")
+            db.session.commit()
+            flash("Modified password")
+        else:
+            print("wrong old password")
+            flash("Insert your current password correctly")
 
     form.nome.data = current_user.nome
     form.cognome.data = current_user.cognome

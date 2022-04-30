@@ -23,7 +23,7 @@
 {% block right_content %}
 
 <fieldset>
-    <form action="/register" method="POST">
+    <form action="/profileinfo" method="POST">
         <p style="text-align: left;">
             {{ form.hidden_tag() }}
 
@@ -39,15 +39,17 @@
             {{ form.data_di_nascita.label }}
             {{ form.data_di_nascita(class="form-field") }} <br><br>  
 
-            {{ form.submit(size=30, class="button-2") }} <br><br>
+            {{ form.submit1(size=30, class="button-2") }} <br><br>
         </p>
     </form>
 </fieldset>
 
 <fieldset>
-    <form>
+    <form action="/profileinfo" method="POST">
         <h2>Cambia Password</h2>
         <p>
+            {{ form2.hidden_tag() }}
+
             {{ form2.old_psw.label }} <br>
             {{ form2.old_psw(size=30, class="form") }} <br><br>
 
@@ -57,7 +59,7 @@
             {{ form2.psw2.label }} <br>
             {{ form2.psw2(size=30, class="form") }} <br><br>
             
-            {{ form2.submit(size=30, class="button-2") }} <br><br>
+            {{ form2.submit2(size=30, class="button-2") }} <br><br>
         </p>
     </form>
 </fieldset>
