@@ -15,14 +15,16 @@
         
         {% for request in requests %}
 
-            <p class="request">
+            <form class="request" action="/admin" method="POST">
                 
                 {{ request.id_utente }} - {{ request.nome_arte }} - {{ request.motivazione }}
                 
-                <button style="float: right">Accept</button>
-                <button style="float: right">Reject</button>
-            
-            </p>
+                <input type="hidden" name="id_utente" value="{{ request.id_utente }}">
+                <button style="float: right" type="submit" name="accept" value=1>Accept</button>
+                <button style="float: right" type="submit" name="reject" value="1">Reject</button>
+                
+            </form>
+            <br>
 
         {% endfor %}
 
