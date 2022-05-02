@@ -1,9 +1,11 @@
+from crypt import methods
 from faulthandler import dump_traceback_later
 from flask import *
 from flask_sqlalchemy import *
 from flask_login import UserMixin, current_user, login_user, LoginManager, login_required, logout_user
 from psycopg2 import IntegrityError
 from sqlalchemy import PrimaryKeyConstraint
+import werkzeug
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, DateField, TextAreaField
@@ -138,15 +140,18 @@ class Artista(db.Model):
     __tablename__ = "artisti"
     id_artista = db.Column(db.Integer, primary_key = True)
     nome_arte = db.Column(db.String)
+    id_utente = db.Column(db.String)
 
-    def __init__(self, id_artista, nome_arte):
+    def __init__(self, id_artista, nome_arte, id_utente):
         self.id_artista = id_artista
         self.nome_arte = nome_arte
+        self.id_utente = id_utente
 
     def debug(self):
         print("\n---------[DEBUG]---------\n")
         print(self.id_artista)
         print(self.nome_arte)
+        print(self.id_utente)
         print("\n-------------------------\n")
 
 class Artisti_album(db.Model):
@@ -374,8 +379,36 @@ def artist():
     
     return render_template('artist.html', form = form, artist = artist, nome_arte = nome_arte, request_status = request_status)
 
-@app.route('/admin')
+@app.route('/admin', methods=['GET', 'POST'])
 def admin():
+
+    # non so se è buona pratica gestire queta cosa con le eccezioni, da rivedere
+    # si potrebbe fare con stesso nome dei pulsanti ma valore diverso TRUE per accept e FALSE per reject
+    if request.method == 'POST':
+        id = request.form['id_utente']
+        nome_arte = request.form=['nome_arte']
+        try:
+            accept = bool(request.form['accept'])
+        except werkzeug.exceptions.BadRequestKeyError:
+            accept = False
+        try:
+            reject = bool(request.form['reject'])
+        except werkzeug.exceptions.BadRequestKeyError:
+            reject = False
+
+        if accept:
+            req = Richieste_diventa_artista.query.filter_by(id_utente = id).first()
+            req.stato_richiesta = 2
+            artista = Artista(190123, nome_arte, id)
+            db.session.add(artista)
+
+            db.session.commit()
+
+        elif reject:
+            req = Richieste_diventa_artista.query.filter_by(id_utente = id).first()
+            req.stato_richiesta = -1
+            db.session.commit()
+
     requests = Richieste_diventa_artista.query.filter_by(stato_richiesta = '1').all()
     return render_template("admin.html", requests = requests)
 
