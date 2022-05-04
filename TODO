@@ -1,8 +1,10 @@
 Rivedere salvataggio richieste artista implementazione
-Correggere errori
+Gestire salvataggio richieste per diventare artista
+Implementare Bootstrap
+Rifare frontend con Bootstrap
+Correggere errori nuovo database
 Sistemare gerarchia
 Oscuare credenziali portandole fuori dalla cartella pubblica
 Dividere le classi in file diversi se possibile
-Collegare database
 Commentare il codice esaustivamente
 Fare README.md carino

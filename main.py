@@ -1,5 +1,5 @@
-from crypt import methods
 from faulthandler import dump_traceback_later
+from typing_extensions import Self
 from flask import *
 from flask_sqlalchemy import *
 from flask_login import UserMixin, current_user, login_user, LoginManager, login_required, logout_user
@@ -23,7 +23,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY']="AS7wvAhaKu4yFyVuPaTasCUDY6mg8c3RmjMFAAtQCfAxrUZxt5xZbTbVy8rHYagkAYG52jrVSz6aMBDPQt6bVLnPzd7ZBbCwAZnazwKkuYNvnKMVSqppmnvSV8xrwJZMXhPdQY6bhgHUjxx3cwHZkB66v4uYZWmdBNaLuDrnFZFgJS58KnSnPuQa2zQYjzqCZEZzz3gscmZvNCfhaRSFaM4AKu2UaHcW9K9Cqnf5pFLvBPTFmbAJCsuVEHPvKNSL"
 
 #settig flask-sqalchemy database connection
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://echos:EchosApp@139.162.163.103/echos"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://echos:EchosApp@139.162.163.103/echos2"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 #initializing database with flask-sqalchemy
@@ -44,21 +44,26 @@ class User(db.Model, UserMixin):
     __tablename__ = "utenti"
     nome  = db.Column(db.String(20))
     cognome = db.Column(db.String(20))
+    id = db.Column(db.Integer, unique=True, primary_key = True)
+    username = db.Column(db.String(50), unique=True)
     mail = db.Column(db.String(40), unique=True)
-    cf = db.Column(db.String, primary_key=True)
     data_di_nascita = db.Column(db.Date)
     id_artista = db.Column(db.String(30))
+    premium = db.Column(db.Boolean)
+    ascoltate = db.Column(db.ARRAY(db.Integer))
     
     psw = db.Column(db.String(128))
 
-    def __init__(self, nome, cognome, mail, cf, psw, data_di_nascita, id_artista):
+    def __init__(self, nome, cognome, mail, psw, data_di_nascita, id_artista, premium, ascoltate, username):
         self.nome = nome
         self.cognome = cognome
         self.mail = mail
-        self.cf = cf
         self.psw = generate_password_hash(psw, "sha256")
         self.data_di_nascita = data_di_nascita
         self.id_artista = id_artista
+        self.premium = premium
+        self.ascoltate = ascoltate
+        self.username = username
 
     def verify_password(self, psw):
         return check_password_hash(self.psw, psw)
@@ -68,14 +73,17 @@ class User(db.Model, UserMixin):
         print(self.nome)
         print(self.cognome)
         print(self.mail)
-        print(self.cf)
+        print(self.id)
         print(self.psw)
         print(self.data_di_nascita)
         print(self.id_artista)
+        print(self.premium)
+        print(self.ascoltate)
+        print(self.username)
         print("\n-------------------------\n")
     
     def get_id(self):
-        return self.cf
+        return self.id
 
 #class that defines the login form
 class LoginForm(FlaskForm):
@@ -87,7 +95,7 @@ class LoginForm(FlaskForm):
 class RegisterForm(FlaskForm):
     nome = StringField("Nome*", validators=[DataRequired()])
     cognome = StringField("Cognome*", validators=[DataRequired()])
-    cf = StringField("CF*", validators=[DataRequired()])
+    username = StringField("Username*", validators=[DataRequired()])
     email = StringField("Email*", validators=[DataRequired()])
     psw = PasswordField("Password*", validators=[DataRequired(), EqualTo('psw2', message='Passwords do not match'), Length(min=8)])
     psw2 = PasswordField("Conferma Password*", validators=[DataRequired(), Length(min=8)])
@@ -118,7 +126,7 @@ class Richieste_diventa_artista(db.Model):
     nome_arte = db.Column(db.String(40))
     motivazione = db.Column(db.String(128))
     stato_richiesta = db.Column(db.Integer)
-    id_utente = db.Column(db.String(20), primary_key=True)
+    id_utente = db.Column(db.String(20), primary_key = True)
     
 
     def __init__(self, nome_arte, motivazione, stato_richiesta, id_utente):
@@ -140,56 +148,54 @@ class Artista(db.Model):
     __tablename__ = "artisti"
     id_artista = db.Column(db.Integer, primary_key = True)
     nome_arte = db.Column(db.String)
-    id_utente = db.Column(db.String)
+    data_iscrizione = db.Column(db.Date)
 
-    def __init__(self, id_artista, nome_arte, id_utente):
+    def __init__(self, id_artista, nome_arte, data_iscrizione):
         self.id_artista = id_artista
         self.nome_arte = nome_arte
-        self.id_utente = id_utente
+        self.data_iscrizione = data_iscrizione
+
 
     def debug(self):
         print("\n---------[DEBUG]---------\n")
         print(self.id_artista)
         print(self.nome_arte)
         print(self.id_utente)
+        print(self.data_iscrizione)
         print("\n-------------------------\n")
 
-class Artisti_album(db.Model):
-    __tablename__ = "artisti_album"
-    id_artista = db.Column(db.Integer, primary_key = True)
-    id_album = db.Column(db.Integer, primary_key = True)
-    
-    def __init__(self, id_artista, id_album):
-        self.id_album = id_album
-        self.id_artista = id_artista
 
 class Album(db.Model):
     __tablename__ = 'album'
     id_album = db.Column(db.Integer, primary_key = True)
+    id_artista = db.Column(db.Integer)
+    id_canzoni = db.Column(db.ARRAY(db.Integer))
+    singolo = db.Column(db.Boolean)
+    scadenza = db.Column(db.Date)
+    restricted = db.Column(db.Boolean)
     titolo = db.Column(db.String)
     anno = db.Column(db.Date)
 
-    def __init__(self, id_album, titolo, anno):
+    def __init__(self, id_album, id_artista, id_canzoni, singolo, scadenza, restricted, titolo, anno):
         self.id_album = id_album
+        self.id_artista = id_artista
+        self.id_canzoni = id_canzoni
+        self.singolo = singolo
+        self.scadenza = scadenza
+        self.restricted = restricted
         self.titolo = titolo
         self.anno = anno
 
-class Album_canzoni(db.Model):
-    __tablename__ = 'album_canzoni'
-    id_album = db.Column(db.Integer, primary_key = True)
-    id_canzoni = db.Column(db.Integer, primary_key = True)
-
-    def __intit__(self, id_album, id_canzoni):
-        self.id_album = id_album
-        self.id_canzoni = id_canzoni
-
 class Canzoni(db.Model):
     __tablename__ = 'canzoni'
-    id_canzone = db.Column(db.Integer, primary_key = True)
+    id = db.Column(db.Integer, primary_key = True)
+    id_artista = db.Column(db.Integer)
+    riservato = db.Column(db.Boolean)
+    data_inserimento = db.Column(db.Date)
     titolo = db.Column(db.String)
     durata = db.Column(db.Integer)
     anno = db.Column(db.Date)
-    id_genere_musicale = db.Column(db.Integer)
+    id_genere = db.Column(db.Integer)
     file = db.Column(db.LargeBinary)
 
     def __intit__(self, id_canzone, titolo, durata, anno, id_genere_musicale, file):
@@ -202,19 +208,29 @@ class Canzoni(db.Model):
 
 class Generi_Musicali(db.Model):
     __tablename__ = 'generi_musicali'
-    id_genere_musicale = db.Column(db.Integer, primary_key = True)
+    id_genere = db.Column(db.Integer, primary_key = True)
     nome = db.Column(db.String)
+    descrizione = db.Column(db.String(255))
 
-    def __init__(self, id_genere_musicale, nome):
+    def __init__(self, id_genere_musicale, nome, descrizione):
         self.id_genere_musicale = id_genere_musicale
         self.nome = nome      
+        self.descrizione = descrizione
 
 class Playlist(db.Model):
     __tablename__  = 'playlist'
     id_playlist = db.Column(db.Integer, primary_key = True)
     titolo = db.Column(db.String)
     id_utente = db.Column(db.Integer)
-    id_playlist_canzoni = db.Column(db.Integer)
+    id_canzoni = db.Column(db.Integer)
+    restricted = db.Column(db.Boolean)
+
+    def playlist(self, titolo, id_utente, id_canzoni, restricted):
+        self.titolo = titolo
+        self.id_utente = id_utente
+        self.id_canzoni = id_canzoni
+        self.restricted = restricted
+
 
     
 
@@ -249,7 +265,7 @@ def login():
 @app.route('/profile')
 @login_required
 def profile():
-    return render_template("profile.html", user=current_user.nome)
+    return render_template("profile.html", user=current_user.username)
 
 #info page
 @app.route('/info')
@@ -269,18 +285,20 @@ def logout():
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(cf=form.cf.data).first()
+        user = User.query.filter_by(mail=form.email.data).first()
         if user is None:
-            user = User(nome=form.nome.data, cognome=form.cognome.data, mail=form.email.data, cf=form.cf.data, psw=form.psw.data, data_di_nascita=form.data_di_nascita.data, id_artista=None)
+            user = User(nome=form.nome.data, cognome=form.cognome.data, mail=form.email.data, psw=form.psw.data, data_di_nascita=form.data_di_nascita.data, id_artista=None, premium=False, ascoltate=[], username = form.username.data)
             user.debug()
             db.session.add(user)
             db.session.commit()
+            
             print("User added correctly!")
             flash("User added correctly!")
+
             form.nome.data = ''
             form.cognome.data = ''
             form.email.data = ''
-            form.cf.data = ''
+            form.username.data = ''
             form.psw.data = ''
             form.data_di_nascita.data = ''
             
@@ -306,7 +324,7 @@ def profileinfo():
 
     if form.submit1.data and form.validate():
         print("Modified info")
-        user = User.query.filter_by(cf = current_user.cf).first()
+        user = User.query.filter_by(id = current_user.id).first()
 
         user.nome = form.nome.data
         user.cognome = form.cognome.data
@@ -319,7 +337,7 @@ def profileinfo():
 
     
     if form2.submit2.data and form2.validate():    
-        user = User.query.filter_by(cf = current_user.cf).first()
+        user = User.query.filter_by(id = current_user.id).first()
 
         if user.verify_password(form2.old_psw.data):
             user.psw = generate_password_hash(form2.psw.data)
@@ -355,7 +373,7 @@ def artist():
 
     # controllo se esiste già una richiesta a nome dell'utente, se esiste prendo il codice si stato, altrimenti setto il codice di stato a 0
     if not artist:
-        request = Richieste_diventa_artista.query.filter_by(id_utente = current_user.cf).first()
+        request = Richieste_diventa_artista.query.filter_by(id_utente = current_user.id).first()
         if request:
             request_status = request.stato_richiesta
         else:
@@ -365,7 +383,7 @@ def artist():
             nome_arte = form.nome_arte.data
             motivazione = form.motivazione.data
             stato_richiesta = 1
-            id_utente = current_user.cf
+            id_utente = current_user.id
 
             richiesta = Richieste_diventa_artista(nome_arte, motivazione, stato_richiesta, id_utente)
             richiesta.debug()
@@ -419,8 +437,8 @@ def admin():
 #######################################################
 
 @login_manager.user_loader
-def load_user(cf):
-    return User.query.get(cf)
+def load_user(id):
+    return User.query.get(id)
 
 
 if __name__ == "__main__":
