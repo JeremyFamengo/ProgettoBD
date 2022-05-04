@@ -8,7 +8,7 @@ from sqlalchemy import PrimaryKeyConstraint
 import werkzeug
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, DateField, TextAreaField
+from wtforms import StringField, PasswordField, SubmitField, DateField, TextAreaField, SelectField, FileField
 from wtforms.validators import DataRequired, EqualTo, Length
 from datetime import date
 
@@ -238,6 +238,17 @@ class Playlist(db.Model):
         self.id_canzoni = id_canzoni
         self.restricted = restricted
 
+class UploadForm(FlaskForm):
+    titolo = StringField("Titolo", validators=[DataRequired()])
+    genere = SelectField("Genere", choices=[(1, "Pop"), (2, "Rock"), (3, "Blues")], validators=[DataRequired()])
+    file = FileField("Canzone", validators=[DataRequired()])
+    riservato = SelectField("Riservato", choices=[(True, "No"), (False, "Si")], validators=[DataRequired()])
+    album = SelectField("Album", validators=[DataRequired()])
+    scadenza = DateField("Scadenza")
+    submit = SubmitField("Carica")
+
+class CreateAlbum(FlaskForm):
+    titolo = StringField("Titolo", validators=[DataRequired()])
 
     
 
@@ -459,9 +470,16 @@ def uploadsong():
         flash("You must be an Artist to access the artist's dashboard")
         return redirect('/profile')
 
+    form = UploadForm()
+
     artista = Artista.query.filter_by(id_artista = current_user.id_artista).first()
 
-    return render_template("uploadsong.html")
+    return render_template("uploadsong.html", form=form)
+
+@app.route('/artist/creaalbum')
+@login_required
+def creaalbum():
+    return render_template("creaalbum.html")
 
 #######################################################   
 # FUNCTIONS
