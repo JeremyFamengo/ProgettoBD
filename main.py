@@ -27,6 +27,9 @@ app.config['SECRET_KEY']="AS7wvAhaKu4yFyVuPaTasCUDY6mg8c3RmjMFAAtQCfAxrUZxt5xZbT
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://echos:EchosApp@139.162.163.103/echos2"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+# setting flask max dimensions of uploaded files to prevent crash and errors
+app.config['MAX_CONTENT_PATH'] = 10485760
+
 #initializing database with flask-sqalchemy
 db = SQLAlchemy(app)
 
@@ -439,6 +442,27 @@ def admin():
     return render_template("admin.html", requests = requests)
 
 
+@app.route('/artist/dashboard')
+@login_required
+def dashboard():
+    if current_user.id_artista == None:
+        flash("You must be an Artist to access the artist's dashboard")
+        return redirect('/profile')
+
+    user = Artista.query.filter_by(id_artista = current_user.id_artista).first().nome_arte
+
+    return render_template("dashboard.html", user = user)
+
+@app.route('/artist/uploadsong')
+@login_required
+def uploadsong():
+    if current_user.id_artista == None:
+        flash("You must be an Artist to access the artist's dashboard")
+        return redirect('/profile')
+
+    artista = Artista.query.filter_by(id_artista = current_user.id_artista).first()
+
+    return render_template("uploadsong.html")
 
 #######################################################   
 # FUNCTIONS
