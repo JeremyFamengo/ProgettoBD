@@ -370,10 +370,9 @@ def artist():
     nome_arte = None
 
     # controllo se esiste già una entry nella tabella artisti legata all'utente corrente e setto artist a True se vero, altrimenti a False
-    artist = Artista.query.filter_by(id_artista = current_user.id_artista).first()
+    artist = current_user.id_artista
     if artist:
-        nome_arte = artist.nome_arte
-        artist = True
+        return redirect("/artist/dashboard")
     else:
         artist = False
 
