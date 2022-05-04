@@ -199,14 +199,16 @@ class Canzoni(db.Model):
     anno = db.Column(db.Date)
     id_genere = db.Column(db.Integer)
     file = db.Column(db.LargeBinary)
+    extension = db.Column(db.String(10))
 
-    def __intit__(self, id_canzone, titolo, durata, anno, id_genere_musicale, file):
+    def __intit__(self, id_canzone, titolo, durata, anno, id_genere_musicale, file, extension):
         self.id_canzone = id_canzone
         self.titolo = titolo
         self.durata = durata
         self.anno = anno
         self.id_genere_musicale = id_genere_musicale
         self.file = file
+        self.extension = extension
 
 class Generi_Musicali(db.Model):
     __tablename__ = 'generi_musicali'
