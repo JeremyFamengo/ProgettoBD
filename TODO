@@ -1,8 +1,7 @@
 Implementare cancellazione utenti
 Implementare cancellazione artista
 Implementare status premium
-Gestire salvataggio richieste per diventare artista
-Implementare Bootstrap
+Controllare ridondanze richieste per diventare artista
 Rifare frontend con Bootstrap
 Correggere errori nuovo database
 Sistemare gerarchia
