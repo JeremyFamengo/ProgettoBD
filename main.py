@@ -3,13 +3,14 @@ from typing_extensions import Self
 from flask import *
 from flask_sqlalchemy import *
 from flask_login import UserMixin, current_user, login_user, LoginManager, login_required, logout_user
-from psycopg2 import IntegrityError
+from psycopg2 import Date, IntegrityError
 from sqlalchemy import PrimaryKeyConstraint
 import werkzeug
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, DateField, TextAreaField
 from wtforms.validators import DataRequired, EqualTo, Length
+from datetime import date
 
 
 #######################################################
@@ -149,11 +150,12 @@ class Artista(db.Model):
     id_artista = db.Column(db.Integer, primary_key = True)
     nome_arte = db.Column(db.String)
     data_iscrizione = db.Column(db.Date)
+    id_utente = db.Column(db.Integer)
 
-    def __init__(self, id_artista, nome_arte, data_iscrizione):
-        self.id_artista = id_artista
+    def __init__(self, nome_arte, data_iscrizione, id_utente):
         self.nome_arte = nome_arte
         self.data_iscrizione = data_iscrizione
+        self.id_utente = id_utente
 
 
     def debug(self):
@@ -404,25 +406,29 @@ def admin():
     # si potrebbe fare con stesso nome dei pulsanti ma valore diverso TRUE per accept e FALSE per reject
     if request.method == 'POST':
         id = request.form['id_utente']
-        nome_arte = request.form=['nome_arte']
-        try:
-            accept = bool(request.form['accept'])
-        except werkzeug.exceptions.BadRequestKeyError:
-            accept = False
-        try:
-            reject = bool(request.form['reject'])
-        except werkzeug.exceptions.BadRequestKeyError:
-            reject = False
+        nome_arte = request.form['nome_arte']
+        print(id)
+        print(nome_arte)
+        
+        accept = bool(request.form['accept'])
+        print(accept)
 
+
+        # TODO: controllare ridondanze in questa procedura
         if accept:
             req = Richieste_diventa_artista.query.filter_by(id_utente = id).first()
             req.stato_richiesta = 2
-            artista = Artista(190123, nome_arte, id)
+            artista = Artista(nome_arte, date.today(), id)
             db.session.add(artista)
+            db.session.commit()
+
+            user = User.query.filter_by(id = id).first()
+            artista = Artista.query.filter_by(id_utente = user.id).first()
+            user.id_artista = artista.id_artista
 
             db.session.commit()
 
-        elif reject:
+        else:
             req = Richieste_diventa_artista.query.filter_by(id_utente = id).first()
             req.stato_richiesta = -1
             db.session.commit()
