@@ -12,7 +12,20 @@
 {% endblock %}
 
 {% block right_content %}
-        <p>Ben tornato, {{ user }}</p>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for msg in messages %}
+            <div class="flashed-message-error alert">
+                {{ msg }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" style="float: right"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <p>Ben tornato, {{ user }}</p>
+
 {% endblock %}
 
 {% block left_content %}
