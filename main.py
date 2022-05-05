@@ -1,6 +1,3 @@
-from asyncio import _set_running_loop
-from faulthandler import dump_traceback_later
-from typing_extensions import Self
 from flask import *
 from flask_sqlalchemy import *
 from flask_login import UserMixin, current_user, login_user, LoginManager, login_required, logout_user
