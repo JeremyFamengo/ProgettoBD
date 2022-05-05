@@ -1,3 +1,4 @@
+from pickletools import int4
 from flask import *
 from flask_sqlalchemy import *
 from flask_login import UserMixin, current_user, login_user, LoginManager, login_required, logout_user
@@ -6,9 +7,9 @@ from sqlalchemy import PrimaryKeyConstraint
 import werkzeug
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, DateField, TextAreaField, SelectField, FileField
+from wtforms import StringField, PasswordField, SubmitField, DateField, TextAreaField, SelectField, FileField, IntegerField
 from wtforms.validators import DataRequired, EqualTo, Length
-from datetime import date
+from datetime import date, timedelta
 
 
 #######################################################
@@ -258,7 +259,7 @@ class UploadForm(FlaskForm):
 class CreateAlbumForm(FlaskForm):
     titolo = StringField("Titolo", validators=[DataRequired()])
     singolo = SelectField("Singolo", choices=[(0, "No"), (1, "Sì")])
-    scadenza = DateField("Scadenza (opzionale)")
+    scadenza = IntegerField("Scadenza (opzionale)")
     restricted = SelectField("Riservato", choices=[(0, "No"), (1, "Sì")])
     anno = DateField("Anno di uscita", validators=[DataRequired()])
     submit = SubmitField("Crea")
@@ -500,16 +501,13 @@ def creaalbum():
 
     form = CreateAlbumForm()
 
-    if form.validate_on_submit():
+
+    if form.is_submitted():
         titolo = form.titolo.data
-        scadenza = form.scadenza.data
-        
+        anno = form.anno.data
         singolo = bool(form.singolo.data)
         restricted = bool(form.restricted.data)
-
-        anno = form.anno.data
-        if not anno:
-            anno = 0
+        scadenza = form.scadenza.data
 
         album = Album(artista.id_artista, [], singolo, scadenza, restricted, titolo, anno)
 

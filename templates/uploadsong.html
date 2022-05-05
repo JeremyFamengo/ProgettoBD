@@ -25,33 +25,44 @@
 
 {% block right_content %}
 
-<fieldset>
-    <form action="/uploadsong" method="POST">
-        <p>
-            {{ form.hidden_tag() }}
-        
-            {{ form.titolo.label }}<br><br>
-            {{ form.titolo(size=30, class="form") }} <br><br>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for msg in messages %}
+            <div class="flashed-message-error alert">
+                {{ msg }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" style="float: right"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
 
-            {{ form.genere.label }}<br><br>
-            {{ form.genere(class="form") }} <br><br>
+    <fieldset>
+        <form action="/uploadsong" method="POST">
+            <p>
+                {{ form.hidden_tag() }}
+            
+                {{ form.titolo.label }}<br><br>
+                {{ form.titolo(size=30, class="form") }} <br><br>
 
-            {{ form.file.label }}<br><br>
-            {{ form.file(size=30, class="form") }} <br><br>
+                {{ form.genere.label }}<br><br>
+                {{ form.genere(class="form") }} <br><br>
 
-            {{ form.riservato.label }}<br><br>
-            {{ form.riservato(class="form") }} <br><br>
+                {{ form.file.label }}<br><br>
+                {{ form.file(size=30, class="form") }} <br><br>
 
-            {{ form.album.label }}<br><br>
-            {{ form.album(class="form") }} <br><br>
+                {{ form.riservato.label }}<br><br>
+                {{ form.riservato(class="form") }} <br><br>
 
-            {{ form.scadenza.label }}<br><br>
-            {{ form.scadenza(class="form") }} <br><br>
+                {{ form.album.label }}<br><br>
+                {{ form.album(class="form") }} <br><br>
 
-            {{ form.submit(size=30, class="button-2") }} <br><br>
-        </p>
-    </form>
-</fieldset>
+                {{ form.scadenza.label }}<br><br>
+                {{ form.scadenza(class="form") }} <br><br>
+
+                {{ form.submit(size=30, class="button-2") }} <br><br>
+            </p>
+        </form>
+    </fieldset>
 
 {% endblock %}
 
