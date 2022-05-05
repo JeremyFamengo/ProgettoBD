@@ -1,4 +1,4 @@
-Implementare creazione album
+Aggiungere controllo scadenza a valore NoneType che non fa validare il form nella creazione di album
 Finire di implementare upload canzoni
 Implementare lista e statistiche dashboard artista
 Implementare statistiche dashboards utente
