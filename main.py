@@ -1,7 +1,6 @@
 from flask import *
 from flask_sqlalchemy import *
 from flask_login import UserMixin, current_user, login_user, LoginManager, login_required, logout_user
-from matplotlib.pyplot import annotate
 from psycopg2 import Date, IntegrityError
 from sqlalchemy import PrimaryKeyConstraint
 import werkzeug
