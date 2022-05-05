@@ -1,8 +1,10 @@
+from asyncio import _set_running_loop
 from faulthandler import dump_traceback_later
 from typing_extensions import Self
 from flask import *
 from flask_sqlalchemy import *
 from flask_login import UserMixin, current_user, login_user, LoginManager, login_required, logout_user
+from matplotlib.pyplot import annotate
 from psycopg2 import Date, IntegrityError
 from sqlalchemy import PrimaryKeyConstraint
 import werkzeug
@@ -181,8 +183,7 @@ class Album(db.Model):
     titolo = db.Column(db.String)
     anno = db.Column(db.Date)
 
-    def __init__(self, id_album, id_artista, id_canzoni, singolo, scadenza, restricted, titolo, anno):
-        self.id_album = id_album
+    def __init__(self, id_artista, id_canzoni, singolo, scadenza, restricted, titolo, anno):
         self.id_artista = id_artista
         self.id_canzoni = id_canzoni
         self.singolo = singolo
@@ -190,6 +191,17 @@ class Album(db.Model):
         self.restricted = restricted
         self.titolo = titolo
         self.anno = anno
+
+    def debug(self):
+        print("\n---------[DEBUG]---------\n")
+        print(self.id_artista)
+        print(self.id_canzoni)
+        print(self.singolo)
+        print(self.scadenza)
+        print(self.restricted)
+        print(self.titolo)
+        print(self.anno)
+        print("\n-------------------------\n")
 
 class Canzoni(db.Model):
     __tablename__ = 'canzoni'
@@ -242,13 +254,18 @@ class UploadForm(FlaskForm):
     titolo = StringField("Titolo", validators=[DataRequired()])
     genere = SelectField("Genere", choices=[(1, "Pop"), (2, "Rock"), (3, "Blues")], validators=[DataRequired()])
     file = FileField("Canzone", validators=[DataRequired()])
-    riservato = SelectField("Riservato", choices=[(True, "No"), (False, "Si")], validators=[DataRequired()])
+    riservato = SelectField("Riservato", choices=[(0, "No"), (1, "Sì")], validators=[DataRequired()])
     album = SelectField("Album", validators=[DataRequired()])
     scadenza = DateField("Scadenza")
     submit = SubmitField("Carica")
 
-class CreateAlbum(FlaskForm):
+class CreateAlbumForm(FlaskForm):
     titolo = StringField("Titolo", validators=[DataRequired()])
+    singolo = SelectField("Singolo", choices=[(0, "No"), (1, "Sì")])
+    scadenza = DateField("Scadenza (opzionale)")
+    restricted = SelectField("Riservato", choices=[(0, "No"), (1, "Sì")])
+    anno = DateField("Anno di uscita", validators=[DataRequired()])
+    submit = SubmitField("Crea")
 
     
 
@@ -417,8 +434,6 @@ def artist():
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
 
-    # non so se è buona pratica gestire queta cosa con le eccezioni, da rivedere
-    # si potrebbe fare con stesso nome dei pulsanti ma valore diverso TRUE per accept e FALSE per reject
     if request.method == 'POST':
         id = request.form['id_utente']
         nome_arte = request.form['nome_arte']
@@ -459,9 +474,11 @@ def dashboard():
         flash("You must be an Artist to access the artist's dashboard")
         return redirect('/profile')
 
-    user = Artista.query.filter_by(id_artista = current_user.id_artista).first().nome_arte
+    user = Artista.query.filter_by(id_artista = current_user.id_artista).first()
 
-    return render_template("dashboard.html", user = user)
+    albums = Album.query.filter_by(id_artista = user.id_artista).all()
+
+    return render_template("dashboard.html", user=user.nome_arte, albums=albums)
 
 @app.route('/artist/uploadsong')
 @login_required
@@ -476,10 +493,44 @@ def uploadsong():
 
     return render_template("uploadsong.html", form=form)
 
-@app.route('/artist/creaalbum')
+@app.route('/artist/creaalbum', methods=['GET', 'POST'])
 @login_required
 def creaalbum():
-    return render_template("creaalbum.html")
+    if current_user.id_artista == None:
+        flash("You must be an Artist to access the artist's dashboard")
+        return redirect('/profile')
+
+    artista = Artista.query.filter_by(id_artista = current_user.id_artista).first()
+
+    form = CreateAlbumForm()
+
+    if form.validate_on_submit():
+        titolo = form.titolo.data
+        scadenza = form.scadenza.data
+        
+        singolo = bool(form.singolo.data)
+        restricted = bool(form.restricted.data)
+
+        anno = form.anno.data
+        if not anno:
+            anno = 0
+
+        album = Album(artista.id_artista, [], singolo, scadenza, restricted, titolo, anno)
+
+        album.debug()
+
+        db.session.add(album)
+        db.session.commit()
+
+        titolo = ''
+        scadenza = ''
+        anno = ''
+        singolo = ''
+        restricted = ''
+
+        flash("Album aggiunto correttamente")
+
+    return render_template("creaalbum.html", form=form)
 
 #######################################################   
 # FUNCTIONS

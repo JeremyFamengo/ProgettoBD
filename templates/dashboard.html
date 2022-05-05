@@ -24,6 +24,23 @@
 {% block right_content %}
 
     <p>I tuoi album</p>
+
+    {% if albums %}
+    
+        {% for album in albums %}
+
+            <div>
+                <p>{{ album.titolo }} by {{ album.id_artista }}</p>
+            </div>
+            
+        {% endfor %}
+        
+    {% else %}
+            
+            <p>Non hai ancora pubblicato nessun album</p>
+    
+    {% endif %}
+
     <p>Le tue canzoni</p>
     <p>Statistiche</p>
 
