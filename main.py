@@ -1,15 +1,16 @@
-from faulthandler import dump_traceback_later
-from typing_extensions import Self
+from pickletools import int4
 from flask import *
 from flask_sqlalchemy import *
 from flask_login import UserMixin, current_user, login_user, LoginManager, login_required, logout_user
-from psycopg2 import IntegrityError
+from psycopg2 import Date, IntegrityError
 from sqlalchemy import PrimaryKeyConstraint
 import werkzeug
+from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, DateField, TextAreaField
+from wtforms import StringField, PasswordField, SubmitField, DateField, TextAreaField, SelectField, FileField, IntegerField
 from wtforms.validators import DataRequired, EqualTo, Length
+from datetime import date, timedelta
 
 
 #######################################################
@@ -25,6 +26,12 @@ app.config['SECRET_KEY']="AS7wvAhaKu4yFyVuPaTasCUDY6mg8c3RmjMFAAtQCfAxrUZxt5xZbT
 #settig flask-sqalchemy database connection
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://echos:EchosApp@139.162.163.103/echos2"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# setting flask max dimensions of uploaded files to prevent crash and errors
+app.config['MAX_CONTENT_PATH'] = 10485760
+
+#setting upload folder
+app.config['UPLOAD_FOLDER'] = "$HOME/Downloads/echos_uploads"
 
 #initializing database with flask-sqalchemy
 db = SQLAlchemy(app)
@@ -149,11 +156,12 @@ class Artista(db.Model):
     id_artista = db.Column(db.Integer, primary_key = True)
     nome_arte = db.Column(db.String)
     data_iscrizione = db.Column(db.Date)
+    id_utente = db.Column(db.Integer)
 
-    def __init__(self, id_artista, nome_arte, data_iscrizione):
-        self.id_artista = id_artista
+    def __init__(self, nome_arte, data_iscrizione, id_utente):
         self.nome_arte = nome_arte
         self.data_iscrizione = data_iscrizione
+        self.id_utente = id_utente
 
 
     def debug(self):
@@ -176,8 +184,7 @@ class Album(db.Model):
     titolo = db.Column(db.String)
     anno = db.Column(db.Date)
 
-    def __init__(self, id_album, id_artista, id_canzoni, singolo, scadenza, restricted, titolo, anno):
-        self.id_album = id_album
+    def __init__(self, id_artista, id_canzoni, singolo, scadenza, restricted, titolo, anno):
         self.id_artista = id_artista
         self.id_canzoni = id_canzoni
         self.singolo = singolo
@@ -185,6 +192,17 @@ class Album(db.Model):
         self.restricted = restricted
         self.titolo = titolo
         self.anno = anno
+
+    def debug(self):
+        print("\n---------[DEBUG]---------\n")
+        print(self.id_artista)
+        print(self.id_canzoni)
+        print(self.singolo)
+        print(self.scadenza)
+        print(self.restricted)
+        print(self.titolo)
+        print(self.anno)
+        print("\n-------------------------\n")
 
 class Canzoni(db.Model):
     __tablename__ = 'canzoni'
@@ -197,14 +215,16 @@ class Canzoni(db.Model):
     anno = db.Column(db.Date)
     id_genere = db.Column(db.Integer)
     file = db.Column(db.LargeBinary)
+    extension = db.Column(db.String(10))
 
-    def __intit__(self, id_canzone, titolo, durata, anno, id_genere_musicale, file):
+    def __intit__(self, id_canzone, titolo, durata, anno, id_genere_musicale, file, extension):
         self.id_canzone = id_canzone
         self.titolo = titolo
         self.durata = durata
         self.anno = anno
         self.id_genere_musicale = id_genere_musicale
         self.file = file
+        self.extension = extension
 
 class Generi_Musicali(db.Model):
     __tablename__ = 'generi_musicali'
@@ -231,6 +251,22 @@ class Playlist(db.Model):
         self.id_canzoni = id_canzoni
         self.restricted = restricted
 
+class UploadForm(FlaskForm):
+    titolo = StringField("Titolo", validators=[DataRequired()])
+    genere = SelectField("Genere", choices=[(1, "Pop"), (2, "Rock"), (3, "Blues")], validators=[DataRequired()])
+    file = FileField("Canzone", validators=[DataRequired()])
+    riservato = SelectField("Riservato", choices=[(0, "No"), (1, "Sì")], validators=[DataRequired()])
+    album = SelectField("Album", choices=[(1, 1)], validators=[DataRequired()])
+    scadenza = DateField("Scadenza")
+    submit = SubmitField("Carica")
+
+class CreateAlbumForm(FlaskForm):
+    titolo = StringField("Titolo", validators=[DataRequired()])
+    singolo = SelectField("Singolo", choices=[(0, "No"), (1, "Sì")])
+    scadenza = IntegerField("Scadenza (opzionale)")
+    restricted = SelectField("Riservato", choices=[(0, "No"), (1, "Sì")])
+    anno = DateField("Anno di uscita", validators=[DataRequired()])
+    submit = SubmitField("Crea")
 
     
 
@@ -363,10 +399,9 @@ def artist():
     nome_arte = None
 
     # controllo se esiste già una entry nella tabella artisti legata all'utente corrente e setto artist a True se vero, altrimenti a False
-    artist = Artista.query.filter_by(id_artista = current_user.id_artista).first()
+    artist = current_user.id_artista
     if artist:
-        nome_arte = artist.nome_arte
-        artist = True
+        return redirect("/artist/dashboard")
     else:
         artist = False
 
@@ -400,29 +435,31 @@ def artist():
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
 
-    # non so se è buona pratica gestire queta cosa con le eccezioni, da rivedere
-    # si potrebbe fare con stesso nome dei pulsanti ma valore diverso TRUE per accept e FALSE per reject
     if request.method == 'POST':
         id = request.form['id_utente']
-        nome_arte = request.form=['nome_arte']
-        try:
-            accept = bool(request.form['accept'])
-        except werkzeug.exceptions.BadRequestKeyError:
-            accept = False
-        try:
-            reject = bool(request.form['reject'])
-        except werkzeug.exceptions.BadRequestKeyError:
-            reject = False
+        nome_arte = request.form['nome_arte']
+        print(id)
+        print(nome_arte)
+        
+        accept = bool(request.form['accept'])
+        print(accept)
 
+
+        # TODO: controllare ridondanze in questa procedura
         if accept:
             req = Richieste_diventa_artista.query.filter_by(id_utente = id).first()
             req.stato_richiesta = 2
-            artista = Artista(190123, nome_arte, id)
+            artista = Artista(nome_arte, date.today(), id)
             db.session.add(artista)
+            db.session.commit()
+
+            user = User.query.filter_by(id = id).first()
+            artista = Artista.query.filter_by(id_utente = user.id).first()
+            user.id_artista = artista.id_artista
 
             db.session.commit()
 
-        elif reject:
+        else:
             req = Richieste_diventa_artista.query.filter_by(id_utente = id).first()
             req.stato_richiesta = -1
             db.session.commit()
@@ -431,6 +468,77 @@ def admin():
     return render_template("admin.html", requests = requests)
 
 
+@app.route('/artist/dashboard')
+@login_required
+def dashboard():
+    if current_user.id_artista == None:
+        flash("You must be an Artist to access the artist's dashboard")
+        return redirect('/profile')
+
+    user = Artista.query.filter_by(id_artista = current_user.id_artista).first()
+
+    albums = Album.query.filter_by(id_artista = user.id_artista).all()
+
+    return render_template("dashboard.html", user=user.nome_arte, albums=albums)
+
+@app.route('/artist/uploadsong')
+@login_required
+def uploadsong():
+    if current_user.id_artista == None:
+        flash("You must be an Artist to access the artist's dashboard")
+        return redirect('/profile')
+
+    form = UploadForm()
+
+    artista = Artista.query.filter_by(id_artista = current_user.id_artista).first()
+
+    return render_template("uploadsong.html", form=form)
+
+@app.route('/artist/creaalbum', methods=['GET', 'POST'])
+@login_required
+def creaalbum():
+    if current_user.id_artista == None:
+        flash("You must be an Artist to access the artist's dashboard")
+        return redirect('/profile')
+
+    artista = Artista.query.filter_by(id_artista = current_user.id_artista).first()
+
+    form = CreateAlbumForm()
+
+
+    if form.is_submitted():
+        titolo = form.titolo.data
+        anno = form.anno.data
+        singolo = bool(form.singolo.data)
+        restricted = bool(form.restricted.data)
+        scadenza = form.scadenza.data
+
+        album = Album(artista.id_artista, [], singolo, scadenza, restricted, titolo, anno)
+
+        album.debug()
+
+        db.session.add(album)
+        db.session.commit()
+
+        titolo = ''
+        scadenza = ''
+        anno = ''
+        singolo = ''
+        restricted = ''
+
+        flash("Album aggiunto correttamente")
+
+    return render_template("creaalbum.html", form=form)
+    
+
+@app.route('/168AN4df15/uploader', methods=['GET', 'POST'])
+def uploader():
+    if request.method == 'POST':
+      f = request.files['file']
+      f.save(secure_filename(f.filename))
+      flash("file uploaded successfully")
+
+    return redirect('/artist/uploadsong')
 
 #######################################################   
 # FUNCTIONS
@@ -439,6 +547,8 @@ def admin():
 @login_manager.user_loader
 def load_user(id):
     return User.query.get(id)
+
+
 
 
 if __name__ == "__main__":

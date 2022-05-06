@@ -1,10 +1,15 @@
-Rivedere salvataggio richieste artista implementazione
-Gestire salvataggio richieste per diventare artista
-Implementare Bootstrap
+Aggiungere controllo scadenza a valore NoneType che non fa validare il form nella creazione di album
+Finire di implementare upload canzoni
+Implementare lista e statistiche dashboard artista
+Implementare statistiche dashboards utente
+Rendere Base-1/left-content fixed
+Implementare cancellazione utenti
+Implementare cancellazione artista
+Implementare status premium
+Controllare ridondanze richieste per diventare artista
 Rifare frontend con Bootstrap
 Correggere errori nuovo database
-Sistemare gerarchia
-Oscuare credenziali portandole fuori dalla cartella pubblica
+Sistemare gerarchia >> https://exploreflask.com/en/latest/organizing.html >> https://dev.to/curiouspaul1/creating-modularized-flask-apps-with-blueprints-19nc
 Dividere le classi in file diversi se possibile
 Commentare il codice esaustivamente
 Fare README.md carino

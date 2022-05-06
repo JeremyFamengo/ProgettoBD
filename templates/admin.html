@@ -20,8 +20,9 @@
                 User id: [ {{ request.id_utente }} ] - {{ request.nome_arte }} - {{ request.motivazione }}
                 
                 <input type="hidden" name="id_utente" value="{{ request.id_utente }}">
+                <input type="hidden" name="nome_arte" value="{{ request.nome_arte }}">
                 <button style="float: right" type="submit" name="accept" value=1>Accept</button>
-                <button style="float: right" type="submit" name="reject" value="1">Reject</button>
+                <button style="float: right" type="submit" name="accept" value="0">Reject</button>
                 
             </form>
             <br>

@@ -25,7 +25,8 @@
 
     {% if artist %} <!-- se è già artista mostra la dashboard-->
         
-        <p> Ecco la tua dashboard, {{ nome_arte }}</p>
+        <p> Bentornato nella tua dashboard, {{ nome_arte }}</p>
+        
 
     {% endif %}
 
@@ -61,7 +62,7 @@
                     {{ form.nome_arte(size=30, class="form") }} <br><br>
                     
                     {{ form.motivazione.label }} <br><br>
-                    {{ form.motivazione(rows = 5, class="form-field") }} <br><br><br><br><br>
+                    {{ form.motivazione(rows = 5, class="form-field") }} <br><br><br><br><br><br>
                 
                     {{ form.submit(size=30, class="button-2") }}
                 </p>
