@@ -492,6 +492,13 @@ def uploadsong():
 
     artista = Artista.query.filter_by(id_artista = current_user.id_artista).first()
 
+    albums = Album.query.filter_by(id_artista = artista.id_artista).all()
+
+    choices = []
+    for album in albums:
+        choices.append(album.titolo)
+
+    form.album.choices = choices
     return render_template("uploadsong.html", form=form)
 
 @app.route('/artist/creaalbum', methods=['GET', 'POST'])
@@ -547,8 +554,6 @@ def uploader():
 @login_manager.user_loader
 def load_user(id):
     return User.query.get(id)
-
-
 
 
 if __name__ == "__main__":

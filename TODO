@@ -6,10 +6,7 @@ Rendere Base-1/left-content fixed
 Implementare cancellazione utenti
 Implementare cancellazione artista
 Implementare status premium
-Controllare ridondanze richieste per diventare artista
-Rifare frontend con Bootstrap
 Correggere errori nuovo database
 Sistemare gerarchia >> https://exploreflask.com/en/latest/organizing.html >> https://dev.to/curiouspaul1/creating-modularized-flask-apps-with-blueprints-19nc
-Dividere le classi in file diversi se possibile
 Commentare il codice esaustivamente
 Fare README.md carino
