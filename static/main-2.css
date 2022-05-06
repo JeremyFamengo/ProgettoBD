@@ -100,7 +100,11 @@ fieldset {
     padding: 10px 80px;
     font-size: 30px;
     border-radius: 25px;
+    opacity: 0.6;
+    transition: 0.3s;
 }
+  
+.button:hover {opacity: 1}
 
 .button-2 {
     border: none;
@@ -109,7 +113,11 @@ fieldset {
     padding: 10px 30px;
     font-size: 15px;
     border-radius: 25px;
+    opacity: 0.6;
+    transition: 0.3s;
 }
+  
+.button-2:hover {opacity: 1}
 
 form {
     text-align:center;
