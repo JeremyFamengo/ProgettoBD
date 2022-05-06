@@ -13,6 +13,9 @@ from datetime import date, timedelta
 import mutagen
 import io
 
+from pydub import AudioSegment
+from pydub.playback import play
+
 from django import forms
 
 
@@ -579,10 +582,12 @@ def uploader():
 
     return redirect('/artist/uploadsong')
 
-@app.route
+@app.route('/player')
 @login_required
 def player():
-    return render_template("player.html")
+    canzone=Canzoni.query.filter_by(id=1).first()
+    
+    return render_template("player.html",canzone=canzone)
 
 #######################################################   
 # FUNCTIONS
@@ -594,4 +599,4 @@ def load_user(id):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True) 
