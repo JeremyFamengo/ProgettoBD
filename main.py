@@ -12,6 +12,12 @@ from wtforms import StringField, PasswordField, SubmitField, DateField, TextArea
 from wtforms.validators import DataRequired, EqualTo, Length
 from datetime import date, timedelta
 
+from pydub import AudioSegment
+from pydub.playback import play
+import io
+
+from django import forms
+
 
 #######################################################
 # CONFIGS
@@ -211,19 +217,19 @@ class Canzoni(db.Model):
     riservato = db.Column(db.Boolean)
     data_inserimento = db.Column(db.Date)
     titolo = db.Column(db.String)
-    durata = db.Column(db.Integer)
-    anno = db.Column(db.Date)
+    scadenza = db.Column(db.Integer)
+    data_uscita = db.Column(db.Date)
     id_genere = db.Column(db.Integer)
     file = db.Column(db.LargeBinary)
     extension = db.Column(db.String(10))
 
-    def __intit__(self, id_canzone, titolo, durata, anno, id_genere_musicale, file, extension):
-        self.id_canzone = id_canzone
+    def __intit__(self, titolo, scadenza, data_uscita, id_genere_musicale, file, riservato, extension):
         self.titolo = titolo
-        self.durata = durata
-        self.anno = anno
+        self.scadenza = scadenza
+        self.data_uscita = data_uscita
         self.id_genere_musicale = id_genere_musicale
         self.file = file
+        self.riservato = riservato
         self.extension = extension
 
 class Generi_Musicali(db.Model):
@@ -254,9 +260,10 @@ class Playlist(db.Model):
 class UploadForm(FlaskForm):
     titolo = StringField("Titolo", validators=[DataRequired()])
     genere = SelectField("Genere", choices=[(1, "Pop"), (2, "Rock"), (3, "Blues")], validators=[DataRequired()])
+    data_uscita = DateField("Data di uscita")
     file = FileField("Canzone", validators=[DataRequired()])
     riservato = SelectField("Riservato", choices=[(0, "No"), (1, "Sì")], validators=[DataRequired()])
-    album = SelectField("Album", choices=[(1, 1)], validators=[DataRequired()])
+    album = SelectField("Album", validators=[DataRequired()])
     scadenza = DateField("Scadenza")
     submit = SubmitField("Carica")
 
@@ -496,9 +503,11 @@ def uploadsong():
 
     choices = []
     for album in albums:
-        choices.append(album.titolo)
+        tmp = (album.id_album,album.titolo)
+        choices.append(tmp)
 
     form.album.choices = choices
+
     return render_template("uploadsong.html", form=form)
 
 @app.route('/artist/creaalbum', methods=['GET', 'POST'])
@@ -542,8 +551,22 @@ def creaalbum():
 def uploader():
     if request.method == 'POST':
       f = request.files['file']
-      f.save(secure_filename(f.filename))
-      flash("file uploaded successfully")
+    #   f.save(secure_filename(f.filename))
+      form = UploadForm()
+
+
+    if form.is_submitted():
+        titolo = form.titolo.data
+        data_uscita = form.data_uscita.data
+        riservato = bool(form.riservato.data)
+        album = int(form.album.data)
+        scadenza = form.scadenza.data
+        genere=form.genere.data
+        data = open(secure_filename(f.filename), 'rb').read()
+        canzoni=Canzoni(titolo, scadenza, data_uscita, genere, data, 'mp3')
+        db.session.add(canzoni)
+        db.session.commit()
+        flash("file uploaded successfully")
 
     return redirect('/artist/uploadsong')
 
