@@ -221,8 +221,10 @@ class Canzoni(db.Model):
     id_genere = db.Column(db.Integer)
     file = db.Column(db.LargeBinary)
     extension = db.Column(db.String(10))
+    durata = db.Column(db.Integer)
 
-    def __intit__(self, titolo, scadenza, data_uscita, id_genere_musicale, file, riservato, extension):
+    def __intit__(self, id_artista, titolo, scadenza, data_uscita, id_genere_musicale, file, riservato, extension, durata):
+        self.id_artista = id_artista
         self.titolo = titolo
         self.scadenza = scadenza
         self.data_uscita = data_uscita
@@ -230,6 +232,7 @@ class Canzoni(db.Model):
         self.file = file
         self.riservato = riservato
         self.extension = extension
+        self.durata = durata
 
 class Generi_Musicali(db.Model):
     __tablename__ = 'generi_musicali'
@@ -258,7 +261,7 @@ class Playlist(db.Model):
 
 class UploadForm(FlaskForm):
     titolo = StringField("Titolo", validators=[DataRequired()])
-    genere = SelectField("Genere", choices=[(1, "Pop"), (2, "Rock"), (3, "Blues")], validators=[DataRequired()])
+    genere = SelectField("Genere", validators=[DataRequired()])
     data_uscita = DateField("Data di uscita")
     file = FileField("Canzone", validators=[DataRequired()])
     riservato = SelectField("Riservato", choices=[(0, "No"), (1, "Sì")], validators=[DataRequired()])
@@ -497,7 +500,7 @@ def uploadsong():
     form = UploadForm()
 
     artista = Artista.query.filter_by(id_artista = current_user.id_artista).first()
-
+    generi = Generi_Musicali.query.all()
     albums = Album.query.filter_by(id_artista = artista.id_artista).all()
 
     choices = []
@@ -506,6 +509,13 @@ def uploadsong():
         choices.append(tmp)
 
     form.album.choices = choices
+
+    choices = []
+    for genere in generi:
+        tmp = (genere.id_genere,genere.nome)
+        choices.append(tmp)
+
+    form.genere.choices = choices
 
     return render_template("uploadsong.html", form=form)
 
@@ -548,22 +558,24 @@ def creaalbum():
 
 @app.route('/168AN4df15/uploader', methods=['GET', 'POST'])
 def uploader():
-    if request.method == 'POST':
-      f = request.files['file']
-    #   f.save(secure_filename(f.filename))
-      form = UploadForm()
-
+      
+    form = UploadForm()
 
     if form.is_submitted():
+        f = request.files['file']
         titolo = form.titolo.data
         data_uscita = form.data_uscita.data
         riservato = bool(form.riservato.data)
         album = int(form.album.data)
         scadenza = form.scadenza.data
         genere=form.genere.data
-        data = open(secure_filename(f.filename), 'rb').read()
-        canzoni=Canzoni(titolo, scadenza, data_uscita, genere, data, 'mp3')
-        db.session.add(canzoni)
+        id_artista = current_user.id_artista
+        data = f.stream.read()
+        durata = 180
+
+        canzone = Canzoni(id_artista=id_artista, titolo=titolo, scadenza=scadenza, data_uscita=data_uscita, id_genere=genere, file=data, riservato=riservato, extension='mp3', durata=durata)
+
+        db.session.add(canzone)
         db.session.commit()
         flash("file uploaded successfully")
 
