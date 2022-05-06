@@ -5,6 +5,7 @@ from flask_login import UserMixin, current_user, login_user, LoginManager, login
 from psycopg2 import Date, IntegrityError
 from sqlalchemy import PrimaryKeyConstraint
 import werkzeug
+from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, DateField, TextAreaField, SelectField, FileField, IntegerField
@@ -28,6 +29,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # setting flask max dimensions of uploaded files to prevent crash and errors
 app.config['MAX_CONTENT_PATH'] = 10485760
+
+#setting upload folder
+app.config['UPLOAD_FOLDER'] = "$HOME/Downloads/echos_uploads"
 
 #initializing database with flask-sqalchemy
 db = SQLAlchemy(app)
@@ -252,7 +256,7 @@ class UploadForm(FlaskForm):
     genere = SelectField("Genere", choices=[(1, "Pop"), (2, "Rock"), (3, "Blues")], validators=[DataRequired()])
     file = FileField("Canzone", validators=[DataRequired()])
     riservato = SelectField("Riservato", choices=[(0, "No"), (1, "Sì")], validators=[DataRequired()])
-    album = SelectField("Album", validators=[DataRequired()])
+    album = SelectField("Album", choices=[(1, 1)], validators=[DataRequired()])
     scadenza = DateField("Scadenza")
     submit = SubmitField("Carica")
 
@@ -525,6 +529,16 @@ def creaalbum():
         flash("Album aggiunto correttamente")
 
     return render_template("creaalbum.html", form=form)
+    
+
+@app.route('/168AN4df15/uploader', methods=['GET', 'POST'])
+def uploader():
+    if request.method == 'POST':
+      f = request.files['file']
+      f.save(secure_filename(f.filename))
+      flash("file uploaded successfully")
+
+    return redirect('/artist/uploadsong')
 
 #######################################################   
 # FUNCTIONS
@@ -533,6 +547,8 @@ def creaalbum():
 @login_manager.user_loader
 def load_user(id):
     return User.query.get(id)
+
+
 
 
 if __name__ == "__main__":
