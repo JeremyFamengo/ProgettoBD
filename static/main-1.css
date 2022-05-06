@@ -185,3 +185,9 @@ form {
     padding: 5px;
     border-radius: 5px;
 }
+
+.album-entry {
+    text-align: left;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}

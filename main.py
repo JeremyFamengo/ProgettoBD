@@ -1,4 +1,3 @@
-from pickletools import int4
 from flask import *
 from flask_sqlalchemy import *
 from flask_login import UserMixin, current_user, login_user, LoginManager, login_required, logout_user
@@ -527,11 +526,11 @@ def creaalbum():
         db.session.add(album)
         db.session.commit()
 
-        titolo = ''
-        scadenza = ''
-        anno = ''
-        singolo = ''
-        restricted = ''
+        form.titolo.data = ''
+        form.scadenza.data = ''
+        form.anno.data = ''
+        form.singolo.data = ''
+        form.restricted.data = ''
 
         flash("Album aggiunto correttamente")
 
