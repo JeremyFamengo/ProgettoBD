@@ -10,9 +10,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, DateField, TextAreaField, SelectField, FileField, IntegerField
 from wtforms.validators import DataRequired, EqualTo, Length
 from datetime import date, timedelta
-
-from pydub import AudioSegment
-from pydub.playback import play
+import mutagen
 import io
 
 from django import forms
@@ -485,10 +483,10 @@ def dashboard():
         return redirect('/profile')
 
     user = Artista.query.filter_by(id_artista = current_user.id_artista).first()
-
+    songs = Canzoni.query.filter_by(id_artista = current_user.id_artista)
     albums = Album.query.filter_by(id_artista = user.id_artista).all()
 
-    return render_template("dashboard.html", user=user.nome_arte, albums=albums)
+    return render_template("dashboard.html", user=user.nome_arte, albums=albums, songs=songs)
 
 @app.route('/artist/uploadsong')
 @login_required
@@ -580,6 +578,11 @@ def uploader():
         flash("file uploaded successfully")
 
     return redirect('/artist/uploadsong')
+
+@app.route
+@login_required
+def player():
+    return render_template("player.html")
 
 #######################################################   
 # FUNCTIONS

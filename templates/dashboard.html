@@ -48,6 +48,26 @@
     
 
     <p>Le tue canzoni</p>
+
+    <ul>
+        {% if songs %}
+            
+            {% for song in songs %}
+
+            <li class="song-entry">
+                <a href="/player"> <p>{{ song.titolo }} - {{ song.data_uscita }}</p></a>
+            </li>
+                                    
+            {% endfor %}
+            
+        {% else %}
+                
+                <p>Non hai ancora pubblicato nessun album</p>
+        
+        {% endif %}
+    </ul>
+
+
     <p>Statistiche</p>
 
 {% endblock %}
