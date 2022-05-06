@@ -207,3 +207,53 @@ form {
     padding-top: 10px;
     padding-bottom: 10px;
 }
+
+div.search-box{
+	position:absolute;
+	width: 280px;
+	height: 30px;
+    right: 10%;
+	display: inline;
+}
+
+input.search{
+	position: relative;
+	display: inline;
+	height: 30px;
+	width: 220px;
+	border-radius: 15px;
+	border: none;
+	float: left;
+	padding: 5px 15px 5px 15px;
+}
+
+input.search:focus{
+	outline: none;
+}
+
+button.bottone{
+	position: relative;
+	display:inline;
+	height: 30px;
+	width: 30px;
+	border-radius: 15px;
+	border: none;
+	float: right;
+	background-color: #2B0078;
+	transition: .2s;
+	transition-timing-function: ease-in;
+}
+
+button.bottone:focus{
+	outline:none;
+}
+
+button.bottone:hover{
+	border-radius: 5px;
+	transition: .2s;
+	transition-timing-function: ease-in;
+}
+
+.fa-search{
+	color: #2e7d32;
+}
