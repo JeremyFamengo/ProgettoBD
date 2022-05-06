@@ -93,6 +93,10 @@ fieldset {
     border: none;
 }
 
+li {
+    color: white;
+}
+
 .button {
     border: none;
     background-color: #8e4dff;
