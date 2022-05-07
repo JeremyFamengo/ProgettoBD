@@ -30,7 +30,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY']="AS7wvAhaKu4yFyVuPaTasCUDY6mg8c3RmjMFAAtQCfAxrUZxt5xZbTbVy8rHYagkAYG52jrVSz6aMBDPQt6bVLnPzd7ZBbCwAZnazwKkuYNvnKMVSqppmnvSV8xrwJZMXhPdQY6bhgHUjxx3cwHZkB66v4uYZWmdBNaLuDrnFZFgJS58KnSnPuQa2zQYjzqCZEZzz3gscmZvNCfhaRSFaM4AKu2UaHcW9K9Cqnf5pFLvBPTFmbAJCsuVEHPvKNSL"
 
 #settig flask-sqalchemy database connection
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://echos:EchosApp@139.162.163.103/echos2"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://echos:EchosApp@139.177.180.60/echos"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # setting flask max dimensions of uploaded files to prevent crash and errors
