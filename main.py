@@ -585,7 +585,8 @@ def uploader():
 @app.route('/player')
 @login_required
 def player():
-    canzone=Canzoni.query.filter_by(id=1).first()
+    canzone=Canzoni.query.filter_by(id=4).first()
+    
     
     return render_template("player.html",canzone=canzone)
 

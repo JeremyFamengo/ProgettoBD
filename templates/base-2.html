@@ -34,6 +34,30 @@
             </div>
             <div class="footer">
 
+                <!-- Trigger the modal with a button -->
+                <button type="button" class="button-2" data-toggle="modal" data-target="#myModal">Open Player</button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="myModal" role="dialog">
+                    <div class="modal-dialog">
+                    
+                        <!-- Modal content-->
+                        <div class="modal-content" style="width: 52vw; height: 68vh; background: #2B0078;">
+
+                            <div class="modal-header"></div>
+
+                            <div class="modal-body">
+                                <iframe src="http://127.0.0.1:5000/player"></iframe>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="button-2" data-dismiss="modal">Close</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
                 {% block footer %}{% endblock %}
 
             </div>
