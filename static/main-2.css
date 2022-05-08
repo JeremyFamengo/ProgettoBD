@@ -45,6 +45,14 @@ body {
 
 }
 
+.header-full {
+    grid-column-start: 1;
+    grid-column-end: 5;
+    grid-row-start: 1;
+    text-align: left;
+
+}
+
 .footer {
     grid-column-start: 1;
     grid-column-end: 5;
@@ -150,6 +158,14 @@ form {
     color: white;
 }
 
+.hidden-button {
+    border: none;
+    background: none;
+    color: white;
+    vertical-align: center;
+
+}
+
 .flashed-message-error {
     font-size: 15px;
     color: white;
@@ -192,4 +208,8 @@ form {
     margin-right: 5%;
     padding: 5px;
     border-radius: 5px;
+}
+
+.song-data {
+    margin-left: 25%;
 }

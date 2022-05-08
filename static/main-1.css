@@ -215,6 +215,14 @@ form {
     padding-bottom: 10px;
 }
 
+.hidden-button {
+    border: none;
+    background: none;
+    color: white;
+    vertical-align: center;
+
+}
+
 div.search-box{
 	position:absolute;
 	width: 280px;

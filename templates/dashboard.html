@@ -55,7 +55,9 @@
             {% for song in songs %}
 
             <li class="song-entry">
-                <a href="/player"> <p>{{ song.titolo }} - {{ song.data_uscita }}</p></a>
+                <button type="button" class="hidden-button" data-toggle="modal" data-target="#myModal"><p>{{ song.titolo }} - {{ song.data_uscita }}</p></button>
+                <!-- "/player?id={{ song.id }}" !-->
+                <br>
             </li>
                                     
             {% endfor %}
