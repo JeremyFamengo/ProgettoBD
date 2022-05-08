@@ -19,17 +19,33 @@
     <body style="background-color:#2B0078;">
         <div class="container-custom">
             <div class="logo">
-                <p><img src="{{ url_for('static', filename='images/soundwave.png')}}" height="30" width="30"> ECHOS</p>
-            </div>
-            <div class="header">
 
+            </div>
+            <div class="header-full">
+                <h2 style="text-align: center;">{{ canzone.titolo }}</h2>
+                <hr style="color: white;">
             </div>
             <div class="content">
+                <div>
 
-                <audio controls>
-                    <source src="{{ url_for('static', filename='song')}}" type="audio/mp3">
-                </audio>
+                    {% if riservato %}
 
+                        <p class="song-data">Autore: {{ artista }}</p>
+                        <p class="song-data">Genere: <a class="hidden-link" data-toggle="tooltip"  href="#" data-placement="right" title="{{ descrizione }}">{{ genere }}</a></p>
+                        <p class="song-data">Data di uscita: {{ canzone.data_uscita }}</p>
+                        <p class="song-data">Durata: {{ canzone.durata }} secondi</p>
+
+                        {% if canzone.scadenza %}
+                            <p style="text-align: center; color: darkorange">Edizione limitata, scade il {{ canzone.scadenza }}</p>        
+                        {% endif %}
+
+                    {% else %}
+
+                        <h2 style="text-align: center;">Devi essere un utente premium per accedere a questo contenuto</h2>
+                        
+                    {% endif %}
+
+                </div>
             </div>
             <div class="footer">
 
@@ -37,6 +53,12 @@
             </div>
             
         </div>
+        <script>
+            $(document).ready(function(){
+                $('[data-toggle="tooltip"]').tooltip(); 
+            });
+        </script>
+
         </body>
         
 </html>

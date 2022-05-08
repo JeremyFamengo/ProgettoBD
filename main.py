@@ -37,7 +37,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['MAX_CONTENT_PATH'] = 10485760
 
 #setting upload folder
-app.config['UPLOAD_FOLDER'] = "$HOME/Downloads/echos_uploads"
+app.config['UPLOAD_FOLDER'] = "/tmp/"
 
 #initializing database with flask-sqalchemy
 db = SQLAlchemy(app)
@@ -264,7 +264,7 @@ class UploadForm(FlaskForm):
     titolo = StringField("Titolo", validators=[DataRequired()])
     genere = SelectField("Genere", validators=[DataRequired()])
     data_uscita = DateField("Data di uscita")
-    file = FileField("Canzone", validators=[DataRequired()])
+    file = FileField("Canzone")
     riservato = SelectField("Riservato", choices=[(0, "No"), (1, "Sì")], validators=[DataRequired()])
     album = SelectField("Album", validators=[DataRequired()])
     scadenza = DateField("Scadenza")
@@ -558,6 +558,7 @@ def creaalbum():
     
 
 @app.route('/168AN4df15/uploader', methods=['GET', 'POST'])
+@login_required
 def uploader():
       
     form = UploadForm()
@@ -585,10 +586,20 @@ def uploader():
 @app.route('/player')
 @login_required
 def player():
-    canzone=Canzoni.query.filter_by(id=4).first()
+
+    id = request.args.get('id')
+    canzone = Canzoni.query.filter_by(id = id).first()
+    artista = Artista.query.filter_by(id_artista = canzone.id_artista).first().nome_arte
+    genere = Generi_Musicali.query.filter_by(id_genere = canzone.id_genere).first()
+    descrizione = genere.descrizione
+    genere = genere.nome
+
+    riservato = canzone.riservato
+    if riservato and current_user.premium:
+        riservato = False
     
     
-    return render_template("player.html",canzone=canzone)
+    return render_template("player.html", canzone=canzone, artista=artista, riservato=riservato, genere=genere, descrizione=descrizione)
 
 #######################################################   
 # FUNCTIONS
