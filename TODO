@@ -1,3 +1,4 @@
+Corregger bug modale frattario infinito (forse con counter globale?)
 Sistemare hidden link sul logo
 Implmentare come fare diventare un utente premium
 Sistemare passaggio dati al modal e dunque iframe
