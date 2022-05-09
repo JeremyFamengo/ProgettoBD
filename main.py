@@ -500,8 +500,9 @@ def uploadsong():
 
     choices = []
     for album in albums:
-        tmp = (album.id_album,album.titolo)
-        choices.append(tmp)
+        if album.singolo and len(album.id_canzoni) != 0:
+            tmp = (album.id_album,album.titolo)
+            choices.append(tmp)
 
     form.album.choices = choices
 
@@ -573,7 +574,6 @@ def uploader():
         canzone = Canzoni(id_artista=id_artista, titolo=titolo, scadenza=scadenza, data_uscita=data_uscita, id_genere=genere, file=data, riservato=riservato, extension='mp3', durata=durata)
 
         db.session.add(canzone)
-        db.session.commit()
 
         id_canzone = Canzoni.query.filter_by(id_artista = current_user.id_artista, data_uscita = data_uscita).first().id
 
