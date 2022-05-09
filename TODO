@@ -2,6 +2,7 @@ Implementare playlist
 Nascondere meglio bottoni canzoni
 Correggere bug modale frattario infinito (forse con counter globale?)
 Sistemare hidden link sul logo
+Da sistemare "scadenza" nel crea album
 Implmentare come fare diventare un utente premium
 Sistemare passaggio dati al modal e dunque iframe
 Sistemare CSS hidden-button per togliere alone quando hover
