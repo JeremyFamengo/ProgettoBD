@@ -253,7 +253,7 @@ class Playlist(db.Model):
 class UploadForm(FlaskForm):
     titolo = StringField("Titolo", validators=[DataRequired()])
     genere = SelectField("Genere", validators=[DataRequired()])
-    data_uscita = DateField("Data di uscita")
+    data_uscita = DateField("Data di uscita", validators=[DataRequired()])
     file = FileField("Canzone")
     riservato = SelectField("Riservato", choices=[(0, "No"), (1, "Sì")], validators=[DataRequired()])
     album = SelectField("Album", validators=[DataRequired()])
