@@ -9,14 +9,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, DateField, TextAreaField, SelectField, FileField, IntegerField
 from wtforms.validators import DataRequired, EqualTo, Length
-from datetime import date, timedelta
-import mutagen
-import io
-
-from pydub import AudioSegment
-from pydub.playback import play
-
-from django import forms
+from datetime import date
 
 
 #######################################################
@@ -488,8 +481,9 @@ def dashboard():
     user = Artista.query.filter_by(id_artista = current_user.id_artista).first()
     songs = Canzoni.query.filter_by(id_artista = current_user.id_artista)
     albums = Album.query.filter_by(id_artista = user.id_artista).all()
+    length = len(albums)
 
-    return render_template("dashboard.html", user=user.nome_arte, albums=albums, songs=songs)
+    return render_template("dashboard.html", user=user.nome_arte, albums=albums, songs=songs, length = length)
 
 @app.route('/artist/uploadsong')
 @login_required
