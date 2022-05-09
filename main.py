@@ -2,7 +2,7 @@ from flask import *
 from flask_sqlalchemy import *
 from flask_login import UserMixin, current_user, login_user, LoginManager, login_required, logout_user
 from psycopg2 import Date, IntegrityError
-from sqlalchemy import PrimaryKeyConstraint
+from sqlalchemy import PrimaryKeyConstraint, update
 import werkzeug
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -568,17 +568,25 @@ def uploader():
         titolo = form.titolo.data
         data_uscita = form.data_uscita.data
         riservato = bool(form.riservato.data)
-        album = int(form.album.data)
+        album_id = int(form.album.data)
         scadenza = form.scadenza.data
         genere=form.genere.data
         id_artista = current_user.id_artista
         data = f.stream.read()
         durata = 180
 
+        
         canzone = Canzoni(id_artista=id_artista, titolo=titolo, scadenza=scadenza, data_uscita=data_uscita, id_genere=genere, file=data, riservato=riservato, extension='mp3', durata=durata)
 
         db.session.add(canzone)
         db.session.commit()
+
+        id_canzone = Canzoni.query.filter_by(id_artista = current_user.id_artista, data_uscita = data_uscita).first().id
+
+        query = """UPDATE album SET id_canzoni = id_canzoni || '{" """ + str(id_canzone) + """ "}' WHERE id_album = """ + str(album_id)
+        db.session.execute(query)
+        db.session.commit()
+        
         flash("file uploaded successfully")
 
     return redirect('/artist/uploadsong')
