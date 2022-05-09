@@ -1,9 +1,6 @@
 from flask import *
 from flask_sqlalchemy import *
 from flask_login import UserMixin, current_user, login_user, LoginManager, login_required, logout_user
-from psycopg2 import Date, IntegrityError
-from sqlalchemy import PrimaryKeyConstraint, update
-import werkzeug
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_wtf import FlaskForm
