@@ -612,7 +612,7 @@ def creaplaylist():
 
     if form.validate_on_submit():
         titolo = form.titolo.data
-        restricted = bool(form.restricted.data)
+        restricted = bool(int(form.restricted.data))
         id_utente = current_user.id
         id_canzoni = []
 
@@ -632,7 +632,7 @@ def creaplaylist():
 @login_required
 def playlist():
     playlists = Playlist.query.filter_by(id_utente=current_user.id).all()
-    return render_template("playlist.html")
+    return render_template("playlist.html", playlists = playlists)
 
 
 @app.errorhandler(404)
