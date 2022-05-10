@@ -10,6 +10,10 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, DateField, TextAreaField, SelectField, FileField, IntegerField
 from wtforms.validators import DataRequired, EqualTo, Length
 from datetime import date
+from flask import request
+from flask_session import Session
+
+
 
 
 #######################################################
@@ -40,6 +44,10 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
+#session
+app.config["SESSION_PERMANENT"] = True
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
 
 #######################################################
 # CLASSES
@@ -588,8 +596,17 @@ def uploader():
 @app.route('/player')
 @login_required
 def player():
+    
+    id=session.get("id_canzone")
+    # id = request.args.get('id')
 
-    id = request.args.get('id')
+    # print("stampaggio id:"+str(id))
+
+    # session["id_canzone"]=15
+
+    # id_canzone=session.get("id_canzone")
+    # print("sessioneee: "+str(session.get("id_canzone")))
+
     canzone = Canzoni.query.filter_by(id = id).first()
     artista = Artista.query.filter_by(id_artista = canzone.id_artista).first().nome_arte
     genere = Generi_Musicali.query.filter_by(id_genere = canzone.id_genere).first()
@@ -600,7 +617,7 @@ def player():
     if riservato and current_user.premium:
         riservato = False
     
-    
+    #problema il valore deve essere passato a base-1.html che poi  richiama player.html con il valore passato
     return render_template("player.html", canzone=canzone, artista=artista, riservato=riservato, genere=genere, descrizione=descrizione)
 
 
@@ -619,3 +636,4 @@ def load_user(id):
 
 if __name__ == "__main__":
     app.run(debug=True) 
+    
