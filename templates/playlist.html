@@ -5,10 +5,9 @@
 
 {% block header %}
 
-<h2>Per te</h2>
+<h2>Playlist</h2>
     <div class="search-box">
-        <input type="text"
-    placeholder="search..." />
+        <input type="text" placeholder="search..." />
         <a href="##" class="icon">
             <i class="fa fa-search"></i>
         </a>
@@ -31,7 +30,10 @@
     {% endif %}
     {% endwith %}
 
-    <p>Ben tornato, {{ user }}</p>
+    <a href=creaplaylist><button type="button" class="button">Crea playlist</button></a>
+
+
+    <h1>Le tue playlist</h1>
 
 {% endblock %}
 

@@ -606,6 +606,11 @@ def player():
 def creaplaylist():
     return render_template("creaplaylist.html")
 
+@app.route('/playlist')
+@login_required
+def playlist():
+    return render_template("playlist.html")
+
 
 @app.errorhandler(404)
 def page_not_found(e):
