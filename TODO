@@ -1,7 +1,7 @@
 Implementare playlist
 Implementare ricerca
 Nascondere meglio bottoni canzoni
-Correggere bug modale frattario infinito (forse con counter globale?)
+Correggere bug modale infinito (forse con counter globale?)
 Da sistemare "scadenza" nel crea album
 Implmentare come fare diventare un utente premium
 Sistemare passaggio dati al modal e dunque iframe
