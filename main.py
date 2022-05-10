@@ -639,8 +639,9 @@ def playlist():
 @login_required
 def search():
     songs = Canzoni.query.all()
+    count = len(songs)
 
-    return render_template("search.html", songs = songs)
+    return render_template("search.html", songs = songs, count_canzoni = count)
 
 
 @app.errorhandler(404)
