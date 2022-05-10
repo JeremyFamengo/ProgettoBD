@@ -1,10 +1,10 @@
 Implementare playlist
-Implementare ricerca
+# Implementare ricerca
 Nascondere meglio bottoni canzoni
-Correggere bug modale infinito (forse con counter globale?)
+# Correggere bug modale infinito (forse con counter globale?)
 Da sistemare "scadenza" nel crea album
-Implmentare come fare diventare un utente premium
-Sistemare passaggio dati al modal e dunque iframe
+# Implmentare come fare diventare un utente premium
+# Sistemare passaggio dati al modal e dunque iframe
 Sistemare CSS hidden-button per togliere alone quando hover
 Implementare statistiche dashboard artista
 Implementare statistiche dashboards utente
