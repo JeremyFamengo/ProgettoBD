@@ -119,6 +119,10 @@ iframe {
 
 }
 
+table{
+    background-color: blueviolet;
+}
+
 .button {
     border: none;
     background-color: #8e4dff;
