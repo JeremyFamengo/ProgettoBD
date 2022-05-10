@@ -621,8 +621,10 @@ def creaplaylist():
 
         db.session.add(playlist)
         db.session.commit()
-
+        
         flash("Playlist creata correttamente")
+
+        return redirect("/playlist")
 
     return render_template("creaplaylist.html", form = form)
 
