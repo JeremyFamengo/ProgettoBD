@@ -151,9 +151,10 @@
             {% for song in songs %}
 
             <li class="song-entry">
-                <button type="button" class="hidden-button" data-toggle="modal" data-target="#myModal"><p>{{ song.titolo }} - {{ song.data_uscita }}</p></button>
+                <a href="/player" class="hidden-link" data-toggle="modal" data-target="#myModal"><p>{{ song.titolo }} - {{ song.data_uscita }}</p></a>
+  
                 <!-- "/player?id={{ song.id }}" !-->
-                <br>
+                
             </li>
                                     
             {% endfor %}
@@ -165,7 +166,7 @@
         {% endif %}
     </ul>
 
-
+    <br>
     <p>Statistiche</p>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
