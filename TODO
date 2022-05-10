@@ -2,18 +2,14 @@ Implementare playlist
 Implementare ricerca
 Nascondere meglio bottoni canzoni
 Correggere bug modale frattario infinito (forse con counter globale?)
-Sistemare hidden link sul logo
 Da sistemare "scadenza" nel crea album
 Implmentare come fare diventare un utente premium
 Sistemare passaggio dati al modal e dunque iframe
 Sistemare CSS hidden-button per togliere alone quando hover
-Aggiungere controllo scadenza a valore NoneType che non fa validare il form nella creazione di album
-Implementare lista e statistiche dashboard artista
+Implementare statistiche dashboard artista
 Implementare statistiche dashboards utente
-Rendere Base-1/left-content fixed
 Implementare cancellazione utenti
 Implementare cancellazione artista
-Implementare status premium
 Correggere errori nuovo database
 Sistemare gerarchia >> https://exploreflask.com/en/latest/organizing.html >> https://dev.to/curiouspaul1/creating-modularized-flask-apps-with-blueprints-19nc
 Commentare il codice esaustivamente
