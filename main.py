@@ -268,6 +268,10 @@ class CreateAlbumForm(FlaskForm):
     anno = DateField("Anno di uscita", validators=[DataRequired()])
     submit = SubmitField("Crea")
 
+class CreaPlaylistForm(FlaskForm):
+    restricted = SelectField("Privacy", choices=[(0, "Pubblica"), (1, "Personale")], validators=[DataRequired()])
+    titolo = StringField("Nome", validators=[DataRequired()])
+    submit = SubmitField("Crea")
     
 
 #######################################################
@@ -601,10 +605,26 @@ def player():
     return render_template("player.html", canzone=canzone, artista=artista, riservato=riservato, genere=genere, descrizione=descrizione)
 
 
-@app.route('/creaplaylist')
+@app.route('/creaplaylist', methods=['GET', 'POST'])
 @login_required
 def creaplaylist():
-    return render_template("creaplaylist.html")
+    form = CreaPlaylistForm()
+
+    if form.validate_on_submit():
+        titolo = form.titolo.data
+        restricted = bool(form.restricted.data)
+        id_utente = current_user.id
+        id_canzoni = []
+
+        playlist = Playlist(titolo = titolo, id_utente = id_utente, id_canzoni = id_canzoni, restricted = restricted)
+        print(playlist)
+
+        db.session.add(playlist)
+        db.session.commit()
+
+        flash("Playlist creata correttamente")
+
+    return render_template("creaplaylist.html", form = form)
 
 
 @app.errorhandler(404)

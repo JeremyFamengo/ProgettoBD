@@ -23,7 +23,21 @@
 
 {% block right_content %}
 
-    
+<fieldset>
+    <form action="/creaplaylist" method="POST">
+        <p>
+            {{ form.hidden_tag() }}
+        
+            {{ form.titolo.label }}<br><br>
+            {{ form.titolo(size=30, class="form") }} <br><br>
+
+            {{ form.restricted.label }}<br><br>
+            {{ form.restricted(class="form") }} <br><br>
+            
+            {{ form.submit(size=30, class="button-2") }} <br><br>
+        </p>
+    </form>
+</fieldset>
 
 {% endblock %}
 
