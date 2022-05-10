@@ -34,6 +34,15 @@
 
 
     <h2>Le tue playlist</h2>
+    <ul>
+        {% for playlist in playlists %}
+            <li>
+                <p>{{ playlist.titolo }}{% if playlist.restricted %}- questa playlist non è pubblica{% endif %}</p>
+                    
+                
+            </li>
+        {% endfor %}
+    </ul>
 
 
 
