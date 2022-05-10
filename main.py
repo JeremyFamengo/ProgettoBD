@@ -263,7 +263,7 @@ class UploadForm(FlaskForm):
 class CreateAlbumForm(FlaskForm):
     titolo = StringField("Titolo", validators=[DataRequired()])
     singolo = SelectField("Singolo", choices=[(0, "No"), (1, "Sì")])
-    scadenza = IntegerField("Scadenza (opzionale)")
+    scadenza = DateField("Scadenza (opzionale)")
     restricted = SelectField("Riservato", choices=[(0, "No"), (1, "Sì")])
     anno = DateField("Anno di uscita", validators=[DataRequired()])
     submit = SubmitField("Crea")
