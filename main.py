@@ -635,6 +635,14 @@ def playlist():
     return render_template("playlist.html", playlists = playlists)
 
 
+@app.route('/search')
+@login_required
+def search():
+    songs = Canzoni.query.all()
+
+    return render_template("search.html", songs = songs)
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html')
