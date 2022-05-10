@@ -157,6 +157,11 @@ form {
 }
 
 .hidden-link {
+  text-decoration: none;
+  color: white;
+}
+
+.hidden-link:hover {
     text-decoration: none;
     color: white;
 }

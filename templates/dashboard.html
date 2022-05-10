@@ -111,7 +111,7 @@
                                 </div>
                                 <div class="flip-card-back">
                                     
-                                    <h2 style="text-align: center;">{{album.titolo}}<h2><br>
+                                    <a class="hidden-link" href=""><h2 style="text-align: center;">{{album.titolo}}<h2></a><br>
                                     <p style="text-align: center;">{{album.anno}}</p>
                                     
                                     <p>Singolo: {{ album.singolo }}</p>
@@ -185,13 +185,9 @@
         });
 
         $(document).on('click', '.owl-item>div', function() {
-        // see https://owlcarousel2.github.io/OwlCarousel2/docs/api-events.html#to-owl-carousel
         var $speed = 300;  // in ms
         $owl.trigger('to.owl.carousel', [$(this).data( 'position' ), $speed] );
         });
-    </script>
-    <script type="text/javascript">
-        
     </script>
 
 {% endblock %}
