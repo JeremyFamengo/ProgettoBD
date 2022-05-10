@@ -531,8 +531,8 @@ def creaalbum():
     if form.is_submitted():
         titolo = form.titolo.data
         anno = form.anno.data
-        singolo = bool(form.singolo.data)
-        restricted = bool(form.restricted.data)
+        singolo = bool(int(form.singolo.data))
+        restricted = bool(int(form.restricted.data))
         scadenza = form.scadenza.data
 
         album = Album(artista.id_artista, [], singolo, scadenza, restricted, titolo, anno)
@@ -563,7 +563,7 @@ def uploader():
         f = request.files['file']
         titolo = form.titolo.data
         data_uscita = form.data_uscita.data
-        riservato = bool(form.riservato.data)
+        riservato = bool(int(form.riservato.data))
         album_id = int(form.album.data)
         scadenza = form.scadenza.data
         genere=form.genere.data
