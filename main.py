@@ -631,7 +631,7 @@ def creaplaylist():
 @app.route('/playlist')
 @login_required
 def playlist():
-    playlists = Playlist.query.find_by(id_utente=current_user.id).all()
+    playlists = Playlist.query.filter_by(id_utente=current_user.id).all()
     return render_template("playlist.html")
 
 
