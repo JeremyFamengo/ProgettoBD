@@ -639,10 +639,21 @@ def playlist():
 @login_required
 def search():
     songs = Canzoni.query.all()
+    playlists = Playlist.query.filter_by(id_utente = current_user.id).all()
     count = len(songs)
 
-    return render_template("search.html", songs = songs, count_canzoni = count)
+    return render_template("search.html", songs = songs, count_canzoni = count, playlists = playlists)
 
+@app.route('/addtoplaylist')
+@login_required
+def addtoplaylist():
+    id_canzone = request.args.get('id_canzone')
+    id_playlist = request.args.get('id_playlist')
+
+    print("ID CANZONE:" + str(id_canzone))
+    print("ID PLAYLIST:" + str(id_playlist))
+
+    return redirect('search')
 
 @app.errorhandler(404)
 def page_not_found(e):
