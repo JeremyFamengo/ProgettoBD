@@ -1,6 +1,67 @@
 {% extends 'base-1.html' %}
 
-{% block head %}{% endblock %}
+{% block head %}
+	<style>
+		.form__group {
+			position: relative;
+			padding: 15px 0 0;
+			margin-top: 10px;
+			width: 50%;
+		  }
+		  
+		  .form__field {
+			font-family: inherit;
+			width: 100%;
+			border: 0;
+			border-bottom: 2px solid #9b9b9b;
+			outline: 0;
+			font-size: 1.3rem;
+			color: #fff;
+			padding: 7px 0;
+			background: transparent;
+			transition: border-color 0.2s;
+		  }
+		  .form__field::placeholder {
+			color: transparent;
+		  }
+		  .form__field:placeholder-shown ~ .form__label {
+			font-size: 1.3rem;
+			cursor: text;
+			top: 20px;
+		  }
+		  
+		  .form__label {
+			position: absolute;
+			top: 0;
+			display: block;
+			transition: 0.2s;
+			font-size: 1rem;
+			color: #9b9b9b;
+		  }
+		  
+		  .form__field:focus {
+			padding-bottom: 6px;
+			font-weight: 700;
+			border-width: 3px;
+			border-image: linear-gradient(to right, #431199, #c738ef);
+			border-image-slice: 1;
+		  }
+		  .form__field:focus ~ .form__label {
+			position: absolute;
+			top: 0;
+			display: block;
+			transition: 0.2s;
+			font-size: 1rem;
+			color: #11998e;
+			font-weight: 700;
+		  }
+		  
+		  /* reset input */
+		  .form__field:required, .form__field:invalid {
+			box-shadow: none;
+		  }
+	</style>
+{% endblock %}
 
 {% block header %}
     <h2>Cerca canzoni</h2>
@@ -23,10 +84,10 @@
 
 {% block right_content %}
 
-<div class="title_scheda">
-    <i class="fas fa-list-ul"></i> Cerca
-    <div class="search"><i class="fas fa-search"></i> <input type="text" id="myInput_cercaCanzoni" onkeyup="search_canzoni()" placeholder="Ricerca"></div>
-    <div style="clear: both;"></div>
+<div class="form__group field">
+    <div class="changeable"><input type="text" id="myInput_cercaCanzoni" onkeyup="search_canzoni()" placeholder="Ricerca" name="name" class="form__field"></div>
+    <label for="myInput_cercaCanzoni" class="form__label">Cerca</label>
+	<div style="clear: both;"></div>
 </div>
 {% if count_canzoni > 0  %}
 				<div class="wrapper1">
@@ -34,7 +95,7 @@
 				</div>
 				<div class="wrapper2">
 					<div class="div2">
-						<table id="ele_canzoni" class="elenco">
+						<table id="ele_canzoni" class="table" style="color: white;">
 							<thead>
 								<tr>
 									<th>Titolo</th>
@@ -52,6 +113,15 @@
                                         <td>{{song.durata}}</td>
                                         <td>{{song.id_genere}}</td>
                                         <td>{{song.data_uscita}}</td>
+										<td>
+												<button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+												  ...
+												</button>
+												<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+													<a class="dropdown-item" href="/player?id={{song.id}}">Info</a>
+													<a class="dropdown-item" href="#">Aggiungi a playlist</a>
+												</div>
+										</td>
                                     </tr>
                                 {% endfor %}
 							</tbody>
