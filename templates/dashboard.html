@@ -151,10 +151,7 @@
             {% for song in songs %}
 
             <li class="song-entry">
-                <a href="/player" class="hidden-link" data-toggle="modal" data-target="#myModal"><p>{{ song.titolo }} - {{ song.data_uscita }}</p></a>
-  
-                <!-- "/player?id={{ song.id }}" !-->
-                
+                <a href="/player?id={{ song.id }}" class="hidden-link"><p>{{ song.titolo }} - {{ song.data_uscita }}</p></a>
             </li>
                                     
             {% endfor %}
