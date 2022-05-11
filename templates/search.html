@@ -114,12 +114,23 @@
                                         <td>{{song.id_genere}}</td>
                                         <td>{{song.data_uscita}}</td>
 										<td>
-												<button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-												  ...
-												</button>
+												<button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
 												<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 													<a class="dropdown-item" href="/player?id={{song.id}}">Info</a>
-													<a class="dropdown-item" href="#">Aggiungi a playlist</a>
+													<button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+														Aggiungi a playlist
+													</button>
+													<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+														
+														{% for playlist in playlists %}
+															{% if playlist %}
+																<a class="dropdown-item" href="/addtoplaylist?id_song={{ song.id }}&id_playlist={{ playlist.id_playlist	 }}">{{ playlist.titolo }}</a>
+															{% else %}
+																<p>No playlist</p>
+															{% endif %}
+															
+														{% endfor %}
+													</div>
 												</div>
 										</td>
                                     </tr>
