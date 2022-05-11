@@ -1,11 +1,10 @@
-Implementare playlist
+Fare tabella canzoni-ascolti (oppure canzoni-click)
+// Implementare playlist
 Trigger doppioni playlist
-# Implementare ricerca
 Nascondere meglio bottoni canzoni
-# Correggere bug modale infinito (forse con counter globale?)
 Da sistemare "scadenza" nel crea album
-# Implmentare come fare diventare un utente premium
-# Sistemare passaggio dati al modal e dunque iframe
+// Implmentare come fare diventare un utente premium
+// Sistemare passaggio dati al modal e dunque iframe
 Implementare statistiche dashboard artista
 Implementare statistiche dashboards utente
 Implementare cancellazione utenti
@@ -13,4 +12,4 @@ Implementare cancellazione artista
 Correggere errori nuovo database
 Sistemare gerarchia >> https://exploreflask.com/en/latest/organizing.html >> https://dev.to/curiouspaul1/creating-modularized-flask-apps-with-blueprints-19nc
 Commentare il codice esaustivamente
-Fare README.md carino
+// Fare README.md carino
