@@ -4,6 +4,8 @@ Trigger doppioni playlist
 Nascondere meglio bottoni canzoni
 Da sistemare "scadenza" nel crea album
 // Implmentare come fare diventare un utente premium
+// Inserire tabella utenti-abbonamenti per status premium
+// pagina dove iscriversi a scadenza mensile con falsi dati carta di credito
 // Sistemare passaggio dati al modal e dunque iframe
 Implementare statistiche dashboard artista
 Implementare statistiche dashboards utente
