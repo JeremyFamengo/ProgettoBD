@@ -598,8 +598,11 @@ def player():
     genere = genere.nome
 
     riservato = canzone.riservato
-    if riservato and current_user.premium:
+    print(current_user.premium)
+    print(riservato)
+    if current_user.premium:
         riservato = False
+    print(riservato)
     
     
     return render_template("player.html", canzone=canzone, artista=artista, riservato=riservato, genere=genere, descrizione=descrizione)

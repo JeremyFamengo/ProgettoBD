@@ -28,7 +28,7 @@
             <div class="content">
                 <div>
 
-                    {% if riservato %}
+                    {% if not riservato  %}
 
                         <p class="song-data">Autore: {{ artista }}</p>
                         <p class="song-data">Genere: <a class="hidden-link" data-toggle="tooltip"  href="#" data-placement="right" title="{{ descrizione }}">{{ genere }}</a></p>
@@ -38,15 +38,15 @@
                         {% if canzone.scadenza %}
                             <p style="text-align: center; color: darkorange">Edizione limitata, scade il {{ canzone.scadenza }}</p>        
                         {% endif %}
+                        
+                        <br><br>
+                        <div style="text-align: center;"><audio controls><source src=""></audio></div>
 
                     {% else %}
 
-                        <h2 style="text-align: center;">Devi essere un utente premium per accedere a questo contenuto</h2>
+                        <h2 style="text-align: center; color: darkorange">Devi essere un utente premium per accedere a questo contenuto</h2>
                         
                     {% endif %}
-
-                    <br><br>
-                    <div style="text-align: center;"><audio controls><source src=""></audio></div>
 
                 </div>
 
