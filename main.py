@@ -213,8 +213,9 @@ class Canzoni(db.Model):
     file = db.Column(db.LargeBinary)
     extension = db.Column(db.String(10))
     durata = db.Column(db.Integer)
+    n_riproduzioni = db.Column(db.Integer)
 
-    def __intit__(self, id_artista, titolo, scadenza, data_uscita, id_genere_musicale, file, riservato, extension, durata):
+    def __intit__(self, id_artista, titolo, scadenza, data_uscita, id_genere_musicale, file, riservato, extension, durata, n_riproduzioni):
         self.id_artista = id_artista
         self.titolo = titolo
         self.scadenza = scadenza
@@ -224,6 +225,7 @@ class Canzoni(db.Model):
         self.riservato = riservato
         self.extension = extension
         self.durata = durata
+        self.n_riproduzioni=n_riproduzioni
 
 class Generi_Musicali(db.Model):
     __tablename__ = 'generi_musicali'
@@ -595,6 +597,12 @@ def player():
 
     id = request.args.get('id')
     canzone = Canzoni.query.filter_by(id = id).first()
+    
+    # Aggironamento numero di riprouzioni svolte in questa canzone
+    nPlayTMP=Canzoni.n_riproduzioni+1
+    Canzoni.query.filter_by(id = id).update(dict(n_riproduzioni=nPlayTMP))
+    db.session.commit()
+
     artista = Artista.query.filter_by(id_artista = canzone.id_artista).first().nome_arte
     genere = Generi_Musicali.query.filter_by(id_genere = canzone.id_genere).first()
     descrizione = genere.descrizione
