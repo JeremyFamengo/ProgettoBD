@@ -1,6 +1,68 @@
 {% extends 'base-1.html' %}
 
-{% block head %}{% endblock %}
+{% block head %}
+    <style>
+        @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,700");
+        @import url("https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css");
+        .accordion{
+            transform: translateZ(0);
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+            background: #222222;
+        }
+        
+        .accordion > .accordion-toggle{
+            position: absolute;
+            opacity: 0;
+            display: none;
+        }
+        
+        .accordion > label{
+            position: relative;
+            display: block;
+            height: 50px;
+            line-height: 50px;
+            padding: 0 20px;
+            font-size: 25px;
+            font-weight: 700;
+            border-top: 1px solid #8e4dff;
+            background: #222222;
+            color: white;
+            cursor: pointer;
+        }
+        
+        .accordion > label:after {
+          content: '\f078';
+          position: absolute;
+          top: 0px;
+          right: 20px;
+          font-family: fontawesome;
+          transform: rotate(90deg);
+          transition: .3s transform;
+        }
+        
+        .accordion > section{
+            height: 0;
+            transition: .3s all;
+            background-color: blueviolet;
+            overflow: hidden;
+        }
+        
+        .accordion > .accordion-toggle:checked ~ label:after{
+         transform: rotate(0deg);
+        }
+        
+        .accordion > .accordion-toggle:checked ~ section{
+          height: auto;
+        }
+        
+        .accordion > section p {
+          margin: 15px 0;
+          padding: 0 20px;
+          font-size: 20px;
+          line-height: 1.5;
+        }
+    </style>
+{% endblock %}
 
 
 {% block header %}
@@ -29,15 +91,28 @@
 
     <h2>Le tue playlist</h2>
     <br>
-    <ul>
+
         {% for playlist in playlists %}
-            <li>
-                <p><strong>{{ playlist.titolo }}{% if playlist.restricted %}</strong> <i>- questa playlist non è pubblica</i>{% endif %}</p>
-            </li>
+        
+            <div class="accordion">
+                <input id="toggle{{ loop.index }}" type="radio" class="accordion-toggle" name="toggle" />
+                <label for="toggle{{ loop.index }}"><strong>{{ playlist.titolo }}</strong>{% if playlist.restricted %} <i>- questa playlist non è pubblica</i>{% endif %}</label>
+                <section>
+                    {% if playlist.id_canzoni %}
+                        <ul>
+                            {% for song in playlist.id_canzoni %}
+                                <li>{{ song }}</li>
+                            {% endfor %}
+                        </ul>
+                        
+                    {% else %}
+                        <p>Non hai ancora inserito canzoni</p>
+                    {% endif %}
+                </section>
+            </div>
+                
+            
         {% endfor %}
-    </ul>
-
-
 
     
 
