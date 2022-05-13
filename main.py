@@ -640,18 +640,20 @@ def playlist():
     playlists = Playlist.query.filter_by(id_utente=current_user.id).all()
     return render_template("playlist.html", playlists = playlists)
 
-
 @app.route('/search', methods=['GET', 'POST'])
 @login_required
 def search():
-    songs = Canzoni.query.all()
+
+    resultQuery=getSearchTable()
+
+    #songs = Canzoni.query.all()
     playlists = Playlist.query.filter_by(id_utente = current_user.id).all()
-    count = len(songs)
+    count = len(resultQuery)
 
     if request.method == 'POST':
         addtoplaylist()
 
-    return render_template("search.html", songs = songs, count_canzoni = count, playlists = playlists)
+    return render_template("search.html", songs = resultQuery, count_canzoni = count, playlists = playlists)
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -660,6 +662,16 @@ def page_not_found(e):
 #######################################################   
 # FUNCTIONS
 #######################################################
+
+def getSearchTable():
+    query = """SELECT id, nome_arte, durata, nome, titolo, data_uscita
+	    FROM public.canzoni
+	    inner join public.artisti using(id_artista)
+	    inner join public.generi_musicali using(id_genere)"""
+    
+    #db.session.commit()
+    return db.session.execute(query).all()
+
 
 @login_manager.user_loader
 def load_user(id):
