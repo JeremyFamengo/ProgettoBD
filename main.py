@@ -173,16 +173,14 @@ class Album(db.Model):
     __tablename__ = 'album'
     id_album = db.Column(db.Integer, primary_key = True)
     id_artista = db.Column(db.Integer)
-    id_canzoni = db.Column(db.ARRAY(db.Integer))
     singolo = db.Column(db.Boolean)
     scadenza = db.Column(db.Date)
     restricted = db.Column(db.Boolean)
     titolo = db.Column(db.String)
     anno = db.Column(db.Date)
 
-    def __init__(self, id_artista, id_canzoni, singolo, scadenza, restricted, titolo, anno):
+    def __init__(self, id_artista, singolo, scadenza, restricted, titolo, anno):
         self.id_artista = id_artista
-        self.id_canzoni = id_canzoni
         self.singolo = singolo
         self.scadenza = scadenza
         self.restricted = restricted
@@ -192,7 +190,6 @@ class Album(db.Model):
     def debug(self):
         print("\n---------[DEBUG]---------\n")
         print(self.id_artista)
-        print(self.id_canzoni)
         print(self.singolo)
         print(self.scadenza)
         print(self.restricted)
@@ -215,12 +212,12 @@ class Canzoni(db.Model):
     durata = db.Column(db.Integer)
     n_riproduzioni = db.Column(db.Integer)
 
-    def __intit__(self, id_artista, titolo, scadenza, data_uscita, id_genere_musicale, file, riservato, extension, durata, n_riproduzioni):
+    def __init__(self, id_artista, titolo, scadenza, data_uscita, id_genere, file, riservato, extension, durata, n_riproduzioni):
         self.id_artista = id_artista
         self.titolo = titolo
         self.scadenza = scadenza
         self.data_uscita = data_uscita
-        self.id_genere_musicale = id_genere_musicale
+        self.id_genere = id_genere
         self.file = file
         self.riservato = riservato
         self.extension = extension
@@ -233,8 +230,8 @@ class Generi_Musicali(db.Model):
     nome = db.Column(db.String)
     descrizione = db.Column(db.String(255))
 
-    def __init__(self, id_genere_musicale, nome, descrizione):
-        self.id_genere_musicale = id_genere_musicale
+    def __init__(self, id_genere, nome, descrizione):
+        self.id_genere = id_genere
         self.nome = nome      
         self.descrizione = descrizione
 
@@ -243,14 +240,30 @@ class Playlist(db.Model):
     id_playlist = db.Column(db.Integer, primary_key = True)
     titolo = db.Column(db.String)
     id_utente = db.Column(db.Integer)
-    id_canzoni = db.Column(db.Integer)
     restricted = db.Column(db.Boolean)
 
-    def playlist(self, titolo, id_utente, id_canzoni, restricted):
+    def __init__(self, titolo, id_utente, restricted):
         self.titolo = titolo
         self.id_utente = id_utente
-        self.id_canzoni = id_canzoni
         self.restricted = restricted
+
+class Playlist_canzoni(db.Model):
+    __tablename__  = 'playlist_canzoni'
+    id_playlist = db.Column(db.Integer, primary_key = True)
+    id_canzone = db.Column(db.Integer, primary_key = True)
+
+    def __init__(self, id_playlist, id_canzone):
+        self.id_playlist = id_playlist
+        self.id_canzone = id_canzone
+
+class  Album_canzoni(db.Model):
+    __tablename__  = 'album_canzoni'
+    id_album = db.Column(db.Integer, primary_key = True)
+    id_canzone = db.Column(db.Integer, primary_key = True)
+
+    def __init__(self, id_album, id_canzone):
+        self.id_album = id_album
+        self.id_canzone = id_canzone
 
 class UploadForm(FlaskForm):
     titolo = StringField("Titolo", validators=[DataRequired()])
@@ -500,10 +513,12 @@ def uploadsong():
     artista = Artista.query.filter_by(id_artista = current_user.id_artista).first()
     generi = Generi_Musicali.query.all()
     albums = Album.query.filter_by(id_artista = artista.id_artista).all()
+    
 
     choices = []
     for album in albums:
-        if album.singolo and len(album.id_canzoni) == 0:
+        is_empty=Album_canzoni.query.filter_by(id_album=album.id_album).all() == None
+        if album.singolo and is_empty:
             tmp = (album.id_album,album.titolo)
             choices.append(tmp)
         elif not album.singolo:
@@ -540,7 +555,7 @@ def creaalbum():
         restricted = bool(int(form.restricted.data))
         scadenza = form.scadenza.data
 
-        album = Album(artista.id_artista, [], singolo, scadenza, restricted, titolo, anno)
+        album = Album(artista.id_artista, singolo, scadenza, restricted, titolo, anno)
 
         album.debug()
 
@@ -569,23 +584,22 @@ def uploader():
         titolo = form.titolo.data
         data_uscita = form.data_uscita.data
         riservato = bool(int(form.riservato.data))
-        album_id = int(form.album.data)
+        id_album = int(form.album.data)
         scadenza = form.scadenza.data
         genere=form.genere.data
         id_artista = current_user.id_artista
         data = f.stream.read()
         durata = 180
+        n_riproduzioni=0
 
         
-        canzone = Canzoni(id_artista=id_artista, titolo=titolo, scadenza=scadenza, data_uscita=data_uscita, id_genere=genere, file=data, riservato=riservato, extension='mp3', durata=durata)
+        canzone = Canzoni(id_artista=id_artista, titolo=titolo, scadenza=scadenza, data_uscita=data_uscita, id_genere=genere, file=data, riservato=riservato, extension='mp3', durata=durata, n_riproduzioni=n_riproduzioni)
 
         db.session.add(canzone)
 
         id_canzone = Canzoni.query.filter_by(id_artista = current_user.id_artista, data_uscita = data_uscita).first().id
 
-        query = """UPDATE album SET id_canzoni = id_canzoni || '{" """ + str(id_canzone) + """ "}' WHERE id_album = """ + str(album_id)
-        db.session.execute(query)
-        db.session.commit()
+        addToAlbum(id_album,id_canzone)
         
         flash("file uploaded successfully")
 
@@ -597,7 +611,7 @@ def player():
 
     id = request.args.get('id')
     canzone = Canzoni.query.filter_by(id = id).first()
-    
+
     # Aggironamento numero di riprouzioni svolte in questa canzone
     nPlayTMP=Canzoni.n_riproduzioni+1
     Canzoni.query.filter_by(id = id).update(dict(n_riproduzioni=nPlayTMP))
@@ -628,9 +642,8 @@ def creaplaylist():
         titolo = form.titolo.data
         restricted = bool(int(form.restricted.data))
         id_utente = current_user.id
-        id_canzoni = []
 
-        playlist = Playlist(titolo = titolo, id_utente = id_utente, id_canzoni = id_canzoni, restricted = restricted)
+        playlist = Playlist(titolo = titolo, id_utente = id_utente, restricted = restricted)
         print(playlist)
 
         db.session.add(playlist)
@@ -664,7 +677,7 @@ def search():
     if request.method == 'POST':
         id_playlist = request.form['id_playlist']
         id_canzone = request.form['id_canzone']
-        addtoplaylist(id_playlist, id_canzone)
+        addToPlaylist(id_playlist, id_canzone)
 
     return render_template("search.html", songs = resultQuery, count_canzoni = count, playlists = playlists)
 
@@ -689,10 +702,20 @@ def getSearchTable():
 def load_user(id):
     return User.query.get(id)
 
-def addtoplaylist(id_playlist, id_canzone):
+# Aggiungo una canzone alla playlist
+def addToPlaylist(id_playlist, id_canzone):
 
-    query = """UPDATE playlist SET id_canzoni = id_canzoni || '{" """ + str(id_canzone) + """ "}' WHERE id_playlist = """ + str(id_playlist)
-    db.session.execute(query)
+    playlist_canzoni=Playlist_canzoni(id_playlist,id_canzone)
+    db.session.add(playlist_canzoni)
+    db.session.commit()
+
+    return redirect('/search')
+
+# Aggiungo una canzone all'album
+def addToAlbum(album_id, id_canzone):
+
+    album_canzoni=Album_canzoni(album_id,id_canzone)
+    db.session.add(album_canzoni)
     db.session.commit()
 
     return redirect('/search')
