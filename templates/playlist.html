@@ -101,7 +101,7 @@
                     {% if playlist.id_canzoni %}
                         <ul>
                             {% for song in playlist.id_canzoni %}
-                                <li>{{ song }}</li>
+                                <a class="hidden-link" href="/player?id={{ song }}"><li><p>{{ diz_titoli.get(song) }}</p></li></a>
                             {% endfor %}
                         </ul>
                         

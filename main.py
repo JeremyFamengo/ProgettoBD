@@ -638,7 +638,28 @@ def creaplaylist():
 @login_required
 def playlist():
     playlists = Playlist.query.filter_by(id_utente=current_user.id).all()
-    return render_template("playlist.html", playlists = playlists)
+
+    # TODO: Controllare se c'è un modo migliore per farlo
+
+    id = []
+    for playlist in playlists:
+        for id_ in playlist.id_canzoni:
+            id.append(id_)
+    
+    id = set(id)
+    query = "SELECT id, titolo FROM canzoni WHERE id in " + str(id).replace('{', '(').replace('}', ')') + ";"
+    titoli = db.session.execute(query).all()
+
+    diz_titoli = {}
+    for i in titoli:
+        diz_titoli[i[0]] = i[1]
+    
+    print(diz_titoli)
+
+        #titoli = Canzoni.query.filter(Canzoni.id.in_(id_canzoni)).titolo.all()
+        #print(titoli)
+
+    return render_template("playlist.html", playlists = playlists, diz_titoli = diz_titoli)
 
 @app.route('/search', methods=['GET', 'POST'])
 @login_required
@@ -673,7 +694,6 @@ def getSearchTable():
     
     #db.session.commit()
     return db.session.execute(query).all()
-
 
 @login_manager.user_loader
 def load_user(id):
