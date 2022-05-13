@@ -672,6 +672,13 @@ def search():
 def page_not_found(e):
     return render_template('404.html')
 
+@app.route('/canzonialbum')
+@login_required
+def canzonialbum():
+    album = Album.query.filter_by(id_album = request.args.get('id_album')).first()
+    songs = Album_canzoni.query.filter_by(id_album=album.id_album).all()
+    return render_template("canzonialbum.html" , album = album, songs = songs)
+
 #######################################################   
 # FUNCTIONS
 #######################################################

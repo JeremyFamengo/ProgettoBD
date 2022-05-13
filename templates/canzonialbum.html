@@ -1,0 +1,37 @@
+{% extends 'base-1.html' %}
+
+{% block head %}{% endblock %}
+
+{% block header %}
+
+    <h2>Canzoni presenti in {{ album.titolo }}</h2>
+
+{% endblock %}
+
+
+{% block left_content %}
+
+    <a href="/" class="hidden-link"><p class="left-content-entry">Home</p></a>
+    <br>
+    <a href="/profile" class="hidden-link"><p class="left-content-entry">Back to Profile</p></a>
+    <br>
+    <a href="/artist/uploadsong" class="hidden-link"><p class="left-content-entry" >Carica canzone</p></a>
+    <br>
+    <a href="/artist/creaalbum" class="hidden-link"><p class="left-content-entry" style="color: blueviolet;">Crea Album</p></a>
+    <br>
+    <a href="/artist/dashboard" class="hidden-link"><p class="left-content-entry">Back to dashboard</p></a>
+    <br>
+
+{% endblock %}
+
+{% block right_content %}
+
+    {% for song in songs %}
+                <li>
+                    <p><strong>{{ song.titolo }}</strong></p>
+                </li>
+    {% endfor %}
+
+{% endblock %}
+
+
