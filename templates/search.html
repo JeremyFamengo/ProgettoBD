@@ -117,16 +117,16 @@
 												<button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
 												<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 													<a class="dropdown-item" href="/player?id={{song.id}}">Info</a>
-													<button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+													<button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  style="background-color: white;border: none; color: black;">
 														Aggiungi a playlist
 													</button>
-													<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+													<div class="dropdown-menu" aria-labelledby="dropdownMenuButton"x>
 														
 														{% for playlist in playlists %}
 															{% if playlist %}
 																<form action="/search" method="POST">
-																	<input type="hidden" name="id_utente" value="{{ playlists.id }}">
-																	<input type="hidden" name="nome_arte" value="{{ song.id }}">
+																	<input type="hidden" name="id_playlist" value="{{ playlist.id_playlist }}">
+																	<input type="hidden" name="id_canzone" value="{{ song.id }}">
 																	<button class="hidden-button" style="color: black; float: right" type="submit" name="add">{{ playlist.titolo }}</button>
 																</form>
 															{% else %}

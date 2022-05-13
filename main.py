@@ -649,7 +649,9 @@ def search():
     count = len(songs)
 
     if request.method == 'POST':
-        addtoplaylist()
+        id_playlist = request.form['id_playlist']
+        id_canzone = request.form['id_canzone']
+        addtoplaylist(id_playlist, id_canzone)
 
     return render_template("search.html", songs = songs, count_canzoni = count, playlists = playlists)
 
@@ -665,14 +667,13 @@ def page_not_found(e):
 def load_user(id):
     return User.query.get(id)
 
-def addtoplaylist():
-    id_canzone = request.args.get('id_canzone')
-    id_playlist = request.args.get('id_playlist')
+def addtoplaylist(id_playlist, id_canzone):
 
-    print("ID CANZONE:" + str(id_canzone))
-    print("ID PLAYLIST:" + str(id_playlist))
+    query = """UPDATE playlist SET id_canzoni = id_canzoni || '{" """ + str(id_canzone) + """ "}' WHERE id_playlist = """ + str(id_playlist)
+    db.session.execute(query)
+    db.session.commit()
 
-    return redirect('search')
+    return redirect('/search')
 
 if __name__ == "__main__":
     app.run(debug=True) 
