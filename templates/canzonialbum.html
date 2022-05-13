@@ -24,14 +24,14 @@
 
 {% endblock %}
 
+
 {% block right_content %}
-
+<ul>
     {% for song in songs %}
-                <li>
-                    <p><strong>{{ song.titolo }}</strong></p>
-                </li>
+        <li>
+            {{song.titolo}}
+        </li>
     {% endfor %}
-
+</ul>
 {% endblock %}
-
 
