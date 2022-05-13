@@ -1,13 +1,11 @@
-Fare tabella canzoni-ascolti (oppure canzoni-click)
 // Implementare playlist
 Trigger doppioni playlist
-Da sistemare "scadenza" nel crea album
 // Implmentare come fare diventare un utente premium
 // Inserire tabella utenti-abbonamenti per status premium
 // pagina dove iscriversi a scadenza mensile con falsi dati carta di credito
 // Sistemare passaggio dati al modal e dunque iframe
-Implementare statistiche dashboard artista
-Implementare statistiche dashboards utente
+Implementare statistiche dashboard artista -> inserire tabella canzoni/ascolti
+Implementare statistiche dashboards utente ---^
 Implementare cancellazione utenti
 Implementare cancellazione artista
 Correggere errori nuovo database
