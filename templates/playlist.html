@@ -96,12 +96,12 @@
         
             <div class="accordion">
                 <input id="toggle{{ loop.index }}" type="radio" class="accordion-toggle" name="toggle" />
-                <label for="toggle{{ loop.index }}"><strong>{{ playlist.titolo }}</strong>{% if playlist.restricted %} <i>- questa playlist non è pubblica</i>{% endif %}</label>
+                <label for="toggle{{ loop.index }}"><strong>{{ playlist[0].titolo_playlist }}</strong>{% if playlist[0].estricted %} <i>- questa playlist non è pubblica</i>{% endif %}</label>
                 <section>
-                    {% if playlist.id_canzoni %}
+                    {% if playlist[1].id_canzone %}
                         <ul>
-                            {% for song in playlist.id_canzoni %}
-                                <a class="hidden-link" href="/player?id={{ song }}"><li><p>{{ diz_titoli.get(song) }}</p></li></a>
+                            {% for canzone in playlist %}
+                                    <a class="hidden-link" href="/player?id={{ song }}"><li><p>{{ canzone.titolo_canzone  }}</p></li></a>
                             {% endfor %}
                         </ul>
                         

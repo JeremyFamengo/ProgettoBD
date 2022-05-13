@@ -1,3 +1,4 @@
+from importlib.machinery import FrozenImporter
 from flask import *
 from flask_sqlalchemy import *
 from flask_login import UserMixin, current_user, login_user, LoginManager, login_required, logout_user
@@ -264,6 +265,18 @@ class  Album_canzoni(db.Model):
     def __init__(self, id_album, id_canzone):
         self.id_album = id_album
         self.id_canzone = id_canzone
+
+# view playlist_canzoni_view
+class Playlist_canzoni_view(db.Model):
+    __tablename__  = 'playlist_canzoni_view'
+    id_playlist = db.Column(db.Integer, primary_key=True)
+    id_canzone = db.Column(db.Integer, primary_key=True)
+    titolo_playlist = db.Column(db.String)
+    titolo_canzone = db.Column(db.String)
+    restricted = db.Column(db.Boolean)
+    id_utente = db.Column(db.Integer)
+
+
 
 class UploadForm(FlaskForm):
     titolo = StringField("Titolo", validators=[DataRequired()])
@@ -658,11 +671,29 @@ def creaplaylist():
 @app.route('/playlist')
 @login_required
 def playlist():
-    playlists = Playlist.query.filter_by(id_utente=current_user.id).all()
+    playlists = Playlist_canzoni_view.query.filter_by(id_utente=current_user.id).all()
 
+
+    temp = []
+    ids = []
+    for playlist in playlists:
+        print(playlist.id_playlist)
+        ids.append(playlist.id_playlist)
+    ids = set(ids)
+    print(ids)
+
+    for id in ids:
+        temp2 = []
+        for playlist in playlists:
+            if playlist.id_playlist == id:
+                temp2.append(playlist)
+        temp.append(temp2)
     
+    # for  i in temp :
+    #     print(i)
+    return render_template("playlist.html", playlists = temp)
 
-    return render_template("playlist.html", playlists = playlists)
+
 
 @app.route('/search', methods=['GET', 'POST'])
 @login_required
