@@ -501,7 +501,10 @@ def uploadsong():
 
     choices = []
     for album in albums:
-        if album.singolo and len(album.id_canzoni) != 0:
+        if album.singolo and len(album.id_canzoni) == 0:
+            tmp = (album.id_album,album.titolo)
+            choices.append(tmp)
+        elif not album.singolo:
             tmp = (album.id_album,album.titolo)
             choices.append(tmp)
 
@@ -638,25 +641,17 @@ def playlist():
     return render_template("playlist.html", playlists = playlists)
 
 
-@app.route('/search')
+@app.route('/search', methods=['GET', 'POST'])
 @login_required
 def search():
     songs = Canzoni.query.all()
     playlists = Playlist.query.filter_by(id_utente = current_user.id).all()
     count = len(songs)
 
+    if request.method == 'POST':
+        addtoplaylist()
+
     return render_template("search.html", songs = songs, count_canzoni = count, playlists = playlists)
-
-@app.route('/addtoplaylist')
-@login_required
-def addtoplaylist():
-    id_canzone = request.args.get('id_canzone')
-    id_playlist = request.args.get('id_playlist')
-
-    print("ID CANZONE:" + str(id_canzone))
-    print("ID PLAYLIST:" + str(id_playlist))
-
-    return redirect('search')
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -670,6 +665,14 @@ def page_not_found(e):
 def load_user(id):
     return User.query.get(id)
 
+def addtoplaylist():
+    id_canzone = request.args.get('id_canzone')
+    id_playlist = request.args.get('id_playlist')
+
+    print("ID CANZONE:" + str(id_canzone))
+    print("ID PLAYLIST:" + str(id_playlist))
+
+    return redirect('search')
 
 if __name__ == "__main__":
     app.run(debug=True) 

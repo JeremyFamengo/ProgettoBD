@@ -124,7 +124,11 @@
 														
 														{% for playlist in playlists %}
 															{% if playlist %}
-																<a class="dropdown-item" href="/addtoplaylist?id_song={{ song.id }}&id_playlist={{ playlist.id_playlist	 }}">{{ playlist.titolo }}</a>
+																<form action="/search" method="POST">
+																	<input type="hidden" name="id_utente" value="{{ playlists.id }}">
+																	<input type="hidden" name="nome_arte" value="{{ song.id }}">
+																	<button class="hidden-button" style="color: black; float: right" type="submit" name="add">{{ playlist.titolo }}</button>
+																</form>
 															{% else %}
 																<p>No playlist</p>
 															{% endif %}
