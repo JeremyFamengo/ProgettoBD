@@ -91,29 +91,32 @@
 
     <h2>Le tue playlist</h2>
     <br>
-
-        {% for playlist in playlists %}
-        
-            <div class="accordion">
-                <input id="toggle{{ loop.index }}" type="radio" class="accordion-toggle" name="toggle" />
-                <label for="toggle{{ loop.index }}"><strong>{{ playlist.titolo }}</strong>{% if playlist.restricted %} <i>- questa playlist non è pubblica</i>{% endif %}</label>
-                <section>
-                    {% if playlist.id_canzoni %}
-                        <ul>
-                            {% for song in playlist.id_canzoni %}
-                                <a class="hidden-link" href="/player?id={{ song }}"><li><p>{{ diz_titoli.get(song) }}</p></li></a>
-                            {% endfor %}
-                        </ul>
-                        
-                    {% else %}
-                        <p>Non hai ancora inserito canzoni</p>
-                    {% endif %}
-                </section>
-            </div>
-                
+        {% if playlists %}
+            {% for playlist in playlists %}
             
-        {% endfor %}
-
+                <div class="accordion">
+                    <input id="toggle{{ loop.index }}" type="radio" class="accordion-toggle" name="toggle" />
+                    <label for="toggle{{ loop.index }}"><strong>{{ playlist[0].titolo_playlist }}</strong>{% if playlist[0].estricted %} <i>- questa playlist non è pubblica</i>{% endif %}</label>
+                    <section>
+                        {% if playlist[0].id_canzone %}
+                        
+                            <ul>
+                                {% for canzone in playlist %}
+                                        <a class="hidden-link" href="/player?id={{ song }}"><li><p>{{ canzone.titolo_canzone  }}</p></li></a>
+                                {% endfor %}
+                            </ul>
+                            
+                        {% else %}
+                            <p>Non hai ancora inserito canzoni</p>
+                        {% endif %}
+                    </section>
+                </div>
+                    
+                
+            {% endfor %}
+        {% else %}
+                <p>Non hai ancora creato playlist</p>
+        {% endif %}
     
 
 {% endblock %}
