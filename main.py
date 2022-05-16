@@ -689,8 +689,6 @@ def playlist():
                 temp2.append(playlist)
         temp.append(temp2)
     
-    # for  i in temp :
-    #     print(i)
     return render_template("playlist.html", playlists = temp)
 
 
