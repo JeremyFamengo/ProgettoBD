@@ -102,7 +102,7 @@
                         
                             <ul>
                                 {% for canzone in playlist %}
-                                        <a class="hidden-link" href="/player?id={{ song }}"><li><p>{{ canzone.titolo_canzone  }}</p></li></a>
+                                        <a class="hidden-link" href="/player?id={{ canzone.id_canzone }}"><li><p>{{ canzone.titolo_canzone  }}</p></li></a>
                                 {% endfor %}
                             </ul>
                             
