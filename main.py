@@ -675,19 +675,16 @@ def creaplaylist():
 
     return render_template("creaplaylist.html", form = form)
 
-@app.route('/playlist')
+@app.route('/playlist', methods=['GET', 'POST'])
 @login_required
 def playlist():
     playlists = Playlist_canzoni_view.query.filter_by(id_utente=current_user.id).all()
 
-
     temp = []
     ids = []
     for playlist in playlists:
-        print(playlist.id_playlist)
         ids.append(playlist.id_playlist)
     ids = set(ids)
-    print(ids)
 
     for id in ids:
         temp2 = []
@@ -695,9 +692,22 @@ def playlist():
             if playlist.id_playlist == id:
                 temp2.append(playlist)
         temp.append(temp2)
+
+    if request.method == 'POST':
+        delete_song = bool(int(request.form['delete_song']))
+        id = request.form['id']
+
+        if delete_song:
+            Playlist_canzoni.query.filter_by(id_canzone = id).delete()
+            db.session.commit()
+        else:
+            Playlist.query.filter_by(id_playlist = id).delete()
+            db.session.commit()
+
+        return redirect('playlist')
+
     
-    # for  i in temp :
-    #     print(i)
+    
     return render_template("playlist.html", playlists = temp)
 
 
