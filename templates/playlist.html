@@ -109,10 +109,12 @@
                         
                             <ul>
                                 {% for canzone in playlist %}
+                                <li>
                                         <form style="text-align: left;" action="/playlist" method="POST">
                                             <input type="hidden" name="id" value="{{ canzone.id_canzone }}">
                                             <p><a class="hidden-link" href="/player?id={{ canzone.id_canzone }}">{{ canzone.titolo_canzone  }}</a><button class="hidden-button" style="float: right" name="delete_song" value=1><i class="fa fa-trash" aria-hidden="true"></i></button></p>
                                         </form>
+                                </li>
                                 {% endfor %}
                             </ul>
                             
