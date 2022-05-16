@@ -276,6 +276,13 @@ class Playlist_canzoni_view(db.Model):
     restricted = db.Column(db.Boolean)
     id_utente = db.Column(db.Integer)
 
+# view album_canzoni_view
+class Album_canzoni_view(db.Model):
+    __tablename__  = 'album_canzoni_view'
+    id_album = db.Column(db.Integer, primary_key=True)
+    id_canzone = db.Column(db.Integer, primary_key=True)
+    titolo_album = db.Column(db.String)
+    titolo_canzone = db.Column(db.String)
 
 
 class UploadForm(FlaskForm):
@@ -719,9 +726,9 @@ def page_not_found(e):
 @app.route('/canzonialbum')
 @login_required
 def canzonialbum():
-    album = Album.query.filter_by(id_album = request.args.get('id_album')).first()
-    songs = Album_canzoni.query.filter_by(id_album=album.id_album).all()
-    return render_template("canzonialbum.html" , album = album, songs = songs)
+    id_album = request.args.get('id_album')
+    songs = Album_canzoni_view.query.filter_by(id_album = id_album).all()
+    return render_template("canzonialbum.html" , songs = songs)
 
 #######################################################   
 # FUNCTIONS

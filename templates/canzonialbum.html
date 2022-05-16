@@ -4,7 +4,7 @@
 
 {% block header %}
 
-    <h2>Canzoni presenti in {{ album.titolo }}</h2>
+    <h2>Canzoni presenti in {{ songs[0].titolo_album }}</h2>
 
 {% endblock %}
 
@@ -29,7 +29,7 @@
 <ul>
     {% for song in songs %}
         <li>
-            {{song.titolo}}
+            {{song.titolo_canzone}}
         </li>
     {% endfor %}
 </ul>
