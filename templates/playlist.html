@@ -96,13 +96,23 @@
             
                 <div class="accordion">
                     <input id="toggle{{ loop.index }}" type="radio" class="accordion-toggle" name="toggle" />
-                    <label for="toggle{{ loop.index }}"><strong>{{ playlist[0].titolo_playlist }}</strong>{% if playlist[0].estricted %} <i>- questa playlist non è pubblica</i>{% endif %}</label>
+                    <label for="toggle{{ loop.index }}">
+                        <form style="text-align: left;" action="/playlist" method="POST">
+                            <input type="hidden" name="id" value="{{ playlist[0].id_playlist }}">
+                            <button class="hidden-button" style="float: right; margin-right: 5%;" name="delete_song" value=0><i class="fa fa-trash" aria-hidden="true"></i></button>
+                        </form>
+                        <strong>{{ playlist[0].titolo_playlist }}</strong>{% if playlist[0].estricted %} <i>- questa playlist non è pubblica</i>{% endif %}
+                        
+                    </label>
                     <section>
                         {% if playlist[0].id_canzone %}
                         
                             <ul>
                                 {% for canzone in playlist %}
-                                        <a class="hidden-link" href="/player?id={{ canzone.id_canzone }}"><li><p>{{ canzone.titolo_canzone  }}</p></li></a>
+                                        <form style="text-align: left;" action="/playlist" method="POST">
+                                            <input type="hidden" name="id" value="{{ canzone.id_canzone }}">
+                                            <p><a class="hidden-link" href="/player?id={{ canzone.id_canzone }}">{{ canzone.titolo_canzone  }}</a><button class="hidden-button" style="float: right" name="delete_song" value=1><i class="fa fa-trash" aria-hidden="true"></i></button></p>
+                                        </form>
                                 {% endfor %}
                             </ul>
                             
