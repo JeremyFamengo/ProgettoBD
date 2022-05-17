@@ -1,4 +1,3 @@
-from importlib.machinery import FrozenImporter
 from flask import *
 from flask_sqlalchemy import *
 from flask_login import UserMixin, current_user, login_user, LoginManager, login_required, logout_user
@@ -55,7 +54,7 @@ class User(db.Model, UserMixin):
     id_artista = db.Column(db.String(30))
     premium = db.Column(db.Boolean)
     ascoltate = db.Column(db.ARRAY(db.Integer))
-    
+
     psw = db.Column(db.String(128))
 
     def __init__(self, nome, cognome, mail, psw, data_di_nascita, id_artista, premium, ascoltate, username):
@@ -85,7 +84,7 @@ class User(db.Model, UserMixin):
         print(self.ascoltate)
         print(self.username)
         print("\n-------------------------\n")
-    
+
     def get_id(self):
         return self.id
 
@@ -131,7 +130,7 @@ class Richieste_diventa_artista(db.Model):
     motivazione = db.Column(db.String(128))
     stato_richiesta = db.Column(db.Integer)
     id_utente = db.Column(db.String(20), primary_key = True)
-    
+
 
     def __init__(self, nome_arte, motivazione, stato_richiesta, id_utente):
         self.nome_arte = nome_arte
@@ -147,7 +146,7 @@ class Richieste_diventa_artista(db.Model):
         print(self.stato_richiesta)
         print(self.id_utente)
         print("\n-------------------------\n")
-    
+
 class Artista(db.Model):
     __tablename__ = "artisti"
     id_artista = db.Column(db.Integer, primary_key = True)
@@ -233,7 +232,7 @@ class Generi_Musicali(db.Model):
 
     def __init__(self, id_genere, nome, descrizione):
         self.id_genere = id_genere
-        self.nome = nome      
+        self.nome = nome
         self.descrizione = descrizione
 
 class Playlist(db.Model):
@@ -276,6 +275,16 @@ class Playlist_canzoni_view(db.Model):
     restricted = db.Column(db.Boolean)
     id_utente = db.Column(db.Integer)
 
+# view n_riproduzioni_album_canzoni_view
+class N_riproduzioni_album_canzoni_view(db.Model):
+    __tablename__  = 'n_riproduzioni_album_canzoni_view'
+    id_artista = db.Column(db.Integer, primary_key=True)
+    id_album = db.Column(db.Integer, primary_key=True)
+    id_canzone = db.Column(db.Integer, primary_key=True)
+    titolo_album = db.Column(db.String)
+    titolo_canzone = db.Column(db.String)
+    n_riproduzioni = db.Column(db.Integer)
+
 
 
 class UploadForm(FlaskForm):
@@ -300,7 +309,7 @@ class CreaPlaylistForm(FlaskForm):
     restricted = SelectField("Privacy", choices=[(0, "Pubblica"), (1, "Personale")], validators=[DataRequired()])
     titolo = StringField("Nome", validators=[DataRequired()])
     submit = SubmitField("Crea")
-    
+
 
 #######################################################
 # ROUTES
@@ -326,7 +335,7 @@ def login():
         else:
             print('User does not exist')
             flash('User does not exist')
-                
+
     return render_template("login.html", form=form)
 
 #profile page
@@ -338,7 +347,7 @@ def profile():
 #info page
 @app.route('/info')
 def info():
-    
+
     return render_template("info.html")
 
 #logout function as route
@@ -359,7 +368,7 @@ def register():
             user.debug()
             db.session.add(user)
             db.session.commit()
-            
+
             print("User added correctly!")
             flash("User added correctly!")
 
@@ -369,7 +378,7 @@ def register():
             form.username.data = ''
             form.psw.data = ''
             form.data_di_nascita.data = ''
-            
+
             return redirect(url_for('login'))
 
         else:
@@ -403,8 +412,8 @@ def profileinfo():
 
         flash("Info updated correctly")
 
-    
-    if form2.submit2.data and form2.validate():    
+
+    if form2.submit2.data and form2.validate():
         user = User.query.filter_by(id = current_user.id).first()
 
         if user.verify_password(form2.old_psw.data):
@@ -461,7 +470,7 @@ def artist():
             form.motivazione.data = ''
 
             return redirect('profile')
-    
+
     return render_template('artist.html', form = form, artist = artist, nome_arte = nome_arte, request_status = request_status)
 
 @app.route('/admin', methods=['GET', 'POST'])
@@ -472,7 +481,7 @@ def admin():
         nome_arte = request.form['nome_arte']
         print(id)
         print(nome_arte)
-        
+
         accept = bool(request.form['accept'])
         print(accept)
 
@@ -526,7 +535,7 @@ def uploadsong():
     artista = Artista.query.filter_by(id_artista = current_user.id_artista).first()
     generi = Generi_Musicali.query.all()
     albums = Album.query.filter_by(id_artista = artista.id_artista).all()
-    
+
 
     choices = []
     for album in albums:
@@ -548,6 +557,75 @@ def uploadsong():
     form.genere.choices = choices
 
     return render_template("uploadsong.html", form=form)
+
+@app.route('/artist/statistiche')
+@login_required
+def statistiche():
+    if current_user.id_artista == None:
+        flash("You must be an Artist to access the artist's dashboard")
+        return redirect('/profile')
+
+
+    n_riproduzioni_album_canzoni = N_riproduzioni_album_canzoni_view.query.filter_by(id_artista = current_user.id_artista).all()
+
+    print(current_user.id_artista)
+
+    # result = list()
+    
+    # canzoniPerAlbum = list()
+
+    # print("#stampaggio vista riproduzioni#")
+    # for ele in n_riproduzioni_album_canzoni:
+    #     print("-> "+ele.titolo_album+" | "+ele.titolo_canzone)
+
+    # oldElement=None
+    # nrac = list()
+    # for ele in n_riproduzioni_album_canzoni:
+    #     if oldElement == None or oldElement.titolo_album != ele.titolo_album:
+    #         nrac.append(ele)
+    #         oldElement=ele
+
+    # result = list()
+    # for i in n_riproduzioni_album_canzoni:
+    #     canzoniPerAlbum = list()
+    #     for j in n_riproduzioni_album_canzoni:
+    #         if i.id_album == j.id_album:
+    #             canzoniPerAlbum.append(j)
+    #     result.append(i)
+    #     result.append(canzoniPerAlbum)
+
+
+
+
+    temp = []
+    ids = []
+    for ele in n_riproduzioni_album_canzoni:
+        print(ele.titolo_album)
+        ids.append(ele.titolo_album)
+    ids = set(ids)
+    print(ids)
+
+    for id in ids:
+        temp2 = []
+        for ele in n_riproduzioni_album_canzoni:
+            if ele.titolo_album == id:
+                temp2.append(ele)
+        temp.append(temp2)
+
+
+    # for ele in n_riproduzioni_album_canzoni:
+    #     if oldElement == None or oldElement != ele.titolo_album:
+    #         print("dentro")
+    #         # if oldElement != None :
+    #         #     result.append(canzoniPerAlbum)
+    #         result.append(ele)
+    #         result.append(canzoniPerAlbum)
+            
+    #         oldElement=ele.titolo_album
+    #     else :
+    #         canzoniPerAlbum.append(ele)
+
+    return render_template("statistiche.html",canzoniPerAlbum=temp)
 
 @app.route('/artist/creaalbum', methods=['GET', 'POST'])
 @login_required
@@ -584,12 +662,12 @@ def creaalbum():
         flash("Album aggiunto correttamente")
 
     return render_template("creaalbum.html", form=form)
-    
+
 
 @app.route('/168AN4df15/uploader', methods=['GET', 'POST'])
 @login_required
 def uploader():
-      
+
     form = UploadForm()
 
     if form.is_submitted():
@@ -605,7 +683,7 @@ def uploader():
         durata = 180
         n_riproduzioni=0
 
-        
+
         canzone = Canzoni(id_artista=id_artista, titolo=titolo, scadenza=scadenza, data_uscita=data_uscita, id_genere=genere, file=data, riservato=riservato, extension='mp3', durata=durata, n_riproduzioni=n_riproduzioni)
 
         db.session.add(canzone)
@@ -613,7 +691,7 @@ def uploader():
         id_canzone = Canzoni.query.filter_by(id_artista = current_user.id_artista, data_uscita = data_uscita).first().id
 
         addToAlbum(id_album,id_canzone)
-        
+
         flash("file uploaded successfully")
 
     return redirect('/artist/uploadsong')
@@ -641,8 +719,8 @@ def player():
     if current_user.premium:
         riservato = False
     print(riservato)
-    
-    
+
+
     return render_template("player.html", canzone=canzone, artista=artista, riservato=riservato, genere=genere, descrizione=descrizione)
 
 
@@ -661,7 +739,7 @@ def creaplaylist():
 
         db.session.add(playlist)
         db.session.commit()
-        
+
         flash("Playlist creata correttamente")
 
         return redirect("/playlist")
@@ -688,7 +766,7 @@ def playlist():
             if playlist.id_playlist == id:
                 temp2.append(playlist)
         temp.append(temp2)
-    
+
     return render_template("playlist.html", playlists = temp)
 
 
@@ -721,7 +799,7 @@ def canzonialbum():
     songs = Album_canzoni.query.filter_by(id_album=album.id_album).all()
     return render_template("canzonialbum.html" , album = album, songs = songs)
 
-#######################################################   
+#######################################################
 # FUNCTIONS
 #######################################################
 
@@ -730,7 +808,7 @@ def getSearchTable():
 	    FROM public.canzoni
 	    inner join public.artisti using(id_artista)
 	    inner join public.generi_musicali using(id_genere)"""
-    
+
     #db.session.commit()
     return db.session.execute(query).all()
 
@@ -757,4 +835,4 @@ def addToAlbum(album_id, id_canzone):
     return redirect('/search')
 
 if __name__ == "__main__":
-    app.run(debug=True) 
+    app.run(debug=True)
