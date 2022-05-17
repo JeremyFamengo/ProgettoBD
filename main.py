@@ -746,19 +746,16 @@ def creaplaylist():
 
     return render_template("creaplaylist.html", form = form)
 
-@app.route('/playlist')
+@app.route('/playlist', methods=['GET', 'POST'])
 @login_required
 def playlist():
     playlists = Playlist_canzoni_view.query.filter_by(id_utente=current_user.id).all()
 
-
     temp = []
     ids = []
     for playlist in playlists:
-        print(playlist.id_playlist)
         ids.append(playlist.id_playlist)
     ids = set(ids)
-    print(ids)
 
     for id in ids:
         temp2 = []
@@ -795,9 +792,9 @@ def page_not_found(e):
 @app.route('/canzonialbum')
 @login_required
 def canzonialbum():
-    album = Album.query.filter_by(id_album = request.args.get('id_album')).first()
-    songs = Album_canzoni.query.filter_by(id_album=album.id_album).all()
-    return render_template("canzonialbum.html" , album = album, songs = songs)
+    id_album = request.args.get('id_album')
+    songs = Album_canzoni_view.query.filter_by(id_album = id_album).all()
+    return render_template("canzonialbum.html" , songs = songs)
 
 #######################################################
 # FUNCTIONS
