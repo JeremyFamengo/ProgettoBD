@@ -568,42 +568,11 @@ def statistiche():
 
     n_riproduzioni_album_canzoni = N_riproduzioni_album_canzoni_view.query.filter_by(id_artista = current_user.id_artista).all()
 
-    print(current_user.id_artista)
-
-    # result = list()
-    
-    # canzoniPerAlbum = list()
-
-    # print("#stampaggio vista riproduzioni#")
-    # for ele in n_riproduzioni_album_canzoni:
-    #     print("-> "+ele.titolo_album+" | "+ele.titolo_canzone)
-
-    # oldElement=None
-    # nrac = list()
-    # for ele in n_riproduzioni_album_canzoni:
-    #     if oldElement == None or oldElement.titolo_album != ele.titolo_album:
-    #         nrac.append(ele)
-    #         oldElement=ele
-
-    # result = list()
-    # for i in n_riproduzioni_album_canzoni:
-    #     canzoniPerAlbum = list()
-    #     for j in n_riproduzioni_album_canzoni:
-    #         if i.id_album == j.id_album:
-    #             canzoniPerAlbum.append(j)
-    #     result.append(i)
-    #     result.append(canzoniPerAlbum)
-
-
-
-
     temp = []
     ids = []
     for ele in n_riproduzioni_album_canzoni:
-        print(ele.titolo_album)
         ids.append(ele.titolo_album)
     ids = set(ids)
-    print(ids)
 
     for id in ids:
         temp2 = []
@@ -611,19 +580,6 @@ def statistiche():
             if ele.titolo_album == id:
                 temp2.append(ele)
         temp.append(temp2)
-
-
-    # for ele in n_riproduzioni_album_canzoni:
-    #     if oldElement == None or oldElement != ele.titolo_album:
-    #         print("dentro")
-    #         # if oldElement != None :
-    #         #     result.append(canzoniPerAlbum)
-    #         result.append(ele)
-    #         result.append(canzoniPerAlbum)
-            
-    #         oldElement=ele.titolo_album
-    #     else :
-    #         canzoniPerAlbum.append(ele)
 
     return render_template("statistiche.html",canzoniPerAlbum=temp)
 
