@@ -26,12 +26,14 @@
 
 
 {% block right_content %}
-<ul>
-    {% for song in songs %}
-        <li>
-            <p><a class="hidden-link" href="/player?id={{ song.id_canzone }}">{{ song.titolo_canzone  }}</a></p>
-        </li>
-    {% endfor %}
-</ul>
+
+    <ul>
+        {% for song in songs %}
+            <li>
+                <p><a class="hidden-link" href="/player?id={{ song.id_canzone }}">{{ song.titolo_canzone  }}</a></p>
+            </li>
+        {% endfor %}
+    </ul>
+
 {% endblock %}
 

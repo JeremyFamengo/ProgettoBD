@@ -306,6 +306,13 @@ class N_riproduzioni_album_canzoni_view(db.Model):
     titolo_canzone = db.Column(db.String)
     n_riproduzioni = db.Column(db.Integer)
 
+class Album_canzoni_view(db.Model):
+    __tablename__ = 'album_canzoni_view'
+    id_album = db.Column(db.Integer, primary_key=True)
+    titolo_album = db.Column(db.String)
+    titolo_canzone = db.Column(db.String)
+    id_canzone = db.Column(db.Integer, primary_key=True)
+
 class UploadForm(FlaskForm):
     titolo = StringField("Titolo", validators=[DataRequired()])
     genere = SelectField("Genere", validators=[DataRequired()])
@@ -780,8 +787,14 @@ def page_not_found(e):
 @login_required
 def canzonialbum():
     id_album = request.args.get('id_album')
+
     songs = Album_canzoni_view.query.filter_by(id_album = id_album).all()
-    return render_template("canzonialbum.html" , songs = songs)
+
+    if songs:
+        return render_template("canzonialbum.html" , songs = songs)
+    else:
+        flash("Questo album è vuoto")
+        return redirect('/artist/dashboard')
 
 #######################################################
 # FUNCTIONS

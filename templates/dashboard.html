@@ -18,7 +18,7 @@
           .flip-card {
             background-color: transparent;
             width: 300px;
-            height: 300px;
+            height: 350px;
             border-radius: 12px;
             perspective: 1000px;
           }
@@ -96,6 +96,17 @@
 
 {% block right_content %}
 
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for msg in messages %}
+            <div class="flashed-message-error alert">
+                {{ msg }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" style="float: right"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
         <h2 style="text-align: center;">I tuoi album</h2>
 
         <div>
@@ -127,7 +138,7 @@
                                     {% endif %}
 
                                     {% if album.scadenza %}
-                                        <p>Questo album scade il {{ album.scadenza }}</p>
+                                        <p style="color: darkorange;">Questo album scade il {{ album.scadenza }}</p>
                                     {% endif %}
                                     
                                 </div>
