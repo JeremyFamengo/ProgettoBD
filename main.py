@@ -275,6 +275,26 @@ class Playlist_canzoni_view(db.Model):
     restricted = db.Column(db.Boolean)
     id_utente = db.Column(db.Integer)
 
+class Utenti_ascolti(db.Model):
+    __tablename__ = 'utenti_ascolti'
+    id_utente = db.Column(db.Integer, primary_key=True)
+    id_canzone = db.Column(db.Integer, primary_key=True)
+    n_ascolti = db.Column(db.Integer)
+
+    def __init__(self, id_utente, id_canzone, n_ascolti):
+        self.id_utente = id_utente
+        self.id_canzone = id_canzone
+        self.n_ascolti = n_ascolti
+
+class Statistiche_utente_view(db.Model):
+    __tablename__ = 'statistiche_utente_view'
+    id_utente = db.Column(db.Integer, primary_key=True)
+    id_canzone = db.Column(db.Integer, primary_key=True)
+    id_artista = db.Column(db.Integer, primary_key=True)
+    id_genere = db.Column(db.Integer, primary_key=True)
+    n_ascolti = db.Column(db.Integer)
+    nome_genere = db.Column(db.String)
+    nome_arte = db.Column(db.String)
 # view n_riproduzioni_album_canzoni_view
 class N_riproduzioni_album_canzoni_view(db.Model):
     __tablename__  = 'n_riproduzioni_album_canzoni_view'
@@ -284,8 +304,6 @@ class N_riproduzioni_album_canzoni_view(db.Model):
     titolo_album = db.Column(db.String)
     titolo_canzone = db.Column(db.String)
     n_riproduzioni = db.Column(db.Integer)
-
-
 
 class UploadForm(FlaskForm):
     titolo = StringField("Titolo", validators=[DataRequired()])
@@ -342,6 +360,12 @@ def login():
 @app.route('/profile')
 @login_required
 def profile():
+    statistiche = Statistiche_utente_view.query.filter_by(id_utente = current_user.id).all()
+
+    print(statistiche)
+    #for statistica in statistiche:
+    #    print(statistica.nome)
+
     return render_template("profile.html", user=current_user.username)
 
 #info page
@@ -662,6 +686,10 @@ def player():
     # Aggironamento numero di riprouzioni svolte in questa canzone
     nPlayTMP=Canzoni.n_riproduzioni+1
     Canzoni.query.filter_by(id = id).update(dict(n_riproduzioni=nPlayTMP))
+    db.session.commit()
+
+    ascolto = Utenti_ascolti(current_user.id, canzone.id, 1)
+    db.session.add(ascolto)
     db.session.commit()
 
     artista = Artista.query.filter_by(id_artista = canzone.id_artista).first().nome_arte
