@@ -278,7 +278,7 @@ class Playlist_canzoni_view(db.Model):
 class Utenti_ascolti(db.Model):
     __tablename__ = 'utenti_ascolti'
     id_utente = db.Column(db.Integer, primary_key=True)
-    id_canzone = db.Column(db.Integer, primary_key=True)
+    id_canzone = db.Column(db.Integer)
     n_ascolti = db.Column(db.Integer)
 
     def __init__(self, id_utente, id_canzone, n_ascolti):
@@ -295,6 +295,7 @@ class Statistiche_utente_view(db.Model):
     n_ascolti = db.Column(db.Integer)
     nome_genere = db.Column(db.String)
     nome_arte = db.Column(db.String)
+    titolo_canzone = db.Column(db.String)
 # view n_riproduzioni_album_canzoni_view
 class N_riproduzioni_album_canzoni_view(db.Model):
     __tablename__  = 'n_riproduzioni_album_canzoni_view'
@@ -360,13 +361,15 @@ def login():
 @app.route('/profile')
 @login_required
 def profile():
+    dati = []
     statistiche = Statistiche_utente_view.query.filter_by(id_utente = current_user.id).all()
+    
+    if statistiche:
+        dati = statistiche_utente(statistiche)
+    else:
+        dati = None
 
-    print(statistiche)
-    #for statistica in statistiche:
-    #    print(statistica.nome)
-
-    return render_template("profile.html", user=current_user.username)
+    return render_template("profile.html", user=current_user.username, dati = dati)
 
 #info page
 @app.route('/info')
@@ -814,6 +817,50 @@ def addToAlbum(album_id, id_canzone):
     db.session.commit()
 
     return redirect('/search')
+
+def statistiche_utente(statistiche):
+    dati = []
+    canzoni_piu_ascoltate = []
+    generi_piu_ascoltati = []
+    generi_consigliati = []
+    artisti_piu_ascoltati = []
+    canzoni_consigliate = [] #canzoni dei generi più ascoltati con più ascolti globali (fare una view)
+
+    for s in statistiche:
+        temp = [s.id_genere, s.nome_genere, 0]
+        if temp not in generi_piu_ascoltati:
+            generi_piu_ascoltati.append(temp)
+
+    for s in statistiche:
+        temp = [s.id_artista, s.nome_arte, 0]
+        if temp not in artisti_piu_ascoltati:
+            artisti_piu_ascoltati.append(temp)
+
+    for s in statistiche:
+        canzoni_piu_ascoltate.append((s.id_canzone, s.n_ascolti, s.titolo_canzone))
+        for g in generi_piu_ascoltati:
+            if s.id_genere == g[0]:
+                g[2] = g[2] + s.n_ascolti
+
+        for a in artisti_piu_ascoltati:
+            if s.id_artista == a[0]:
+                a[2] = a[2] + s.n_ascolti
+
+    
+    artisti_piu_ascoltati.sort(key = lambda x: x[2], reverse=True)
+    generi_piu_ascoltati.sort(key = lambda x: x[2], reverse=True)
+    canzoni_piu_ascoltate.sort(key = lambda x: x[1], reverse=True)
+    
+    
+    
+    if len(generi_piu_ascoltati) > 3:
+        generi_consigliati = [generi_piu_ascoltati[0], generi_piu_ascoltati[1], generi_piu_ascoltati[3]]
+    else:
+        generi_consigliati = generi_piu_ascoltati
+
+    dati = [canzoni_piu_ascoltate, generi_piu_ascoltati, generi_consigliati, artisti_piu_ascoltati, canzoni_consigliate]
+
+    return dati
 
 if __name__ == "__main__":
     app.run(debug=True)

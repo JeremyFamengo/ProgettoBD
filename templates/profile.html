@@ -26,6 +26,31 @@
     {% endwith %}
 
     <p>Ben tornato, {{ user }}</p>
+    {% if dati %}
+        <h2>Canzoni più ascoltate</h2>
+        <ul>
+            {% for song in dati[0] %}
+                <li><a class="hidden-link" href="/player?id={{ song[0] }}">{{ song[2] }} - ascolti: {{ song[1] }}</a></li>
+            {% endfor %}
+        </ul>
+        <br>
+        <h2>Generi più ascoltati</h2>
+        <ul>
+            {% for genere in dati[1] %}
+                <li>{{ genere[1] }} - ascolti: {{ genere[2] }}</li>
+            {% endfor %}
+        </ul>
+        <br>
+        <h2>Artisti più ascoltati</h2>
+        <ul>
+            {% for artista in dati[3] %}
+                <li>{{ artista[1] }} - ascolti: {{ artista[2] }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Statistiche non ancora disponibili</p>
+    {% endif %}
+    
 
 {% endblock %}
 
