@@ -694,18 +694,22 @@ def player():
     canzone = Canzoni.query.filter_by(id = id).first()
 
     # Aggironamento numero di riprouzioni svolte in questa canzone
-    nPlayTMP=Canzoni.n_riproduzioni+1
-    Canzoni.query.filter_by(id = id).update(dict(n_riproduzioni=nPlayTMP))
-    db.session.commit()
 
-    ascolto = Utenti_ascolti(current_user.id, canzone.id, 1)
-    db.session.add(ascolto)
-    db.session.commit()
-
-    artista = Artista.query.filter_by(id_artista = canzone.id_artista).first().nome_arte
+    artista = Artista.query.filter_by(id_artista = canzone.id_artista).first()
     genere = Generi_Musicali.query.filter_by(id_genere = canzone.id_genere).first()
     descrizione = genere.descrizione
     genere = genere.nome
+
+    if artista.id_artista != current_user.id_artista:
+        nPlayTMP=Canzoni.n_riproduzioni+1
+        Canzoni.query.filter_by(id = id).update(dict(n_riproduzioni=nPlayTMP))
+        db.session.commit()
+
+        ascolto = Utenti_ascolti(current_user.id, canzone.id, 1)
+        db.session.add(ascolto)
+        db.session.commit()
+
+    artista = artista.nome_arte
 
     riservato = canzone.riservato
     print(current_user.premium)
