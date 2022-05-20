@@ -1,3 +1,4 @@
+from anyio import TypedAttributeLookupError
 from flask import *
 from flask_sqlalchemy import *
 from flask_login import UserMixin, current_user, login_user, LoginManager, login_required, logout_user
@@ -320,6 +321,15 @@ class Album_canzoni_view(db.Model):
     titolo_canzone = db.Column(db.String)
     id_canzone = db.Column(db.Integer, primary_key=True)
 
+class Canzoni_recenti_view(db.Model):
+    __tablename__ = 'canzoni_recenti_view'
+    titolo = db.Column(db.String)
+    id = db.Column(db.Integer, primary_key=True)
+    nome_genere = db.Column(db.String)
+    data_inserimento = db.Column(db.Date)
+    data_uscita = db.Column(db.Date)
+    nome_arte = db.Column(db.String)
+
 class UploadForm(FlaskForm):
     titolo = StringField("Titolo", validators=[DataRequired()])
     genere = SelectField("Genere", validators=[DataRequired()])
@@ -353,8 +363,10 @@ class CreaPlaylistForm(FlaskForm):
 def home():
     artisti = Top_five_artists_view.query.all()
     dati_canzoni = home_statistics(statistiche)
+    canzoni = Canzoni_recenti_view.query.all()
 
-    return render_template("index.html", dati = dati_canzoni, artisti = artisti)
+
+    return render_template("index.html", dati = dati_canzoni, artisti = artisti, canzoni = canzoni)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
