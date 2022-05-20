@@ -297,6 +297,7 @@ class Statistiche_utente_view(db.Model):
     nome_arte = db.Column(db.String)
     titolo_canzone = db.Column(db.String)
 # view n_riproduzioni_album_canzoni_view
+
 class N_riproduzioni_album_canzoni_view(db.Model):
     __tablename__  = 'n_riproduzioni_album_canzoni_view'
     id_artista = db.Column(db.Integer, primary_key=True)
@@ -305,6 +306,12 @@ class N_riproduzioni_album_canzoni_view(db.Model):
     titolo_album = db.Column(db.String)
     titolo_canzone = db.Column(db.String)
     n_riproduzioni = db.Column(db.Integer)
+
+class Top_five_artists_view(db.Model):
+    __tablename__ = 'top_five_artists_view'
+    id_artista = db.Column(db.Integer, primary_key=True)
+    fama = db.Column(db.Integer, primary_key=True)
+    nome_arte = db.Column(db.String)
 
 class Album_canzoni_view(db.Model):
     __tablename__ = 'album_canzoni_view'
@@ -344,7 +351,10 @@ class CreaPlaylistForm(FlaskForm):
 #home
 @app.route('/')
 def home():
-    return render_template("index.html")
+    artisti = Top_five_artists_view.query.all()
+    dati_canzoni = home_statistics(statistiche)
+
+    return render_template("index.html", dati = dati_canzoni, artisti = artisti)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -879,5 +889,12 @@ def statistiche_utente(statistiche):
 
     return dati
 
+def home_statistics(statistiche):
+    dati = []
+
+
+    return dati
+
+    
 if __name__ == "__main__":
     app.run(debug=True)

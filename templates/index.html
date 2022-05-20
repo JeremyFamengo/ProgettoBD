@@ -1,21 +1,71 @@
 {% extends 'base-2.html' %}
 
-{% block head %}{% endblock %}
+{% block head %}
+<style>
 
-{% block header %}{% endblock %}
+</style>
+{% endblock %}
+
+{% block header %}
+    <span style="float: right; margin-right: 12%;">
+        <a href=profile><button type="button" class="button-2">Profile</button></a>
+        <a href=info><button type="button" class="button-2">Info</button></a>
+    </span>
+{% endblock %}
 
 {% block content %}
+    <div>
+        <h1 style="text-align: center;"><img src="{{ url_for('static', filename='images/soundwave.png')}}" width="120px"> ECHOS</h1>
+    </div>
 
-<div>
-    <h1 style="text-align: center;"><img src="{{ url_for('static', filename='images/soundwave.png')}}" width="120px"> ECHOS</h1>
-</div>
-<div style="text-align: center;">
+    <h2 style="text-align: center;">Canzoni recenti</h2>
+    <br>
+    <h2 style="text-align: center;">Canzoni popolari</h2>
+    <br>
 
-    <a href=profile><button type="button" class="button">Profile</button></a>
+    <table class="table table-hover table-dark" style="color: white; width: 30%; float: center; margin-left: 35%; margin-right: 35%;">
+        <tr>
+            <th></th>
+            <th>Artista</th>
+            <th style="text-align: center;">Livello di fama</th>
+        </tr>
+        {% if artisti %}
+            {% for artista in artisti %}
+                <tr>
+                    <td>{{ loop.index }}°</td>
+                    <td>{{ artista.nome_arte }}</td>
+                    <td style="text-align: center;">{{ artista.fama }}</td>
+                </tr>            
+            {% endfor %}
+        {% else %}
+            <tr>Non ci sono ancora canzoni</tr>
+        {% endif %}
+    </table>
+
     <br><br>
-    <a href=info><button type="button" class="button">Info</button></a>
-   
-</div>
+    <h2 style="text-align: center;">Artisti popolari</h2>
+    <br>
+
+
+    <table class="table table-hover table-dark" style="color: white; width: 30%; float: center; margin-left: 35%; margin-right: 35%;">
+        <tr>
+            <th></th>
+            <th>Artista</th>
+            <th style="text-align: center;">Livello di fama</th>
+        </tr>
+        {% if artisti %}
+            {% for artista in artisti %}
+                <tr>
+                    <td>{{ loop.index }}°</td>
+                    <td>{{ artista.nome_arte }}</td>
+                    <td style="text-align: center;">{{ artista.fama }}</td>
+                </tr>            
+            {% endfor %}
+        {% else %}
+            <tr>Non ci sono ancora artisti</tr>
+        {% endif %}
+    </table>
+
 {% endblock %}
 
 {% block footer %}{% endblock %}
