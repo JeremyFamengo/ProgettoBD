@@ -330,6 +330,15 @@ class Canzoni_recenti_view(db.Model):
     data_uscita = db.Column(db.Date)
     nome_arte = db.Column(db.String)
 
+class Canzoni_popolari_view(db.Model):
+    __tablename__ = 'canzoni_popolari_view'
+    titolo = db.Column(db.String)
+    id = db.Column(db.Integer, primary_key=True)
+    nome_genere = db.Column(db.String)
+    n_riproduzioni = db.Column(db.Integer)
+    data_uscita = db.Column(db.Date)
+    nome_arte = db.Column(db.String)
+
 class UploadForm(FlaskForm):
     titolo = StringField("Titolo", validators=[DataRequired()])
     genere = SelectField("Genere", validators=[DataRequired()])
@@ -363,10 +372,11 @@ class CreaPlaylistForm(FlaskForm):
 def home():
     artisti = Top_five_artists_view.query.all()
     dati_canzoni = home_statistics(statistiche)
-    canzoni = Canzoni_recenti_view.query.all()
+    canzoni_recenti = Canzoni_recenti_view.query.all()
+    canzoni_popolari = Canzoni_popolari_view.query.all()
 
 
-    return render_template("index.html", dati = dati_canzoni, artisti = artisti, canzoni = canzoni)
+    return render_template("index.html", dati = dati_canzoni, artisti = artisti, canzoni = canzoni_recenti, popolari = canzoni_popolari)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
