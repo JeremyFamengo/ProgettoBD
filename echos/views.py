@@ -480,9 +480,22 @@ def search():
 def page_not_found(e):
     return render_template('404.html')
 
-@app.route('/canzonialbum')
+@app.route('/canzonialbum', methods=['GET', 'POST'])
 @login_required
 def canzonialbum():
+    if request.method == 'POST':
+        is_song = bool(int(request.form.get('delete_song')))
+        id = request.form.get('id')
+
+        print(id)
+
+        if is_song:
+            Canzoni.query.filter_by(id = id).delete()
+            db.session.commit()
+        else:
+            Album.query.filter_by(id_album = id).delete()
+            db.session.commit()
+
     id_album = request.args.get('id_album')
 
     songs = Album_canzoni_view.query.filter_by(id_album = id_album).all()
