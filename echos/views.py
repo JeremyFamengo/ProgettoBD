@@ -354,7 +354,7 @@ def uploader():
         n_riproduzioni=0
 
 
-        canzone = Canzoni(id_artista=id_artista, titolo=titolo, scadenza=scadenza, data_uscita=data_uscita, id_genere=genere, file=data, riservato=riservato, extension='mp3', durata=durata, n_riproduzioni=n_riproduzioni)
+        canzone = Canzoni(id_artista=id_artista, titolo=titolo, scadenza=scadenza, data_inserimento=date.today(), data_uscita=data_uscita, id_genere=genere, file=data, riservato=riservato, extension='mp3', durata=durata, n_riproduzioni=n_riproduzioni)
 
         db.session.add(canzone)
 
