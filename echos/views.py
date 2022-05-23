@@ -9,7 +9,7 @@ from echos.models import *
 from echos.functions import *
 
 
-#home
+# Funzione dedicata alla pagina principale del sito
 @app.route('/')
 def home():
     artisti = Top_five_artists_view.query.all()
@@ -19,6 +19,7 @@ def home():
 
     return render_template("index.html", artisti = artisti, canzoni = canzoni_recenti, popolari = canzoni_popolari)
 
+# Funzione dedicata alla pagina di accesso al sito
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -37,7 +38,7 @@ def login():
 
     return render_template("login.html", form=form)
 
-#profile page
+# Funzione dedicata all'utente, dove vengono mostrate le canzoni più ascoltate, i generi più ascoltati e gli artisti più ascoltati
 @app.route('/profile')
 @login_required
 def profile():
@@ -51,20 +52,19 @@ def profile():
 
     return render_template("profile.html", user=current_user.username, dati = dati)
 
-#info page
+# Funzione dedicata onorevolmente alla pagina dei logo creatori
 @app.route('/info')
 def info():
-
     return render_template("info.html")
 
-#logout function as route
+# Funzione dedicata al logout dell'utente
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('login'))
 
-#register page and function
+# Funzione dedicata alla registrazione dell'utente
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
@@ -96,10 +96,7 @@ def register():
 
     return render_template("register.html", form = form)
 
-@app.route('/test')
-def test():
-    return render_template('test.html')
-
+# Funzione dedicata alla gestione dei dati dell'utente
 @app.route('/profileinfo', methods=['GET', 'POST'])
 @login_required
 def profileinfo():
@@ -139,6 +136,9 @@ def profileinfo():
 
     return render_template('profileinfo.html', form = form, form2 = form2)
 
+
+# Funzione dedicato agli utenti che non sono artisti.
+# Permette ad un utente di inviare una richiesta all'amministratore per poter diventare una artista
 @app.route('/artist', methods=['GET', 'POST'])
 @login_required
 def artist():
@@ -180,6 +180,7 @@ def artist():
 
     return render_template('artist.html', form = form, artist = artist, nome_arte = nome_arte, request_status = request_status)
 
+# Funzione dedidicata alla pagina dell'amministratore
 @app.route('/admin', methods=['GET', 'POST'])
 @requires_auth
 def admin():
@@ -216,7 +217,7 @@ def admin():
     requests = Richieste_diventa_artista.query.filter_by(stato_richiesta = '1').all()
     return render_template("admin.html", requests = requests)
 
-
+# Funzione dedicata alla dashboard degli artisti
 @app.route('/artist/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
@@ -237,6 +238,7 @@ def dashboard():
 
     return render_template("dashboard.html", user=user.nome_arte, albums=albums, songs=songs, length = length)
 
+# Funzione dedicata alla maschera d'inserimento della canzone
 @app.route('/artist/uploadsong')
 @login_required
 def uploadsong():
@@ -272,6 +274,7 @@ def uploadsong():
 
     return render_template("uploadsong.html", form=form)
 
+# Funzione dedicata alle statistiche
 @app.route('/artist/statistiche')
 @login_required
 def statistiche():
@@ -297,6 +300,7 @@ def statistiche():
 
     return render_template("statistiche.html",canzoniPerAlbum=temp)
 
+# Funzione dedicata alla creaizone di un album
 @app.route('/artist/creaalbum', methods=['GET', 'POST'])
 @login_required
 def creaalbum():
@@ -333,7 +337,7 @@ def creaalbum():
 
     return render_template("creaalbum.html", form=form)
 
-
+# Funzione dedicata all'inserimento di una nuova canzone
 @app.route('/168AN4df15/uploader', methods=['GET', 'POST'])
 @login_required
 def uploader():
@@ -366,6 +370,7 @@ def uploader():
 
     return redirect('/artist/uploadsong')
 
+# Funzione dedicata alla pagina che mostra i metadati di una singola canzone
 @app.route('/player')
 @login_required
 def player():
@@ -373,7 +378,7 @@ def player():
     id = request.args.get('id')
     canzone = Canzoni.query.filter_by(id = id).first()
 
-    # Aggironamento numero di riprouzioni svolte in questa canzone
+    # Aggironamento numero di riproduzioni svolte in questa canzone
 
     artista = Artista.query.filter_by(id_artista = canzone.id_artista).first()
     genere = Generi_Musicali.query.filter_by(id_genere = canzone.id_genere).first()
@@ -401,7 +406,7 @@ def player():
 
     return render_template("player.html", canzone=canzone, artista=artista, riservato=riservato, genere=genere, descrizione=descrizione)
 
-
+# Funzione dedicata alla creazione di una playlist
 @app.route('/creaplaylist', methods=['GET', 'POST'])
 @login_required
 def creaplaylist():
@@ -424,6 +429,7 @@ def creaplaylist():
 
     return render_template("creaplaylist.html", form = form)
 
+# Funzione dedicata alla pagina playlist
 @app.route('/playlist', methods=['GET', 'POST'])
 @login_required
 def playlist():
@@ -458,14 +464,13 @@ def playlist():
 
     return render_template("playlist.html", playlists = temp)
 
-
+# Funzione dedicata al tasto cerca
 @app.route('/search', methods=['GET', 'POST'])
 @login_required
 def search():
 
     resultQuery=getSearchTable()
 
-    #songs = Canzoni.query.all()
     playlists = Playlist.query.filter_by(id_utente = current_user.id).all()
     count = len(resultQuery)
 
@@ -476,19 +481,20 @@ def search():
 
     return render_template("search.html", songs = resultQuery, count_canzoni = count, playlists = playlists)
 
+# Funzione che richiama la pagina di errore 404
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html')
 
+
+# Funzione dedicata alla visita di un album specifico
 @app.route('/canzonialbum', methods=['GET', 'POST'])
 @login_required
 def canzonialbum():
     if request.method == 'POST':
         is_song = bool(int(request.form.get('delete_song')))
         id = request.form.get('id')
-
-        print(id)
-
+    
         if is_song:
             Canzoni.query.filter_by(id = id).delete()
             db.session.commit()
@@ -503,6 +509,5 @@ def canzonialbum():
 
     album_titolo = Album.query.filter_by(id_album = id_album).first().titolo
     songs = Album_canzoni_view.query.filter_by(id_album = id_album).all()
-    print(songs)
 
     return render_template("/canzonialbum.html" , songs = songs, titolo = album_titolo, id_album = id_album)
