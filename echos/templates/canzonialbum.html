@@ -5,8 +5,8 @@
 {% block header %}
 
     <form style="text-align: left;" action="/canzonialbum" method="POST">
-        <input type="hidden" name="id" value="{{ songs[0].id_album  }}">
-        <h2>Canzoni presenti in {{ songs[0].titolo_album }} <button class="hidden-button" style="float: right" name="delete_album" value=1><i class="fa fa-trash" aria-hidden="true"></i></button></h2>
+        <input type="hidden" name="id" value="{{ id_album  }}">
+        <h2>Canzoni presenti in {{ titolo }} <button class="hidden-button" style="float: right" name="delete_song" value=0><i class="fa fa-trash" aria-hidden="true"></i></button></h2>
     </form>
 
 {% endblock %}
@@ -30,17 +30,22 @@
 
 {% block right_content %}
 
-    <ul>
-        {% for song in songs %}
-            <li> 
+    {% if songs %}
+        <ul>
+            {% for song in songs %}
+                <li> 
 
-                <form style="text-align: left;" action="/canzonialbum" method="POST">
-                    <input type="hidden" name="id" value="{{ song.id_canzone  }}">
-                    <p><a class="hidden-link" href="/player?id={{ song.id_canzone }}">{{ song.titolo_canzone  }}</a><button class="hidden-button" style="float: right" name="delete_song" value=1><i class="fa fa-trash" aria-hidden="true"></i></button></p>
-                </form>
-            </li>
-        {% endfor %}
-    </ul>
+                    <form style="text-align: left;" action="/canzonialbum" method="POST">
+                        <input type="hidden" name="id" value="{{ song.id_canzone  }}">
+                        <p><a class="hidden-link" href="/player?id={{ song.id_canzone }}">{{ song.titolo_canzone  }}</a><button class="hidden-button" style="float: right" name="delete_song" value=1><i class="fa fa-trash" aria-hidden="true"></i></button></p>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
 
+        <p>Non ci sono canzoni</p>
+
+    {% endif %}
 {% endblock %}
 
