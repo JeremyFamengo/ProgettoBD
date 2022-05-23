@@ -6,7 +6,7 @@
 
     <form style="text-align: left;" action="/canzonialbum" method="POST">
         <input type="hidden" name="id" value="{{ id_album  }}">
-        <h2>Canzoni presenti in {{ titolo }} <button class="hidden-button" style="float: right" name="delete_album" value=1><i class="fa fa-trash" aria-hidden="true"></i></button></h2>
+        <h2>Canzoni presenti in {{ titolo }} <button class="hidden-button" style="float: right" name="delete_song" value=0><i class="fa fa-trash" aria-hidden="true"></i></button></h2>
     </form>
 
 {% endblock %}

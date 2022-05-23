@@ -495,6 +495,7 @@ def canzonialbum():
         else:
             Album.query.filter_by(id_album = id).delete()
             db.session.commit()
+            return redirect('/artist/dashboard')
         
         return redirect("/canzonialbum")
 
