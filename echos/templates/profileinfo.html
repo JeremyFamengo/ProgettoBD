@@ -70,9 +70,12 @@
     </form>
 </fieldset>
 
-<span style="float: right; margin-right: 2%;">
-    <button type="button" class="cancella_account" >Elimina Account</button>
-</span>
+    <form style="float: right; margin-right: 2%;" action="/profileinfo" method="POST">
+        <input type="hidden" name="id" value="{{ id_utente }}">
+        <button type="hidden-button" class="cancella_account" name="delete_user" value=1 >Elimina Account</button>
+    </form>
+
+
 {% endblock %}
 
 {% block footer %}{% endblock %}
