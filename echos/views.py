@@ -242,10 +242,17 @@ def dashboard():
     length = len(albums)
 
     if request.method == 'POST':
-        id = request.form.get('id')
-        print(id)
-        Canzoni.query.filter_by(id=id).delete()
-        db.session.commit()
+        delete_song = request.form.get('id')
+        if delete_song:
+            Canzoni.query.filter_by(id=id).delete()
+            db.session.commit()
+        
+        delete_artista = bool(request.form.get('delete_artista'))
+        if delete_artista:
+            Artista.query.filter_by(id_artista = delete_artista).delete()
+            db.session.commit()
+            
+        return redirect(url_for('login'))
 
     return render_template("dashboard.html", user=user.nome_arte, albums=albums, songs=songs, length = length)
 
