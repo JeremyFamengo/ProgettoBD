@@ -181,6 +181,7 @@ def artist():
     return render_template('artist.html', form = form, artist = artist, nome_arte = nome_arte, request_status = request_status)
 
 @app.route('/admin', methods=['GET', 'POST'])
+@requires_auth
 def admin():
 
     if request.method == 'POST':
