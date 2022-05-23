@@ -166,7 +166,10 @@
             {% for song in songs %}
 
             <li class="song-entry">
-                <a href="/player?id={{ song.id }}" class="hidden-link"><p>{{ song.titolo }} - {{ song.data_uscita }}</p></a>
+                <form style="text-align: left;" action="/artist/dashboard" method="POST">
+                    <input type="hidden" name="id" value="{{ song.id }}">
+                    <p><a href="/player?id={{ song.id }}" class="hidden-link">{{ song.titolo }} - {{ song.data_uscita }}</a><button class="hidden-button" style="float: right" name="delete_song" value=1><i class="fa fa-trash" aria-hidden="true"></i></button></p>
+                </form>
             </li>
                                     
             {% endfor %}
