@@ -495,13 +495,13 @@ def canzonialbum():
         else:
             Album.query.filter_by(id_album = id).delete()
             db.session.commit()
+        
+        return redirect("/canzonialbum")
 
     id_album = request.args.get('id_album')
 
+    album_titolo = Album.query.filter_by(id_album = id_album).first().titolo
     songs = Album_canzoni_view.query.filter_by(id_album = id_album).all()
+    print(songs)
 
-    if songs:
-        return render_template("canzonialbum.html" , songs = songs)
-    else:
-        flash("Questo album è vuoto")
-        return redirect('/artist/dashboard')
+    return render_template("/canzonialbum.html" , songs = songs, titolo = album_titolo, id_album = id_album)
