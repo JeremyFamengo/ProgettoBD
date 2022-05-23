@@ -217,7 +217,7 @@ def admin():
     return render_template("admin.html", requests = requests)
 
 
-@app.route('/artist/dashboard')
+@app.route('/artist/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
     if current_user.id_artista == None:
@@ -228,6 +228,12 @@ def dashboard():
     songs = Canzoni.query.filter_by(id_artista = current_user.id_artista)
     albums = Album.query.filter_by(id_artista = user.id_artista).all()
     length = len(albums)
+
+    if request.method == 'POST':
+        id = request.form.get('id')
+        print(id)
+        Canzoni.query.filter_by(id=id).delete()
+        db.session.commit()
 
     return render_template("dashboard.html", user=user.nome_arte, albums=albums, songs=songs, length = length)
 
