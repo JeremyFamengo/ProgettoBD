@@ -1,3 +1,4 @@
+from asyncio import _set_running_loop
 from flask import *
 from flask_sqlalchemy import *
 from flask_login import UserMixin
@@ -305,6 +306,13 @@ class Canzoni_popolari_view(db.Model):
     data_uscita = db.Column(db.Date)
     nome_arte = db.Column(db.String)
 
+class Album_artisti_view(db.Model):
+    __tablename__ = 'album_artisti_view'
+    id_album = db.Column(db.Integer, primary_key=True)
+    id_artista = db.Column(db.Integer)
+    singolo = db.Column(db.Boolean)
+    titolo = db.Column(db.String)
+    vuoto = db.Column(db.Boolean)
 class UploadForm(FlaskForm):
     titolo = StringField("Titolo", validators=[DataRequired()])
     genere = SelectField("Genere", validators=[DataRequired()])

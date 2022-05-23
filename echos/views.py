@@ -242,12 +242,12 @@ def uploadsong():
 
     artista = Artista.query.filter_by(id_artista = current_user.id_artista).first()
     generi = Generi_Musicali.query.all()
-    albums = Album.query.filter_by(id_artista = artista.id_artista).all()
+    albums = Album_artisti_view.query.filter_by(id_artista = artista.id_artista).all()
 
 
     choices = []
     for album in albums:
-        is_empty=Album_canzoni.query.filter_by(id_album=album.id_album).all() == None
+        is_empty = album.vuoto
         if album.singolo and is_empty:
             tmp = (album.id_album,album.titolo)
             choices.append(tmp)
