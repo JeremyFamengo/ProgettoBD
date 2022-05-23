@@ -149,6 +149,20 @@ table{
   
 .button-2:hover {opacity: 1}
 
+.cancella_account {
+    border: none;
+    background-color: #FF0000;
+    color: #000000;
+    text-align: center;
+    padding: 10px 30px;
+    font-size: 15px;
+    border-radius: 25px;
+    opacity: 0.6;
+    transition: 0.3s;
+}
+
+.cancella_account:hover {opacity: 1}
+
 form {
     text-align:center;
     color: white;
