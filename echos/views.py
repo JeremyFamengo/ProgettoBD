@@ -143,9 +143,10 @@ def profileinfo():
         id = request.form.get('id')
 
         if delete_user:
+            Artista.query.filter_by(id_utente = id).update(dict(id_utente=0))
             User.query.filter_by(id = id).delete()
             db.session.commit()
-            
+
         return redirect(url_for('login'))
 
     return render_template('profileinfo.html', form = form, form2 = form2, id_utente = current_user.id)
