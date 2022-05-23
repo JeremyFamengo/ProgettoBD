@@ -180,11 +180,12 @@ class Canzoni(db.Model):
     durata = db.Column(db.Integer)
     n_riproduzioni = db.Column(db.Integer)
 
-    def __init__(self, id_artista, titolo, scadenza, data_uscita, id_genere, file, riservato, extension, durata, n_riproduzioni):
+    def __init__(self, id_artista, titolo, scadenza, data_inserimento, data_uscita, id_genere, file, riservato, extension, durata, n_riproduzioni):
         self.id_artista = id_artista
         self.titolo = titolo
         self.scadenza = scadenza
         self.data_uscita = data_uscita
+        self.data_inserimento = data_inserimento
         self.id_genere = id_genere
         self.file = file
         self.riservato = riservato
