@@ -131,11 +131,6 @@
                                     
                                     <p>Singolo: {{ album.singolo }}</p>
                                     <p>Riservato: {{album.restricted}}</p>
-                                    {% if album.id_canzoni %}
-                                        <p>Sono presenti canzoni</p>
-                                    {% else %}
-                                        <p>Non ci sono ancora canzoni</p>
-                                    {% endif %}
 
                                     {% if album.scadenza %}
                                         <p style="color: darkorange;">Questo album scade il {{ album.scadenza }}</p>

@@ -134,7 +134,18 @@ def profileinfo():
     form.email.data = current_user.mail
     form.data_di_nascita.data = current_user.data_di_nascita
 
-    return render_template('profileinfo.html', form = form, form2 = form2)
+    
+    if request.method == 'POST':
+        delete_user = bool(int(request.form.get('delete_user')))
+        id = request.form.get('id')
+
+        if delete_user:
+            User.query.filter_by(id = id).delete()
+            db.session.commit()
+            
+        return redirect(url_for('login'))
+
+    return render_template('profileinfo.html', form = form, form2 = form2, id_utente = current_user.id)
 
 
 # Funzione dedicato agli utenti che non sono artisti.

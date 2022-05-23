@@ -4,14 +4,13 @@ from flask import request, Response
 from echos import app
 from echos.models import *
 
-
+# funzione che sostituisce una vista, non scritta con ORM di sqlalchemy
 def getSearchTable():
     query = """SELECT id, nome_arte, durata, nome, titolo, data_uscita
 	    FROM public.canzoni
 	    inner join public.artisti using(id_artista)
 	    inner join public.generi_musicali using(id_genere)"""
 
-    #db.session.commit()
     return db.session.execute(query).all()
 
 # Aggiungo una canzone alla playlist
@@ -32,6 +31,7 @@ def addToAlbum(album_id, id_canzone):
 
     return redirect('/search')
 
+# funzione per elaborare l'array di dati relativi alle statistiche dell'utente
 def statistiche_utente(statistiche):
     dati = []
     canzoni_piu_ascoltate = []
@@ -61,6 +61,7 @@ def statistiche_utente(statistiche):
                 a[2] = a[2] + s.n_ascolti
 
     
+    #sorting secondo certi parametri
     artisti_piu_ascoltati.sort(key = lambda x: x[2], reverse=True)
     generi_piu_ascoltati.sort(key = lambda x: x[2], reverse=True)
     canzoni_piu_ascoltate.sort(key = lambda x: x[1], reverse=True)
@@ -76,20 +77,21 @@ def statistiche_utente(statistiche):
 
     return dati
 
-
+# semplice funzione per controllare la correttezza delle password
 def check_auth(username, password):
     """This function is called to check if a username /
     password combination is valid.
     """
     return username == 'admin' and password == 'Admin'
 
+# Sends a 401 response that enables basic auth
 def authenticate():
-    """Sends a 401 response that enables basic auth"""
     return Response(
     'Could not verify your access level for that URL.\n'
     'You have to login with proper credentials', 401,
     {'WWW-Authenticate': 'Basic realm="Login Required"'})
 
+# decoratore per proteggere una pagina con le credenziali specificate in check_auth()
 def requires_auth(f):
     @wraps(f)
     def decorated(*args, **kwargs):
