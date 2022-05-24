@@ -176,9 +176,9 @@
         {% endif %}
     </ul>
 
-    <form style="float: right; margin-right: 2%;" action="/profileinfo" method="POST">
-        <input type="hidden" name="id" value="{{ id_utente }}">
-        <button type="hidden-button" class="cancella_account" name="delete_artista">Elimina Artista</button>
+    <form style="float: right; margin-right: 2%;" action="/artist/dashboard" method="POST">
+        <input type="hidden" name="id_arista" value="{{ id_artista }}">
+        <button type="hidden-button" class="cancella_account" name="delete_artista" value=1>Elimina Artista</button>
     </form>
 
     <br>

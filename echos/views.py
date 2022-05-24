@@ -245,15 +245,15 @@ def dashboard():
     if request.method == 'POST':
         delete_song = request.form.get('id')
         if delete_song:
-            Canzoni.query.filter_by(id=id).delete()
+            Canzoni.query.filter_by(id=delete_song).delete()
             db.session.commit()
+            return redirect('/artist/dashboard')
         
-        delete_artista = bool(request.form.get('delete_artista'))
-        if delete_artista:
-            Artista.query.filter_by(id_artista = delete_artista).delete()
-            db.session.commit()
-            
-        return redirect(url_for('login'))
+        delete_artista = bool(int(request.form.get('delete_artista')))
+        if delete_artista: 
+            Artista.query.filter_by(id_artista = user.id_artista).delete()
+            db.session.commit() 
+            return redirect('/profile')
 
     return render_template("dashboard.html", user=user.nome_arte, albums=albums, songs=songs, length = length)
 
