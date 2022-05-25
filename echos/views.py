@@ -38,7 +38,8 @@ def login():
 
     return render_template("login.html", form=form)
 
-# Funzione dedicata all'utente, dove vengono mostrate le canzoni più ascoltate, i generi più ascoltati e gli artisti più ascoltati
+# Funzione dedicata all'utente, dove vengono mostrate le canzoni più ascoltate, i generi più ascoltati 
+# e gli artisti più ascoltati
 @app.route('/profile')
 @login_required
 def profile():
@@ -71,7 +72,9 @@ def register():
     if form.validate_on_submit():
         user = User.query.filter_by(mail=form.email.data).first()
         if user is None:
-            user = User(nome=form.nome.data, cognome=form.cognome.data, mail=form.email.data, psw=form.psw.data, data_di_nascita=form.data_di_nascita.data, id_artista=None, premium=False, ascoltate=[], username = form.username.data)
+            user = User(nome=form.nome.data, cognome=form.cognome.data, mail=form.email.data, 
+                        psw=form.psw.data, data_di_nascita=form.data_di_nascita.data, id_artista=None,
+                        premium=False, ascoltate=[], username = form.username.data)
             user.debug()
             db.session.add(user)
             db.session.commit()
@@ -158,7 +161,8 @@ def artist():
     request_status = None
     nome_arte = None
 
-    # controllo se esiste già una entry nella tabella artisti legata all'utente corrente e setto artist a True se vero, altrimenti a False
+    # controllo se esiste già una entry nella tabella artisti legata all'utente corrente e
+    # setto artist a True se vero, altrimenti a False
     artist = current_user.id_artista
     if artist:
         return redirect("/artist/dashboard")
@@ -166,7 +170,8 @@ def artist():
         artist = False
 
 
-    # controllo se esiste già una richiesta a nome dell'utente, se esiste prendo il codice si stato, altrimenti setto il codice di stato a 0
+    # controllo se esiste già una richiesta a nome dell'utente, se esiste prendo il codice si stato, 
+    # altrimenti setto il codice di stato a 0
     if not artist:
         request = Richieste_diventa_artista.query.filter_by(id_utente = current_user.id).first()
         if request:
@@ -190,7 +195,8 @@ def artist():
 
             return redirect('profile')
 
-    return render_template('artist.html', form = form, artist = artist, nome_arte = nome_arte, request_status = request_status)
+    return render_template('artist.html', form = form, artist = artist, nome_arte = nome_arte, 
+                            request_status = request_status)
 
 # Funzione dedidicata alla pagina dell'amministratore
 @app.route('/admin', methods=['GET', 'POST'])
@@ -302,7 +308,8 @@ def statistiche():
         return redirect('/profile')
 
 
-    n_riproduzioni_album_canzoni = N_riproduzioni_album_canzoni_view.query.filter_by(id_artista = current_user.id_artista).all()
+    n_riproduzioni_album_canzoni = N_riproduzioni_album_canzoni_view.query.filter_by(\
+        id_artista = current_user.id_artista).all()
 
     temp = []
     ids = []
@@ -377,7 +384,9 @@ def uploader():
         n_riproduzioni=0
 
 
-        canzone = Canzoni(id_artista=id_artista, titolo=titolo, scadenza=scadenza, data_inserimento=date.today(), data_uscita=data_uscita, id_genere=genere, file=data, riservato=riservato, extension='mp3', durata=durata, n_riproduzioni=n_riproduzioni)
+        canzone = Canzoni(id_artista=id_artista, titolo=titolo, scadenza=scadenza, data_inserimento=date.today(),
+                          data_uscita=data_uscita, id_genere=genere, file=data, riservato=riservato, extension='mp3',
+                          durata=durata, n_riproduzioni=n_riproduzioni)
 
         db.session.add(canzone)
 
@@ -423,7 +432,8 @@ def player():
     print(riservato)
 
 
-    return render_template("player.html", canzone=canzone, artista=artista, riservato=riservato, genere=genere, descrizione=descrizione)
+    return render_template("player.html", canzone=canzone, artista=artista, riservato=riservato, genere=genere,
+                            descrizione=descrizione)
 
 # Funzione dedicata alla creazione di una playlist
 @app.route('/creaplaylist', methods=['GET', 'POST'])
