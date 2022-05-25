@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import *
 from flask_login import LoginManager
+from echos.config import config
 
 
 #initializing the webapp
@@ -11,10 +12,10 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 #setting secret key
-app.config['SECRET_KEY']="AS7wvAhaKu4yFyVuPaTasCUDY6mg8c3RmjMFAAtQCfAxrUZxt5xZbTbVy8rHYagkAYG52jrVSz6aMBDPQt6bVLnPzd7ZBbCwAZnazwKkuYNvnKMVSqppmnvSV8xrwJZMXhPdQY6bhgHUjxx3cwHZkB66v4uYZWmdBNaLuDrnFZFgJS58KnSnPuQa2zQYjzqCZEZzz3gscmZvNCfhaRSFaM4AKu2UaHcW9K9Cqnf5pFLvBPTFmbAJCsuVEHPvKNSL"
+app.config['SECRET_KEY']= config.get('SECRET_KEY')
 
 #settig flask-sqalchemy database connection
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://echos:EchosApp@139.177.180.60/echos"
+app.config['SQLALCHEMY_DATABASE_URI'] = config.get('SQLALCHEMY_DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # setting flask max dimensions of uploaded files to prevent crash and errors
