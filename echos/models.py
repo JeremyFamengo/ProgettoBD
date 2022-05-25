@@ -4,7 +4,8 @@ from flask_sqlalchemy import *
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, DateField, TextAreaField, SelectField, FileField, IntegerField
+from wtforms import StringField, PasswordField, SubmitField, DateField, TextAreaField,\
+     SelectFiel, FileField, IntegerField
 from wtforms.validators import DataRequired, EqualTo, Length
 
 from echos import app
@@ -68,7 +69,8 @@ class RegisterForm(FlaskForm):
     cognome = StringField("Cognome*", validators=[DataRequired()])
     username = StringField("Username*", validators=[DataRequired()])
     email = StringField("Email*", validators=[DataRequired()])
-    psw = PasswordField("Password*", validators=[DataRequired(), EqualTo('psw2', message='Passwords do not match'), Length(min=8)])
+    psw = PasswordField("Password*", validators=[DataRequired(), EqualTo('psw2', message='Passwords do not match'),
+          Length(min=8)])
     psw2 = PasswordField("Conferma Password*", validators=[DataRequired(), Length(min=8)])
     data_di_nascita = DateField("Data di nascita")
     submit = SubmitField("Registrati")
@@ -83,7 +85,8 @@ class ModifyInfo(FlaskForm):
 
 class ModifyPsw(FlaskForm):
     old_psw = PasswordField("Vecchia Password", validators=[DataRequired()])
-    psw = PasswordField("Nuova password", validators=[DataRequired(), EqualTo('psw2', message='Passwords do not match'), Length(min=8)])
+    psw = PasswordField("Nuova password", validators=[DataRequired(), EqualTo('psw2', message='Passwords do not match'),
+          Length(min=8)])
     psw2 = PasswordField("Conferma nuova password", validators=[DataRequired(), Length(min=8)])
     submit2 = SubmitField("Cambia password")
 
@@ -180,7 +183,8 @@ class Canzoni(db.Model):
     durata = db.Column(db.Integer)
     n_riproduzioni = db.Column(db.Integer)
 
-    def __init__(self, id_artista, titolo, scadenza, data_inserimento, data_uscita, id_genere, file, riservato, extension, durata, n_riproduzioni):
+    def __init__(self, id_artista, titolo, scadenza, data_inserimento, data_uscita, id_genere, file,\
+                 riservato, extension, durata, n_riproduzioni):
         self.id_artista = id_artista
         self.titolo = titolo
         self.scadenza = scadenza
