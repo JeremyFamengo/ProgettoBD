@@ -112,6 +112,15 @@ class ArtistForm(FlaskForm):
     motivazione = TextAreaField("Tell us what makes you special!", validators=(DataRequired(), Length(max = 128)))
     submit = SubmitField("I'm ready!")
 
+#modello richieste diventa artista
+Richieste_diventa_artista = Table(
+    'richieste_diventa_artista', meta,
+    Column('nome_arte', String),
+    Column('motivazione', String),
+    Column('stato_richiesta', Integer),
+    Column('id_utente', Integer, primary_key = True)
+)
+
 class Richieste_diventa_artista(db.Model):
     __tablename__ = "richieste_diventa_artista"
     nome_arte = db.Column(db.String(40))
@@ -135,6 +144,14 @@ class Richieste_diventa_artista(db.Model):
         print(self.id_utente)
         print("\n-------------------------\n")
 
+#modello artista
+Artista = Table(
+    'artisti', meta,
+    Column('id_artista', Integer, primary_key = True),
+    Column('nome_arte', String),
+    Column('data_iscrizione', Date),
+    Column('id_utente', Integer)
+)
 class Artista(db.Model):
     __tablename__ = "artisti"
     id_artista = db.Column(db.Integer, primary_key = True)
@@ -156,7 +173,17 @@ class Artista(db.Model):
         print(self.data_iscrizione)
         print("\n-------------------------\n")
 
-
+#modello album
+Album = Table(
+    'album', meta,
+    Column('id_album', Integer, primary_key = True),
+    Column('id_artista', Integer),
+    Column('singolo', Boolean),
+    Column('scadenza', Date),
+    Column('restricted', Boolean),
+    Column('titolo', String),
+    Column('anno', Date)
+)
 class Album(db.Model):
     __tablename__ = 'album'
     id_album = db.Column(db.Integer, primary_key = True)
@@ -185,6 +212,22 @@ class Album(db.Model):
         print(self.anno)
         print("\n-------------------------\n")
 
+#modello canzoni
+Canzoni = Table(
+    'canzoni', meta,
+    Column('id', Integer, primary_key = True),
+    Column('id_artista', Integer),
+    Column('riservato', Boolean),
+    Column('data_inserimento', Date),
+    Column('scadenza', Integer),
+    Column('titolo', String),
+    Column('data_uscita', Date),
+    Column('id_genere', Integer),
+    Column('file', LargeBinary),
+    Column('extension', String),
+    Column('durata', Integer),
+    Column('n_riproduzioni', Integer)
+)
 class Canzoni(db.Model):
     __tablename__ = 'canzoni'
     id = db.Column(db.Integer, primary_key = True)
@@ -214,6 +257,13 @@ class Canzoni(db.Model):
         self.durata = durata
         self.n_riproduzioni=n_riproduzioni
 
+#modello generi musicali
+Generi_Musicali = Table(
+    'generi_musicali', meta,
+    Column('id_genere', Integer, primary_key = True),
+    Column('nome', String),
+    Column('descrizione', String)
+)
 class Generi_Musicali(db.Model):
     __tablename__ = 'generi_musicali'
     id_genere = db.Column(db.Integer, primary_key = True)
@@ -225,6 +275,16 @@ class Generi_Musicali(db.Model):
         self.nome = nome
         self.descrizione = descrizione
 
+
+#modello playlist
+Playlist = Table(
+    'playlist', meta,
+    Column('id_playlist', Integer),
+    Column('titolo', String),
+    Column('id_utente', Integer),
+    Column('restricted', Boolean)
+    
+)
 class Playlist(db.Model):
     __tablename__  = 'playlist'
     id_playlist = db.Column(db.Integer, primary_key = True)
