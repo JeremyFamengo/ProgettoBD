@@ -1,8 +1,10 @@
 from flask import Flask
+from requests import Session
 from sqlalchemy import *
 from flask_sqlalchemy import *
 from flask_login import LoginManager
 from echos.config import config
+from sqlalchemy.orm import sessionmaker
 
 
 #initializing the webapp
@@ -25,6 +27,16 @@ engine_user = create_engine(config.get('USER_DB'), echo = True)
 engine_artist = create_engine(config.get('ARTIST_DB'), echo = True)
 engine_home = create_engine(config.get('HOME_DB'), echo = True)
 
+#genero le sessioni per ogni ruolo
+Session = sessionmaker(bind = engine_admin)
+Session_admin = Session()
+Session = sessionmaker(bind = engine_user)
+Session_user = Session()
+Session = sessionmaker(bind = engine_artist)
+Session_artist = Session()
+Session = sessionmaker(bind = engine_home)
+Session_home = Session()
+
 # setting flask max dimensions of uploaded files to prevent crash and errors
 app.config['MAX_CONTENT_PATH'] = 10485760
 
@@ -32,11 +44,8 @@ app.config['MAX_CONTENT_PATH'] = 10485760
 app.config['UPLOAD_FOLDER'] = "/tmp/"
 
 #initializing database with flask-sqalchemy
-db = SQLAlchemy(app)
 
 import echos.views
-
-
 from echos.models import User
 
 login_manager.login_view = 'login'
@@ -44,5 +53,6 @@ login_manager.login_view = 'login'
 @login_manager.user_loader
 #user loader
 def load_user(id):
-    return User.query.get(id)
+    user = Session_user.query(User).filter(User.id == id).one()
+    return user
 
