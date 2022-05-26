@@ -1,6 +1,7 @@
 from asyncio import _set_running_loop
 from flask import *
 from flask_sqlalchemy import *
+from sqlalchemy import *
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_wtf import FlaskForm
@@ -10,8 +11,24 @@ from wtforms.validators import DataRequired, EqualTo, Length
 
 from echos import app
 from echos import db
+from echos import engine_user
+
+#metadata
+meta = MetaData()
 
 #class that defines a user in the table of Utenti in the database
+User = Table(
+    'utenti', meta,
+    Column('nome', String),
+    Column('cognome', String),
+    Column('id', Integer, primary_key = True),
+    Column('username', String),
+    Column('mail', String),
+    Column('data_di_nascita', Date),
+    Column('id_artista', Integer),
+    Column('premium', Boolean),
+    Column('psw', String)
+)
 class User(db.Model, UserMixin):
     __tablename__ = "utenti"
     nome  = db.Column(db.String(20))

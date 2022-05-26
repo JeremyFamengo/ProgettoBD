@@ -1,4 +1,5 @@
 from flask import Flask
+from sqlalchemy import *
 from flask_sqlalchemy import *
 from flask_login import LoginManager
 from echos.config import config
@@ -17,6 +18,12 @@ app.config['SECRET_KEY']= config.get('SECRET_KEY')
 #settig flask-sqalchemy database connection
 app.config['SQLALCHEMY_DATABASE_URI'] = config.get('SQLALCHEMY_DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+#setting sqlalchemy connection
+engine_admin = create_engine(config.get('ADMIN_DB'), echo = True)
+engine_user = create_engine(config.get('USER_DB'), echo = True)
+engine_artist = create_engine(config.get('ARTIST_DB'), echo = True)
+engine_home = create_engine(config.get('HOME_DB'), echo = True)
 
 # setting flask max dimensions of uploaded files to prevent crash and errors
 app.config['MAX_CONTENT_PATH'] = 10485760
