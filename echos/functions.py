@@ -5,12 +5,8 @@ from echos.models import *
 from echos import Session_artist, Session_user
 
 
-# funzione che sostituisce una vista, non scritta con ORM di sqlalchemy
+# funzione che sostituisce una vista scritta con ORM di sqlalchemy
 def getSearchTable():
-    # query = """SELECT id, nome_arte, durata, nome, titolo, data_uscita
-	#     FROM public.canzoni
-	#     inner join public.artisti using(id_artista)
-	#     inner join public.generi_musicali using(id_genere)"""
 
     table = Session_user.query(Canzoni).join(Artista,Artista.id_artista == Canzoni.id_artista)\
             .join(Generi_Musicali, Generi_Musicali.id_genere == Canzoni.id_genere).all()
