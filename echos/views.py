@@ -9,16 +9,6 @@ from echos import Session_admin, Session_artist, Session_home, Session_user
 from echos.models import *
 from echos.functions import *
 
-
-# Funzione dedicata alla pagina principale del sito
-@app.route('/')
-def home():
-    artisti = Session_home.query(Top_five_artists_view).all()
-    canzoni_recenti =  Session_home.query(Canzoni_recenti_view).all()
-    canzoni_popolari =  Session_home.query(Canzoni_popolari_view).all()
-
-    return render_template("index.html", artisti = artisti, canzoni = canzoni_recenti, popolari = canzoni_popolari)
-
 # Funzione dedicata alla pagina di accesso al sito
 @app.route('/login', methods=['GET', 'POST'])
 def login():
