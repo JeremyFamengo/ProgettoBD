@@ -25,7 +25,6 @@ class User(Base, UserMixin):
     data_di_nascita = Column(Date)
     id_artista = Column(String(30))
     premium = Column(Boolean)
-    ascoltate = Column(ARRAY(Integer))
 
     psw = Column(String(128))
 
