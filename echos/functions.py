@@ -1,33 +1,32 @@
-from flask_login import LoginManager
+
 from functools import wraps
 from flask import request, Response
-from echos import app
 from echos.models import *
+from echos import Session_artist, Session_user
 
-# funzione che sostituisce una vista, non scritta con ORM di sqlalchemy
+
+# funzione che sostituisce una vista scritta con ORM di sqlalchemy
 def getSearchTable():
-    query = """SELECT id, nome_arte, durata, nome, titolo, data_uscita
-	    FROM public.canzoni
-	    inner join public.artisti using(id_artista)
-	    inner join public.generi_musicali using(id_genere)"""
 
-    return db.session.execute(query).all()
+    table = Session_user.query(Canzoni).join(Artista,Artista.id_artista == Canzoni.id_artista)\
+            .join(Generi_Musicali, Generi_Musicali.id_genere == Canzoni.id_genere).all()
+
+    return table
 
 # Aggiungo una canzone alla playlist
 def addToPlaylist(id_playlist, id_canzone):
 
     playlist_canzoni=Playlist_canzoni(id_playlist,id_canzone)
-    db.session.add(playlist_canzoni)
-    db.session.commit()
+    Session_user.add(playlist_canzoni)
+    Session_user.commit()
 
-    return redirect('/search')
 
 # Aggiungo una canzone all'album
 def addToAlbum(album_id, id_canzone):
 
     album_canzoni=Album_canzoni(album_id,id_canzone)
-    db.session.add(album_canzoni)
-    db.session.commit()
+    Session_artist.add(album_canzoni)
+    Session_artist.commit()
 
     return redirect('/search')
 

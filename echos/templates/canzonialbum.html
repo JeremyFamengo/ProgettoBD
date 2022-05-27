@@ -5,7 +5,7 @@
 {% block header %}
 
     <form style="text-align: left;" action="/canzonialbum" method="POST">
-        <input type="hidden" name="id" value="{{ id_album  }}">
+        <input type="hidden" name="id_album" value="{{ id_album  }}">
         <h2>Canzoni presenti in {{ titolo }} <button class="hidden-button" style="float: right" name="delete_song" value=0><i class="fa fa-trash" aria-hidden="true"></i></button></h2>
     </form>
 
@@ -36,6 +36,7 @@
                 <li> 
 
                     <form style="text-align: left;" action="/canzonialbum" method="POST">
+                        <input type="hidden" name="id_album" value="{{ song.id_album  }}">
                         <input type="hidden" name="id" value="{{ song.id_canzone  }}">
                         <p><a class="hidden-link" href="/player?id={{ song.id_canzone }}">{{ song.titolo_canzone  }}</a><button class="hidden-button" style="float: right" name="delete_song" value=1><i class="fa fa-trash" aria-hidden="true"></i></button></p>
                     </form>

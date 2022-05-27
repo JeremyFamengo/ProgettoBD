@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash
 from datetime import date
 
 from echos import app
+from echos import Session_admin, Session_artist, Session_home, Session_user
 from echos.models import *
 from echos.functions import *
 
@@ -12,10 +13,9 @@ from echos.functions import *
 # Funzione dedicata alla pagina principale del sito
 @app.route('/')
 def home():
-    artisti = Top_five_artists_view.query.all()
-    canzoni_recenti = Canzoni_recenti_view.query.all()
-    canzoni_popolari = Canzoni_popolari_view.query.all()
-
+    artisti = Session_home.query(Top_five_artists_view).all()
+    canzoni_recenti =  Session_home.query(Canzoni_recenti_view).all()
+    canzoni_popolari =  Session_home.query(Canzoni_popolari_view).all()
 
     return render_template("index.html", artisti = artisti, canzoni = canzoni_recenti, popolari = canzoni_popolari)
 
@@ -24,7 +24,7 @@ def home():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(mail=form.email.data).first()
+        user = Session_user.query(User).filter(User.mail == form.email.data).first()
         if user:
             if user.verify_password(form.psw.data):
                 login_user(user)
@@ -44,7 +44,7 @@ def login():
 @login_required
 def profile():
     dati = []
-    statistiche = Statistiche_utente_view.query.filter_by(id_utente = current_user.id).all()
+    statistiche = Session_user.query(Statistiche_utente_view).filter(Statistiche_utente_view.id_utente == current_user.id).all()
     
     if statistiche:
         dati = statistiche_utente(statistiche)
@@ -70,14 +70,14 @@ def logout():
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(mail=form.email.data).first()
+        user = Session_user.query(User).filter(User.mail == form.email.data).first()
         if user is None:
             user = User(nome=form.nome.data, cognome=form.cognome.data, mail=form.email.data, 
                         psw=form.psw.data, data_di_nascita=form.data_di_nascita.data, id_artista=None,
                         premium=False, ascoltate=[], username = form.username.data)
             user.debug()
-            db.session.add(user)
-            db.session.commit()
+            Session_user.add(user)
+            Session_user.commit()
 
             print("User added correctly!")
             flash("User added correctly!")
@@ -108,25 +108,25 @@ def profileinfo():
 
     if form.submit1.data and form.validate():
         print("Modified info")
-        user = User.query.filter_by(id = current_user.id).first()
+        user = Session_user.query(User).filter(User.id == current_user.id).first()
 
         user.nome = form.nome.data
         user.cognome = form.cognome.data
         user.mail = form.email.data
         user.data_di_nascita = form.data_di_nascita.data
 
-        db.session.commit()
+        Session_user.commit()
 
         flash("Info updated correctly")
 
 
     if form2.submit2.data and form2.validate():
-        user = User.query.filter_by(id = current_user.id).first()
+        user = Session_user.query(User).filter(User.id == current_user.id).first()
 
         if user.verify_password(form2.old_psw.data):
             user.psw = generate_password_hash(form2.psw.data)
             print("Modified password")
-            db.session.commit()
+            Session_user.commit()
             flash("Modified password")
         else:
             print("wrong old password")
@@ -138,14 +138,14 @@ def profileinfo():
     form.data_di_nascita.data = current_user.data_di_nascita
 
     
-    if request.method == 'POST':
+    if request.method == 'POST' and (request.form.get('delete_user')!=None):
         delete_user = bool(int(request.form.get('delete_user')))
         id = request.form.get('id')
 
         if delete_user:
-            Artista.query.filter_by(id_utente = id).update(dict(id_utente=0))
-            User.query.filter_by(id = id).delete()
-            db.session.commit()
+            Session_user.query(Artista).filter(Artista.id_utente == id).update({'id_utente':0})
+            Session_user.query(User).filter(User.id == id).delete()
+            Session_user.commit()
 
         return redirect(url_for('login'))
 
@@ -173,7 +173,8 @@ def artist():
     # controllo se esiste già una richiesta a nome dell'utente, se esiste prendo il codice si stato, 
     # altrimenti setto il codice di stato a 0
     if not artist:
-        request = Richieste_diventa_artista.query.filter_by(id_utente = current_user.id).first()
+        request = Session_user.query(Richieste_diventa_artista).filter(Richieste_diventa_artista.id_utente == current_user.id).first()
+
         if request:
             request_status = request.stato_richiesta
         else:
@@ -187,8 +188,9 @@ def artist():
 
             richiesta = Richieste_diventa_artista(nome_arte, motivazione, stato_richiesta, id_utente)
             richiesta.debug()
-            db.session.add(richiesta)
-            db.session.commit()
+
+            Session_user.add(richiesta)
+            Session_user.commit()
 
             form.nome_arte.data = ''
             form.motivazione.data = ''
@@ -215,24 +217,24 @@ def admin():
 
         # TODO: controllare ridondanze in questa procedura
         if accept:
-            req = Richieste_diventa_artista.query.filter_by(id_utente = id).first()
+            req = Session_admin.query(Richieste_diventa_artista).filter(Richieste_diventa_artista.id_utente == id).first()
             req.stato_richiesta = 2
             artista = Artista(nome_arte, date.today(), id)
-            db.session.add(artista)
-            db.session.commit()
+            Session_admin.add(artista)
+            Session_admin.commit()
 
-            user = User.query.filter_by(id = id).first()
-            artista = Artista.query.filter_by(id_utente = user.id).first()
+            user = Session_admin.query(User).filter(User.id == id).one()
+            artista = Session_admin.query(Artista).filter(Artista.id_utente == user.id).one()
             user.id_artista = artista.id_artista
 
-            db.session.commit()
+            Session_admin.commit()
 
         else:
-            req = Richieste_diventa_artista.query.filter_by(id_utente = id).first()
+            req = Session_admin.query(Richieste_diventa_artista).filter(Richieste_diventa_artista.id_utente == id).first()
             req.stato_richiesta = -1
-            db.session.commit()
+            Session_admin.commit()
 
-    requests = Richieste_diventa_artista.query.filter_by(stato_richiesta = '1').all()
+    requests = Session_admin.query(Richieste_diventa_artista).filter(Richieste_diventa_artista.stato_richiesta == '1').all()
     return render_template("admin.html", requests = requests)
 
 # Funzione dedicata alla dashboard degli artisti
@@ -243,22 +245,22 @@ def dashboard():
         flash("You must be an Artist to access the artist's dashboard")
         return redirect('/profile')
 
-    user = Artista.query.filter_by(id_artista = current_user.id_artista).first()
-    songs = Canzoni.query.filter_by(id_artista = current_user.id_artista)
-    albums = Album.query.filter_by(id_artista = user.id_artista).all()
+    user = Session_artist.query(Artista).filter(Artista.id_artista == current_user.id_artista).one()
+    songs = Session_artist.query(Canzoni).filter(Canzoni.id_artista == current_user.id_artista).all()
+    albums = Session_artist.query(Album).filter(Album.id_artista == user.id_artista).all()
     length = len(albums)
 
     if request.method == 'POST':
         delete_song = request.form.get('id')
         if delete_song:
-            Canzoni.query.filter_by(id=delete_song).delete()
-            db.session.commit()
+            Session_artist.query(Canzoni).filter(Canzoni.id==delete_song).delete()
+            Session_artist.commit()
             return redirect('/artist/dashboard')
         
         delete_artista = bool(int(request.form.get('delete_artista')))
         if delete_artista: 
-            Artista.query.filter_by(id_artista = user.id_artista).delete()
-            db.session.commit() 
+            Session_artist.query(Artista).filter(Artista.id_artista == user.id_artista).delete()
+            Session_artist.commit() 
             return redirect('/profile')
 
     return render_template("dashboard.html", user=user.nome_arte, albums=albums, songs=songs, length = length)
@@ -273,9 +275,9 @@ def uploadsong():
 
     form = UploadForm()
 
-    artista = Artista.query.filter_by(id_artista = current_user.id_artista).first()
-    generi = Generi_Musicali.query.all()
-    albums = Album_artisti_view.query.filter_by(id_artista = artista.id_artista).all()
+    artista = Session_artist.query(Artista).filter(Artista.id_artista == current_user.id_artista).one()
+    generi = Session_artist.query(Generi_Musicali).all()
+    albums = Session_artist.query(Album_artisti_view).filter(Album_artisti_view.id_artista == artista.id_artista).all()
 
 
     choices = []
@@ -308,8 +310,8 @@ def statistiche():
         return redirect('/profile')
 
 
-    n_riproduzioni_album_canzoni = N_riproduzioni_album_canzoni_view.query.filter_by(\
-        id_artista = current_user.id_artista).all()
+    n_riproduzioni_album_canzoni = Session_artist.query(N_riproduzioni_album_canzoni_view).filter\
+                                    (N_riproduzioni_album_canzoni_view.id_artista == current_user.id_artista).all()
 
     temp = []
     ids = []
@@ -334,7 +336,7 @@ def creaalbum():
         flash("You must be an Artist to access the artist's dashboard")
         return redirect('/profile')
 
-    artista = Artista.query.filter_by(id_artista = current_user.id_artista).first()
+    artista = Session_artist.query(Artista).filter(Artista.id_artista == current_user.id_artista).one()
 
     form = CreateAlbumForm()
 
@@ -350,8 +352,8 @@ def creaalbum():
 
         album.debug()
 
-        db.session.add(album)
-        db.session.commit()
+        Session_artist.add(album)
+        Session_artist.commit()
 
         form.titolo.data = ''
         form.scadenza.data = ''
@@ -388,9 +390,10 @@ def uploader():
                           data_uscita=data_uscita, id_genere=genere, file=data, riservato=riservato, extension='mp3',
                           durata=durata, n_riproduzioni=n_riproduzioni)
 
-        db.session.add(canzone)
+        Session_artist.add(canzone)
+        Session_artist.commit()
 
-        id_canzone = Canzoni.query.filter_by(id_artista = current_user.id_artista, data_uscita = data_uscita).first().id
+        id_canzone = Session_artist.query(Canzoni).filter(Canzoni.id_artista == current_user.id_artista, Canzoni.data_uscita == data_uscita).one().id
 
         addToAlbum(id_album,id_canzone)
 
@@ -404,23 +407,23 @@ def uploader():
 def player():
 
     id = request.args.get('id')
-    canzone = Canzoni.query.filter_by(id = id).first()
+    canzone = Session_user.query(Canzoni).filter(Canzoni.id == id).one()
 
     # Aggironamento numero di riproduzioni svolte in questa canzone
 
-    artista = Artista.query.filter_by(id_artista = canzone.id_artista).first()
-    genere = Generi_Musicali.query.filter_by(id_genere = canzone.id_genere).first()
+    artista = Session_user.query(Artista).filter(Artista.id_artista == canzone.id_artista).one()
+    genere = Session_user.query(Generi_Musicali).filter(Generi_Musicali.id_genere == canzone.id_genere).one()
     descrizione = genere.descrizione
     genere = genere.nome
 
     if artista.id_artista != current_user.id_artista:
         nPlayTMP=Canzoni.n_riproduzioni+1
-        Canzoni.query.filter_by(id = id).update(dict(n_riproduzioni=nPlayTMP))
-        db.session.commit()
+        Session_user.query(Canzoni).filter(Canzoni.id == id).update({'n_riproduzioni':nPlayTMP})
+        Session_user.commit()
 
         ascolto = Utenti_ascolti(current_user.id, canzone.id, 1)
-        db.session.add(ascolto)
-        db.session.commit()
+        Session_user.add(ascolto)
+        Session_user.commit()
 
     artista = artista.nome_arte
 
@@ -449,8 +452,8 @@ def creaplaylist():
         playlist = Playlist(titolo = titolo, id_utente = id_utente, restricted = restricted)
         print(playlist)
 
-        db.session.add(playlist)
-        db.session.commit()
+        Session_user.add(playlist)
+        Session_user.commit()
 
         flash("Playlist creata correttamente")
 
@@ -467,16 +470,17 @@ def playlist():
     if request.method == 'POST':
         is_song = bool(int(request.form.get('delete_song')))
         id = request.form.get('id')
+        id_playlist = request.form.get('id_playlist')
 
         if is_song:
-            Canzoni.query.filter_by(id = id).delete()
-            db.session.commit()
+            Session_user.query(Playlist_canzoni).filter(Playlist_canzoni.id_canzone == id, Playlist_canzoni.id_playlist == id_playlist).delete()
+            Session_user.commit()
         else:
-            Playlist.query.filter_by(id_playlist = id).delete()
-            db.session.commit()
+            Session_user.query(Playlist).filter(Playlist.id_playlist == id).delete()
+            Session_user.commit()
 
 
-    playlists = Playlist_canzoni_view.query.filter_by(id_utente=current_user.id).all()
+    playlists = Session_user.query(Playlist_canzoni_view).filter(Playlist_canzoni_view.id_utente==current_user.id).all()
 
     temp = []
     ids = []
@@ -498,9 +502,9 @@ def playlist():
 @login_required
 def search():
 
-    resultQuery=getSearchTable()
+    resultQuery = getSearchTable()
 
-    playlists = Playlist.query.filter_by(id_utente = current_user.id).all()
+    playlists = Session_user.query(Playlist).filter(Playlist.id_utente == current_user.id).all()
     count = len(resultQuery)
 
     if request.method == 'POST':
@@ -523,20 +527,21 @@ def canzonialbum():
     if request.method == 'POST':
         is_song = bool(int(request.form.get('delete_song')))
         id = request.form.get('id')
+        id_album = request.form.get('id_album')
     
         if is_song:
-            Canzoni.query.filter_by(id = id).delete()
-            db.session.commit()
+            Session_artist.query(Canzoni).filter(Canzoni.id == id).delete()
+            Session_artist.commit()
         else:
-            Album.query.filter_by(id_album = id).delete()
-            db.session.commit()
+            Session_artist.query(Album).filter(Album.id_album == id_album).delete()
+            Session_artist.commit()
             return redirect('/artist/dashboard')
         
-        return redirect("/canzonialbum")
+        return redirect("/canzonialbum?id_album=" + str(id_album))
 
     id_album = request.args.get('id_album')
 
-    album_titolo = Album.query.filter_by(id_album = id_album).first().titolo
-    songs = Album_canzoni_view.query.filter_by(id_album = id_album).all()
+    album_titolo = Session_artist.query(Album).filter(Album.id_album == id_album).first().titolo
+    songs = Session_artist.query(Album_canzoni_view).filter(Album_canzoni_view.id_album == id_album).all()
 
     return render_template("/canzonialbum.html" , songs = songs, titolo = album_titolo, id_album = id_album)
