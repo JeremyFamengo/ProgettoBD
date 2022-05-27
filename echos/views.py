@@ -138,7 +138,7 @@ def profileinfo():
     form.data_di_nascita.data = current_user.data_di_nascita
 
     
-    if request.method == 'POST':
+    if request.method == 'POST' and (request.form.get('delete_user')!=None):
         delete_user = bool(int(request.form.get('delete_user')))
         id = request.form.get('id')
 
@@ -173,7 +173,8 @@ def artist():
     # controllo se esiste già una richiesta a nome dell'utente, se esiste prendo il codice si stato, 
     # altrimenti setto il codice di stato a 0
     if not artist:
-        request = Richieste_diventa_artista.query.filter_by(id_utente = current_user.id).first()
+        request = Session_user.query(Richieste_diventa_artista).filter(Richieste_diventa_artista.id_utente == current_user.id).first()
+
         if request:
             request_status = request.stato_richiesta
         else:
@@ -187,8 +188,9 @@ def artist():
 
             richiesta = Richieste_diventa_artista(nome_arte, motivazione, stato_richiesta, id_utente)
             richiesta.debug()
-            db.session.add(richiesta)
-            db.session.commit()
+
+            Session_user.add(richiesta)
+            Session_user.commit()
 
             form.nome_arte.data = ''
             form.motivazione.data = ''
@@ -215,7 +217,7 @@ def admin():
 
         # TODO: controllare ridondanze in questa procedura
         if accept:
-            req = Session_admin.query(Richieste_diventa_artista).filter(Richieste_diventa_artista.id_utente == id).one()
+            req = Session_admin.query(Richieste_diventa_artista).filter(Richieste_diventa_artista.id_utente == id).first()
             req.stato_richiesta = 2
             artista = Artista(nome_arte, date.today(), id)
             Session_admin.add(artista)
@@ -228,7 +230,7 @@ def admin():
             Session_admin.commit()
 
         else:
-            req = Session_admin.query(Richieste_diventa_artista).filter(Richieste_diventa_artista.id_utente == id).one()
+            req = Session_admin.query(Richieste_diventa_artista).filter(Richieste_diventa_artista.id_utente == id).first()
             req.stato_richiesta = -1
             Session_admin.commit()
 
@@ -468,9 +470,10 @@ def playlist():
     if request.method == 'POST':
         is_song = bool(int(request.form.get('delete_song')))
         id = request.form.get('id')
+        id_playlist = request.form.get('id_playlist')
 
         if is_song:
-            Session_user.query(Playlist_canzoni).filter(Playlist_canzoni == id).delete()
+            Session_user.query(Playlist_canzoni).filter(Playlist_canzoni.id_canzone == id, Playlist_canzoni.id_playlist == id_playlist).delete()
             Session_user.commit()
         else:
             Session_user.query(Playlist).filter(Playlist.id_playlist == id).delete()
@@ -524,21 +527,21 @@ def canzonialbum():
     if request.method == 'POST':
         is_song = bool(int(request.form.get('delete_song')))
         id = request.form.get('id')
+        id_album = request.form.get('id_album')
     
         if is_song:
             Session_artist.query(Canzoni).filter(Canzoni.id == id).delete()
             Session_artist.commit()
         else:
-            Session_artist.query(Album).filter(Album.id_album == id).delete()
+            Session_artist.query(Album).filter(Album.id_album == id_album).delete()
             Session_artist.commit()
             return redirect('/artist/dashboard')
         
-        return redirect("/canzonialbum")
+        return redirect("/canzonialbum?id_album=" + str(id_album))
 
     id_album = request.args.get('id_album')
 
     album_titolo = Session_artist.query(Album).filter(Album.id_album == id_album).first().titolo
-    
     songs = Session_artist.query(Album_canzoni_view).filter(Album_canzoni_view.id_album == id_album).all()
 
     return render_template("/canzonialbum.html" , songs = songs, titolo = album_titolo, id_album = id_album)

@@ -53,6 +53,6 @@ login_manager.login_view = 'login'
 @login_manager.user_loader
 #user loader
 def load_user(id):
-    user = Session_user.query(User).filter(User.id == id).one()
+    user = Session_user.query(User).filter(User.id == id).first()
     return user
 
