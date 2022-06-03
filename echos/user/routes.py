@@ -116,7 +116,7 @@ def profileinfo():
             Session_user.query(User).filter(User.id == id).delete()
             Session_user.commit()
 
-        return redirect(url_for('user_bp.login'))
+        return redirect(url_for('home_bp.login'))
 
     return render_template('profileinfo.html', form = form, form2 = form2, id_utente = current_user.id)
 
