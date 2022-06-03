@@ -1,0 +1,48 @@
+{% extends 'base-1.html' %}
+
+{% block head %}{% endblock %}
+
+{% block header %}
+    <h2>Crea una playlist</h2>
+{% endblock %}
+
+{% block left_content %}
+
+    <a href="/" class="hidden-link"><p class="left-content-entry">Home</p></a>
+    <br>
+    <a href="/profile" class="hidden-link"><p class="left-content-entry">Per Te</p></a>
+    <br>
+    <a href="/profileinfo" class="hidden-link"><p class="left-content-entry">Informazioni personali</p></a>
+    <br>
+    <a href="/playlist" class="hidden-link"><p class="left-content-entry">Le tue playlist</p></a>
+    <br>
+    <a href="/artist" class="hidden-link"><p class="left-content-entry">Dashboard Artisti</p></a>
+    <br>
+    <a href="/search" class="hidden-link"><p class="left-content-entry">Cerca</p></a>
+    <br>
+    <a href="/logout" class="hidden-link"><p class="left-content-entry">Logout</p></a>
+    <br>
+
+{% endblock %}
+
+{% block right_content %}
+
+<fieldset>
+    <form action="/creaplaylist" method="POST">
+        <p>
+            {{ form.hidden_tag() }}
+        
+            {{ form.titolo.label }}<br><br>
+            {{ form.titolo(size=30, class="form") }} <br><br>
+
+            {{ form.restricted.label }}<br><br>
+            {{ form.restricted(class="form") }} <br><br>
+            
+            {{ form.submit(size=30, class="button-2") }} <br><br>
+        </p>
+    </form>
+</fieldset>
+
+{% endblock %}
+
+{% block footer %}{% endblock %}

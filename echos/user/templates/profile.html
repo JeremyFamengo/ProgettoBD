@@ -1,0 +1,72 @@
+{% extends 'base-1.html' %}
+
+{% block head %}{% endblock %}
+
+
+{% block header %}
+
+<h2>Per te</h2>
+    
+
+{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block right_content %}
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for msg in messages %}
+            <div class="flashed-message-error alert">
+                {{ msg }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" style="float: right"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <p>Ben tornato, {{ user }}</p>
+    {% if dati %}
+        <h2>Canzoni più ascoltate</h2>
+        <ol>
+            {% for song in dati[0] %}
+                <li><a class="hidden-link" href="/player?id={{ song[0] }}">{{ song[2] }} - ascolti: {{ song[1] }}</a></li>
+            {% endfor %}
+        </ol>
+        <br>
+        <h2>Generi più ascoltati</h2>
+        <ol>
+            {% for genere in dati[1] %}
+                <li>{{ genere[1] }} - ascolti: {{ genere[2] }}</li>
+            {% endfor %}
+        </ol>
+        <br>
+        <h2>Artisti più ascoltati</h2>
+        <ol>
+            {% for artista in dati[3] %}
+                <li>{{ artista[1] }} - ascolti: {{ artista[2] }}</li>
+            {% endfor %}
+        </ol>
+    {% else %}
+        <p>Statistiche non ancora disponibili</p>
+    {% endif %}
+    
+
+{% endblock %}
+
+{% block left_content %}
+    <a href="/" class="hidden-link"><p class="left-content-entry">Home</p></a>
+    <br>
+    <p class="left-content-entry" style="color: blueviolet;">Per Te</p>
+    <br>
+    <a href="/playlist" class="hidden-link"><p class="left-content-entry">Le tue playlist</p></a>
+    <br>
+    <a href="/profileinfo" class="hidden-link"><p class="left-content-entry">Informazioni personali</p></a>
+    <br>
+    <a href="/artist" class="hidden-link"><p class="left-content-entry">Dashboard Artisti</p></a>
+    <br>
+    <a href="/search" class="hidden-link"><p class="left-content-entry">Cerca</p></a>
+    <br>
+    <a href="/logout" class="hidden-link"><p class="left-content-entry">Logout</p></a>
+    <br>
+{% endblock %}

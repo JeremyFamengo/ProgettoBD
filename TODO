@@ -1,13 +1,7 @@
+//sql injection proteggere
 // canzoni dei generi più ascoltati con più ascolti globali (fare una view)
 // Implmentare come fare diventare un utente premium
 // Inserire tabella utenti-abbonamenti per status premium
 // pagina dove iscriversi a scadenza mensile con falsi dati carta di credito
 // Sistemare passaggio dati al modal e dunque iframe
-Implementare statistiche dashboard artista -> inserire tabella canzoni/ascolti
-Implementare statistiche dashboards utente ---^
-Implementare cancellazione utenti
-Implementare cancellazione artista
-Correggere errori nuovo database
-Sistemare gerarchia >> https://exploreflask.com/en/latest/organizing.html >> https://dev.to/curiouspaul1/creating-modularized-flask-apps-with-blueprints-19nc
-Commentare il codice esaustivamente
 // Fare README.md carino

@@ -2,8 +2,8 @@ Flask==2.1.1
 Flask_Login==0.6.0
 Flask_SQLAlchemy==2.5.1
 Flask_WTF==1.0.1
-psycopg2==2.9.3
-psycopg2_binary==2.9.3
+requests==2.22.0
+setuptools==45.2.0
 SQLAlchemy==1.4.35
 Werkzeug==2.1.1
 WTForms==3.0.1
