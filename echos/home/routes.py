@@ -1,13 +1,20 @@
 from flask import Blueprint, render_template
+from flask import current_app as app
 from echos import *
 from echos.models import *
 from flask_login import *
 from echos.functions import *
 
-home = Blueprint('home', __name__, template_folder="templates")
+
+# Blueprint Configuration
+home_bp = Blueprint(
+    'home_bp', __name__,
+    template_folder='templates',
+    static_folder='static'
+)
 
 # Funzione dedicata alla pagina principale del sito
-@home.route('/')
+@home_bp.route('/')
 def home():
     artisti = Session_home.query(Top_five_artists_view).all()
     canzoni_recenti =  Session_home.query(Canzoni_recenti_view).all()
@@ -17,7 +24,7 @@ def home():
 
 
 # Funzione dedicata alla pagina di accesso al sito
-@app.route('/login', methods=['GET', 'POST'])
+@home_bp.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -36,12 +43,12 @@ def login():
     return render_template("login.html", form=form)
 
 # Funzione dedicata onorevolmente alla pagina dei logo creatori
-@app.route('/info')
+@home_bp.route('/info')
 def info():
     return render_template("info.html")
 
 # Funzione dedicata al tasto cerca
-@app.route('/search', methods=['GET', 'POST'])
+@home_bp.route('/search', methods=['GET', 'POST'])
 @login_required
 def search():
 
@@ -59,7 +66,14 @@ def search():
 
 
 # Funzione che richiama la pagina di errore 404
-@app.errorhandler(404)
+@home_bp.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html')
 
+# funzione che sostituisce una vista scritta con ORM di sqlalchemy
+def getSearchTable():
+
+    table = Session_user.query(Canzoni).join(Artista,Artista.id_artista == Canzoni.id_artista)\
+            .join(Generi_Musicali, Generi_Musicali.id_genere == Canzoni.id_genere).all()
+
+    return table

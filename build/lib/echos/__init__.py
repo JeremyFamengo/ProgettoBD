@@ -62,7 +62,7 @@ with app.app_context():
     from .artist import routes
 
     # Register Blueprints
-    app.register_blueprint(home.routes.home_bp)
-    app.register_blueprint(admin.routes.admin_bp)
-    app.register_blueprint(user.routes.user_bp)
-    app.register_blueprint(artist.routes.artist_bp)
+    app.register_blueprint(home.home_bp)
+    app.register_blueprint(admin.admin_bp)
+    app.register_blueprint(user.user_bp)
+    app.register_blueprint(artist.artist_bp)

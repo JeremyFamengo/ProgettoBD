@@ -3,9 +3,17 @@ from echos.models import *
 from flask_login import *
 from datetime import date
 from echos.functions import *
+from flask import current_app as app
+
+# Blueprint Configuration
+artist_bp = Blueprint(
+    'artist_bp', __name__,
+    template_folder='templates',
+    static_folder='static'
+)
 
 # Funzione dedicata alla dashboard degli artisti
-@app.route('/artist/dashboard', methods=['GET', 'POST'])
+@artist_bp.route('/artist/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
     if current_user.id_artista == None:
@@ -33,7 +41,7 @@ def dashboard():
     return render_template("dashboard.html", user=user.nome_arte, albums=albums, songs=songs, length = length)
 
 # Funzione dedicata alla maschera d'inserimento della canzone
-@app.route('/artist/uploadsong')
+@artist_bp.route('/artist/uploadsong')
 @login_required
 def uploadsong():
     if current_user.id_artista == None:
@@ -70,7 +78,7 @@ def uploadsong():
 
 
 # Funzione dedicata alle statistiche
-@app.route('/artist/statistiche')
+@artist_bp.route('/artist/statistiche')
 @login_required
 def statistiche():
     if current_user.id_artista == None:
@@ -98,7 +106,7 @@ def statistiche():
 
 
 # Funzione dedicata alla creaizone di un album
-@app.route('/artist/creaalbum', methods=['GET', 'POST'])
+@artist_bp.route('/artist/creaalbum', methods=['GET', 'POST'])
 @login_required
 def creaalbum():
     if current_user.id_artista == None:
@@ -136,7 +144,7 @@ def creaalbum():
 
 
 # Funzione dedicata all'inserimento di una nuova canzone
-@app.route('/168AN4df15/uploader', methods=['GET', 'POST'])
+@artist_bp.route('/168AN4df15/uploader', methods=['GET', 'POST'])
 @login_required
 def uploader():
 
@@ -173,7 +181,7 @@ def uploader():
 
 
 # Funzione dedicata alla visita di un album specifico
-@app.route('/canzonialbum', methods=['GET', 'POST'])
+@artist_bp.route('/canzonialbum', methods=['GET', 'POST'])
 @login_required
 def canzonialbum():
     if request.method == 'POST':

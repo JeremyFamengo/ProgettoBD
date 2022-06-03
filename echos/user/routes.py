@@ -2,10 +2,18 @@ from echos import *
 from echos.models import *
 from echos.functions import *
 from flask_login import *
+from flask import current_app as app
+
+# Blueprint Configuration
+user_bp = Blueprint(
+    'user_bp', __name__,
+    template_folder='templates',
+    static_folder='static'
+)
 
 # Funzione dedicata all'utente, dove vengono mostrate le canzoni più ascoltate, i generi più ascoltati 
 # e gli artisti più ascoltati
-@app.route('/profile')
+@user_bp.route('/profile')
 @login_required
 def profile():
     dati = []
@@ -19,14 +27,14 @@ def profile():
     return render_template("profile.html", user=current_user.username, dati = dati)
 
 # Funzione dedicata al logout dell'utente
-@app.route('/logout')
+@user_bp.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('login'))
 
 # Funzione dedicata alla registrazione dell'utente
-@app.route("/register", methods=['GET', 'POST'])
+@user_bp.route("/register", methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
@@ -61,7 +69,7 @@ def register():
 
 
 # Funzione dedicata alla gestione dei dati dell'utente
-@app.route('/profileinfo', methods=['GET', 'POST'])
+@user_bp.route('/profileinfo', methods=['GET', 'POST'])
 @login_required
 def profileinfo():
     form = ModifyInfo()
@@ -113,7 +121,7 @@ def profileinfo():
     return render_template('profileinfo.html', form = form, form2 = form2, id_utente = current_user.id)
 
 # Funzione dedicata alla pagina che mostra i metadati di una singola canzone
-@app.route('/player')
+@user_bp.route('/player')
 @login_required
 def player():
 
@@ -151,7 +159,7 @@ def player():
 
 
 # Funzione dedicata alla creazione di una playlist
-@app.route('/creaplaylist', methods=['GET', 'POST'])
+@user_bp.route('/creaplaylist', methods=['GET', 'POST'])
 @login_required
 def creaplaylist():
     form = CreaPlaylistForm()
@@ -174,7 +182,7 @@ def creaplaylist():
     return render_template("creaplaylist.html", form = form)
 
 # Funzione dedicata alla pagina playlist
-@app.route('/playlist', methods=['GET', 'POST'])
+@user_bp.route('/playlist', methods=['GET', 'POST'])
 @login_required
 def playlist():
 

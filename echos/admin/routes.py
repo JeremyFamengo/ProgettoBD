@@ -3,9 +3,17 @@ from echos.models import *
 from flask_login import *
 from echos.functions import *
 from datetime import date
+from flask import current_app as app
+
+# Blueprint Configuration
+admin_bp = Blueprint(
+    'admin_bp', __name__,
+    template_folder='templates',
+    static_folder='static'
+)
 
 # Funzione dedidicata alla pagina dell'amministratore
-@app.route('/admin', methods=['GET', 'POST'])
+@admin_bp.route('/admin', methods=['GET', 'POST'])
 @requires_auth
 def admin():
 
