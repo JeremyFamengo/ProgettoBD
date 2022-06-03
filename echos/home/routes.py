@@ -32,7 +32,7 @@ def login():
         if user:
             if user.verify_password(form.psw.data):
                 login_user(user)
-                return redirect(url_for('profile'))
+                return redirect(url_for('user_bp.profile'))
             else:
                 print('Wrong password')
                 flash('Wrong password')

@@ -31,7 +31,7 @@ def profile():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('user_bp.login'))
+    return redirect(url_for('home_bp.login'))
 
 # Funzione dedicata alla registrazione dell'utente
 @user_bp.route("/register", methods=['GET', 'POST'])
