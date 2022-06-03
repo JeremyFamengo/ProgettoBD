@@ -49,3 +49,7 @@ def admin():
     requests = Session_admin.query(Richieste_diventa_artista).filter(Richieste_diventa_artista.stato_richiesta == '1').all()
     return render_template("admin.html", requests = requests)
 
+# Funzione che richiama la pagina di errore 404
+@admin_bp.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html')

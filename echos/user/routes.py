@@ -235,3 +235,37 @@ def artist():
     else:
         artist = False
 
+    # controllo se esiste già una richiesta a nome dell'utente, se esiste prendo il codice si stato, 
+    # altrimenti setto il codice di stato a 0
+    if not artist:
+        request = Session_user.query(Richieste_diventa_artista).filter(Richieste_diventa_artista.id_utente == current_user.id).first()
+
+        if request:
+            request_status = request.stato_richiesta
+        else:
+            request_status = 0
+
+        if form.validate_on_submit():
+            nome_arte = form.nome_arte.data
+            motivazione = form.motivazione.data
+            stato_richiesta = 1
+            id_utente = current_user.id
+
+            richiesta = Richieste_diventa_artista(nome_arte, motivazione, stato_richiesta, id_utente)
+            richiesta.debug()
+
+            Session_user.add(richiesta)
+            Session_user.commit()
+
+            form.nome_arte.data = ''
+            form.motivazione.data = ''
+
+            return redirect('profile')
+
+    return render_template('artist.html', form = form, artist = artist, nome_arte = nome_arte, 
+                            request_status = request_status)
+
+# Funzione che richiama la pagina di errore 404
+@user_bp.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html')

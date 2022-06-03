@@ -205,3 +205,8 @@ def canzonialbum():
     songs = Session_artist.query(Album_canzoni_view).filter(Album_canzoni_view.id_album == id_album).all()
 
     return render_template("/canzonialbum.html" , songs = songs, titolo = album_titolo, id_album = id_album)
+
+# Funzione che richiama la pagina di errore 404
+@artist_bp.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html')
