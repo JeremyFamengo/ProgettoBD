@@ -57,7 +57,7 @@ def register():
             form.psw.data = ''
             form.data_di_nascita.data = ''
 
-            return redirect(url_for('user_bp.login'))
+            return redirect(url_for('home_bp.login'))
 
         else:
             print("User already registered!")
