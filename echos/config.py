@@ -7,5 +7,6 @@ config = {
     'ADMIN_DB' : "postgresql://echos:EchosApp@139.177.180.60/echos",
     'USER_DB' : "postgresql://utente:EchosAppUtente@139.177.180.60/echos",
     'ARTIST_DB' : "postgresql://artista:EchosAppArtista@139.177.180.60/echos",
-    'HOME_DB' : "postgresql://home:EchosAppHome@139.177.180.60/echos"
+    'HOME_DB' : "postgresql://home:EchosAppHome@139.177.180.60/echos",
+    'STATIC_URL_PATH' : "./static"
 }

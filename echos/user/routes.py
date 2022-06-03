@@ -31,7 +31,7 @@ def profile():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('login'))
+    return redirect(url_for('user_bp.login'))
 
 # Funzione dedicata alla registrazione dell'utente
 @user_bp.route("/register", methods=['GET', 'POST'])
@@ -57,7 +57,7 @@ def register():
             form.psw.data = ''
             form.data_di_nascita.data = ''
 
-            return redirect(url_for('login'))
+            return redirect(url_for('user_bp.login'))
 
         else:
             print("User already registered!")
@@ -116,7 +116,7 @@ def profileinfo():
             Session_user.query(User).filter(User.id == id).delete()
             Session_user.commit()
 
-        return redirect(url_for('login'))
+        return redirect(url_for('user_bp.login'))
 
     return render_template('profileinfo.html', form = form, form2 = form2, id_utente = current_user.id)
 
@@ -216,3 +216,22 @@ def playlist():
         temp.append(temp2)
 
     return render_template("playlist.html", playlists = temp)
+
+
+# Funzione dedicato agli utenti che non sono artisti.
+# Permette ad un utente di inviare una richiesta all'amministratore per poter diventare una artista
+@app.route('/artist', methods=['GET', 'POST'])
+@login_required
+def artist():
+    form = ArtistForm()
+    request_status = None
+    nome_arte = None
+
+    # controllo se esiste già una entry nella tabella artisti legata all'utente corrente e
+    # setto artist a True se vero, altrimenti a False
+    artist = current_user.id_artista
+    if artist:
+        return redirect("/artist/dashboard")
+    else:
+        artist = False
+

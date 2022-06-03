@@ -8,7 +8,7 @@ from sqlalchemy.orm import sessionmaker
 
 
 #initializing the webapp
-app = Flask(__name__)
+app = Flask(__name__, static_folder=None)
 
 #setting up native flask-login manager
 login_manager = LoginManager()
@@ -43,11 +43,9 @@ app.config['MAX_CONTENT_PATH'] = 10485760
 #setting upload folder
 app.config['UPLOAD_FOLDER'] = "/tmp/"
 
-#initializing database with flask-sqalchemy
-
 from echos.models import User
 
-login_manager.login_view = 'login'
+login_manager.login_view = 'home_bp.login'
 
 @login_manager.user_loader
 #user loader
