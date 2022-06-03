@@ -8,14 +8,14 @@
 
 {% block header %}
     <span style="float: right; margin-right: 2%;">
-        <a href=profile><button type="button" class="button-2">Profile</button></a>
-        <a href=info><button type="button" class="button-2">Info</button></a>
+        <a href="/profile"><button type="button" class="button-2">Profile</button></a>
+        <a href="info"><button type="button" class="button-2">Info</button></a>
     </span>
 {% endblock %}
 
 {% block content %}
     <div>
-        <h1 style="text-align: center;"><img src="{{ url_for('static', filename='images/soundwave.png')}}" width="120px"> ECHOS</h1>
+        <h1 style="text-align: center;"><img src="{{ url_for('home_bp.static', filename='images/soundwave.png')}}" width="120px"> ECHOS</h1>
     </div>
 
     <h2 style="text-align: center;">Canzoni recenti</h2>
