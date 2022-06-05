@@ -9,8 +9,6 @@ from wtforms import StringField, PasswordField, SubmitField, DateField, TextArea
                     SelectField, FileField, IntegerField
 from wtforms.validators import DataRequired, EqualTo, Length
 
-from echos import app
-
 #metadata
 Base = declarative_base()
 

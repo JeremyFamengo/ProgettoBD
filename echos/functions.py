@@ -5,13 +5,7 @@ from echos.models import *
 from echos import Session_artist, Session_user
 
 
-# funzione che sostituisce una vista scritta con ORM di sqlalchemy
-def getSearchTable():
 
-    table = Session_user.query(Canzoni).join(Artista,Artista.id_artista == Canzoni.id_artista)\
-            .join(Generi_Musicali, Generi_Musicali.id_genere == Canzoni.id_genere).all()
-
-    return table
 
 # Aggiungo una canzone alla playlist
 def addToPlaylist(id_playlist, id_canzone):
